@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../reducers/auth";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../store/store";
-
 import logo from "../../../../public/images/logo_1.png";
 import "./styles.css";
+
 const LoginPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = (): void => {
     dispatch(loginUser());
-    navigate("/", { replace: true });
+    navigate("/dashboard", { replace: true });
   };
   return (
     <div className="container">

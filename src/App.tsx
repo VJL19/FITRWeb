@@ -1,17 +1,26 @@
-import Home from "./pages/Home";
-import ProtectedRoute from "./pages/ProtectedRoute";
 import LoginPage from "./pages/auth/login/LoginPage";
-import { Routes, Route } from "react-router-dom";
-
+import { Routes, Route, useNavigate } from "react-router-dom";
+import "./App.css";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import Dashboard from "./pages/Dashboard";
+import { useEffect } from "react";
 function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-        <Route path="/" element={<ProtectedRoute />}>
-          <Route element={<Home />} path="/" exact />
-        </Route>
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate, isAuthenticated]);
+
+  return (
+    <div>
+      {isAuthenticated && <Dashboard />}
+      <Routes>
+        {!isAuthenticated && <Route path="/login" element={<LoginPage />} />}
       </Routes>
 
       {/* <div>
@@ -32,7 +41,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
   </p>*/}
-    </>
+    </div>
   );
 }
 
