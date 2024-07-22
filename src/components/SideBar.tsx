@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/SideBar.css";
-import logo from "../../../FITR_Web/public/images/logo_1.png";
+import logo from "src/assets/logo_1.png";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -44,7 +44,7 @@ const SideBar = () => {
             <h5 style={{ textTransform: "uppercase" }}>Announcements</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/programs" style={navLinkTextStyle}>
+        <NavLink to="/dashboard/suggested_programs" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Programs")}>
             <FitnessCenterIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Programs</h5>

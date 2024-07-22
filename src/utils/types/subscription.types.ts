@@ -10,4 +10,8 @@ interface ISubscriptions extends IUser {
   SubscriptionEntryDate: string;
   No_M_SubscriptionID: number;
 }
+
+export interface IEditSubscription {
+  SubscriptionStatus: string;
+}
 export default ISubscriptions;

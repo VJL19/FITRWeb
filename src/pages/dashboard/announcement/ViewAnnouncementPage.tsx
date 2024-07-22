@@ -45,7 +45,6 @@ const ViewAnnouncementPage = () => {
   return (
     <div style={{ padding: 15 }}>
       <Container maxWidth="sm">
-        <h1>View Announcement</h1>
         <Button
           startIcon={<ArrowBackIcon fontSize="large" htmlColor={"#f5f5f5"} />}
           variant="contained"
@@ -55,6 +54,7 @@ const ViewAnnouncementPage = () => {
         >
           Back
         </Button>
+        <h1>VIEW ANNOUNCEMENT</h1>
         <br />
         <img
           src={
@@ -65,31 +65,8 @@ const ViewAnnouncementPage = () => {
           height={400}
           style={{ cursor: "pointer" }}
         />
-        <br />
-
-        <TextField
-          {...register("AnnouncementTitle")}
-          inputMode="text"
-          label="Enter announcement title"
-          style={{ width: "100%" }}
-          disabled={true}
-        />
-        {errors.AnnouncementTitle && (
-          <h3>{errors.AnnouncementTitle?.message}</h3>
-        )}
-        <br />
-        <TextField
-          {...register("AnnouncementDescription")}
-          inputMode="text"
-          rows={10}
-          label="Enter announcement description"
-          multiline={true}
-          style={{ width: "100%" }}
-          disabled={true}
-        />
-        {errors.AnnouncementTitle && (
-          <h3>{errors.AnnouncementTitle?.message}</h3>
-        )}
+        <h2>{AnnouncementTitle}</h2>
+        <p>{AnnouncementDescription}</p>
       </Container>
     </div>
   );

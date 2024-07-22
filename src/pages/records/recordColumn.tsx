@@ -103,7 +103,7 @@ const _columns: GridColDef[] = [
     field: "SubscriptionType",
     headerName: "Subscription Type",
     renderHeader: (params) => {
-      return <b>{params.field}</b>;
+      return <b>Type</b>;
     },
     width: 180,
     flex: 1,
@@ -148,9 +148,9 @@ const _columns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      `${new Date(row.SubscriptionExpectedEnd).toDateString()} ${new Date(
-        row.SubscriptionExpectedEnd
+    valueGetter: (params, row: IAttendance) =>
+      `${new Date(row.DateTapped).toDateString()} ${new Date(
+        row.DateTapped
       ).toLocaleString("en-US", {
         hour: "numeric",
         minute: "numeric",

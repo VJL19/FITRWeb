@@ -17,37 +17,51 @@ import SendIcon from "@mui/icons-material/Send";
 import DisplayFormError from "src/components/DisplayFormError";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { useRegisterUserMutation } from "src/reducers/users";
+import {
+  setOTPToken,
+  setUserData,
+  useRegisterUserMutation,
+  useSendEmailMutation,
+} from "src/reducers/users";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "src/store/store";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 const CreateUserPage = () => {
   const {
     handleSubmit,
     register,
     control,
     setValue,
+    getValues,
     formState: { isSubmitted, isSubmitting, errors },
   } = useForm<TUserSchema>({ resolver: zodResolver(userSchema) });
 
-  const [registerUser, { data, status, isLoading, error }] =
-    useRegisterUserMutation();
+  const [registerUser, { data, status, error }] = useRegisterUserMutation();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [
+    sendOTPEmail,
+    { data: emailCode, status: emailStat, isLoading, error: emailErr },
+  ] = useSendEmailMutation();
+  const dispatch: AppDispatch = useDispatch();
 
+  const navigate = useNavigate();
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         showSuccessToast(data?.message);
       };
+      sendOTPEmail({ Email: getValues("Email") });
       deplayShowToast();
-
-      console.log("heya,");
     }
     if (status === "rejected" && isSubmitted) {
       const deplayShowToast = async () => {
@@ -55,18 +69,30 @@ const CreateUserPage = () => {
         showFailedToast(error?.data?.message || error?.data?.error);
       };
       deplayShowToast();
-      console.log("sorry there was an error");
     }
   }, [status]);
 
+  useEffect(() => {
+    if (emailStat === "fulfilled") {
+      dispatch(setOTPToken(emailCode?.code));
+
+      navigate("/dashboard/users/create_user/confirmation_email", {
+        replace: true,
+      });
+    }
+  }, [emailStat]);
   const onSubmit = async (data: TUserSchema) => {
     setValue("ProfilePic", "default_poster.png");
-    console.log("test data register", data);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     registerUser(data);
+    dispatch(setUserData(data));
     console.log("admin reg user", data);
     console.log("admin reg status", status);
     console.log("admin reg error", error);
+  };
+
+  const handleBack = () => {
+    navigate("/dashboard/users", { replace: true });
   };
 
   if (isLoading) {
@@ -75,6 +101,15 @@ const CreateUserPage = () => {
   return (
     <div>
       <Container maxWidth="md">
+        <Button
+          startIcon={<ArrowBack fontSize="medium" htmlColor={"#f5f5f5"} />}
+          variant="contained"
+          color="warning"
+          size="large"
+          onClick={handleBack}
+        >
+          Back
+        </Button>
         <h1>CREATE USER</h1>
 
         <h3>Personal Information</h3>

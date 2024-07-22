@@ -19,6 +19,10 @@ import EditTransactionPage from "./transactions/EditTransactionPage";
 import CreateUserPage from "./users/CreateUserPage";
 import ViewUserPage from "./users/ViewUserPage";
 import EditUserPage from "./users/EditUserPage";
+import CreateUserConfirmationPage from "./users/CreateUserConfirmationPage";
+import CreateProgramPage from "./programs/CreateProgramPage";
+import ViewProgramPage from "./programs/ViewProgramPage";
+import EditProgramPage from "./programs/EditProgramPage";
 const Dashboard = () => {
   return (
     <div className="main--container">
@@ -42,7 +46,23 @@ const Dashboard = () => {
             element={<EditAnnouncementPage />}
             path={"/dashboard/announcements/edit_announcement/:id"}
           />
-          <Route element={<ProgramPage />} path="/dashboard/programs" />
+          <Route
+            element={<ProgramPage />}
+            path="/dashboard/suggested_programs"
+          />
+
+          <Route
+            element={<CreateProgramPage />}
+            path={"/dashboard/suggested_programs/create_program/"}
+          />
+          <Route
+            element={<ViewProgramPage />}
+            path={"/dashboard/suggested_programs/view_program/:id"}
+          />
+          <Route
+            element={<EditProgramPage />}
+            path={"/dashboard/suggested_programs/edit_program/:id"}
+          />
           <Route element={<RecordPage />} path="/dashboard/records" />
           <Route element={<ReportPage />} path="/dashboard/reports" />
           <Route element={<SalePage />} path="/dashboard/sales" />
@@ -63,6 +83,10 @@ const Dashboard = () => {
           <Route
             element={<CreateUserPage />}
             path={"/dashboard/users/create_user/"}
+          />
+          <Route
+            element={<CreateUserConfirmationPage />}
+            path={"/dashboard/users/create_user/confirmation_email"}
           />
           <Route
             element={<ViewUserPage />}

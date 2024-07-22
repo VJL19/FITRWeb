@@ -6,9 +6,11 @@ import { announcementApi } from "../reducers/announcement";
 import announcementSlice from "../reducers/announcement";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import modal from "src/reducers/modal";
-import { attendanceApi } from "src/reducers/attendance";
-import { usersApi } from "src/reducers/users";
-import { transactionApi } from "src/reducers/transaction";
+import { attendanceApi, attendanceSlice } from "src/reducers/attendance";
+import users, { usersApi } from "src/reducers/users";
+import { transactionApi, transactionSlice } from "src/reducers/transaction";
+import { programApi, programSlice } from "src/reducers/program";
+import { salesAnalyticsApi } from "src/reducers/sales_analytics";
 
 export const store = configureStore({
   reducer: {
@@ -17,10 +19,16 @@ export const store = configureStore({
     route: route,
     announcement: announcementSlice,
     modal: modal,
+    user: users,
+    suggested_program: programSlice.reducer,
+    transaction: transactionSlice.reducer,
+    attendance: attendanceSlice.reducer,
     [announcementApi.reducerPath]: announcementApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [transactionApi.reducerPath]: transactionApi.reducer,
+    [programApi.reducerPath]: programApi.reducer,
+    [salesAnalyticsApi.reducerPath]: salesAnalyticsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -28,6 +36,8 @@ export const store = configureStore({
       attendanceApi.middleware,
       usersApi.middleware,
       transactionApi.middleware,
+      programApi.middleware,
+      salesAnalyticsApi.middleware,
     ]),
 });
 setupListeners(store.dispatch);

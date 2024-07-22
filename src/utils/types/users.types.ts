@@ -19,4 +19,8 @@ interface IUser {
   RFIDNumber?: string;
   Activation?: string;
 }
+
+export interface IOTP {
+  OTPCode: number;
+}
 export default IUser;

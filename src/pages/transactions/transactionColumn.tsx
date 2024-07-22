@@ -10,6 +10,7 @@ import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 import ISubscriptions from "src/utils/types/subscription.types";
+import { setTransactionData } from "src/reducers/transaction";
 const _columns: GridColDef[] = [
   {
     field: "UserID",
@@ -162,6 +163,26 @@ const _columns: GridColDef[] = [
       );
     },
   },
+
+  {
+    field: "SubscriptionEntryDate",
+    headerName: "Subscription Entry Date",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Subscription")[1]}</b>;
+    },
+    align: "center",
+    width: 150,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    valueGetter: (params, row) =>
+      `${new Date(row.SubscriptionEntryDate).toDateString()} ${new Date(
+        row.SubscriptionEntryDate
+      ).toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      })}`,
+  },
   {
     field: "SubscriptionStatus",
     headerName: "Subscription Status",
@@ -183,38 +204,20 @@ const _columns: GridColDef[] = [
             justifyContent: "center",
             color: "#f5f5f5",
             backgroundColor:
-              currentRow.SubscriptionStatus === "fulfilled"
+              currentRow.SubscriptionStatus === "Fulfill"
                 ? "#388e3c"
                 : currentRow.SubscriptionStatus === "pending"
                 ? "#f57c00"
                 : "#d32f2f",
           }}
         >
-          {currentRow.SubscriptionStatus.toUpperCase()}
+          {currentRow.SubscriptionStatus === "pending"
+            ? currentRow.SubscriptionStatus.toUpperCase()
+            : currentRow.SubscriptionStatus.concat("ed").toUpperCase()}
         </Stack>
       );
     },
   },
-  {
-    field: "SubscriptionEntryDate",
-    headerName: "Subscription Entry Date",
-    renderHeader: (params) => {
-      return <b>{params.field.split("Subscription")[1]}</b>;
-    },
-    align: "center",
-    width: 150,
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      `${new Date(row.SubscriptionEntryDate).toDateString()} ${new Date(
-        row.SubscriptionEntryDate
-      ).toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      })}`,
-  },
-
   {
     align: "center",
     field: "Actions",
@@ -228,20 +231,39 @@ const _columns: GridColDef[] = [
     renderCell: (params) => {
       const dispatch = useDispatch();
       const currentRowData: ISubscriptions = params.row;
-      // const arg: IAnnouncements = {
-      //   AnnouncementID: currentRowData.AnnouncementID,
-      //   AnnouncementTitle: currentRowData.AnnouncementTitle,
-      //   AnnouncementDate: currentRowData.AnnouncementDate,
-      //   AnnouncementDescription: currentRowData.AnnouncementDescription,
-      //   AnnouncementImage: currentRowData.AnnouncementImage,
-      // };
+      const arg: ISubscriptions = {
+        ProfilePic: currentRowData.ProfilePic,
+        LastName: currentRowData.LastName,
+        FirstName: currentRowData.FirstName,
+        MiddleName: currentRowData.MiddleName,
+        SubscriptionID: currentRowData.SubscriptionID,
+        SubscriptionAmount: currentRowData.SubscriptionAmount,
+        SubscriptionType: currentRowData.SubscriptionType,
+        SubscriptionUploadedImage: currentRowData.SubscriptionUploadedImage,
+        SubscriptionEntryDate: currentRowData.SubscriptionEntryDate,
+        SubscriptionStatus: currentRowData.SubscriptionStatus,
+        SubscriptionMethod: "",
+        No_M_SubscriptionID: 0,
+        Birthday: "",
+        Age: "",
+        ContactNumber: "",
+        Email: "",
+        Address: "",
+        Height: "",
+        Weight: "",
+        Username: "",
+        Password: "",
+        ConfirmPassword: "",
+        Gender: "",
+      };
       const onClick = () => {
         // dispatch(setAnnouncementData(arg));
+        dispatch(setTransactionData(arg));
       };
 
       const handleDelete = () => {
-        // dispatch(handleOpen());
-        // dispatch(setAnnouncementData(arg));
+        dispatch(handleOpen());
+        dispatch(setTransactionData(arg));
       };
 
       return (
@@ -266,6 +288,7 @@ const _columns: GridColDef[] = [
             variant="contained"
             color="warning"
             size="medium"
+            // disabled={}
             onClick={onClick}
             startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           >

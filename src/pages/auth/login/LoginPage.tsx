@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../../reducers/auth";
+import { loginUser } from "src/reducers/auth";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "../../../store/store";
-import logo from "../../../../public/images/logo_1.png";
+import { AppDispatch, RootState } from "src/store/store";
+import logo from "src/assets/logo_1.png";
 import "./styles.css";
 
 const LoginPage = () => {

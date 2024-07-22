@@ -21,7 +21,8 @@
       "reducers/*": ["src/reducers/*"],
       "store/*": ["src/store/*"],
       "styles/*": ["src/styles/*"],
-      "utils/*": ["src/utils/*"]
+      "utils/*": ["src/utils/*"],
+      "assets/*": ["src/assets/*"]
     },
 
     /* Linting */

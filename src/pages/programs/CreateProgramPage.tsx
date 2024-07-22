@@ -12,7 +12,6 @@ import {
   announcementSchema,
 } from "src/utils/validations/announcementSchema";
 import getCurrentDate from "src/utils/functions/date_fns";
-import { useCreateAnnouncementMutation } from "src/reducers/announcement";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Bounce, toast, ToastContainer } from "react-toastify";
@@ -24,37 +23,29 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { showSuccessToast } from "src/components/showToast";
-const CreateAnnouncementPage = () => {
+import { useCreateSuggestedProgramMutation } from "src/reducers/program";
+import {
+  TProgramSchema,
+  programSchema,
+} from "src/utils/validations/programSchema";
+const CreateProgramPage = () => {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitted },
-  } = useForm<TannouncementSchema>({
-    resolver: zodResolver(announcementSchema),
+    formState: { errors, isSubmitted, isSubmitting },
+  } = useForm<TProgramSchema>({
+    resolver: zodResolver(programSchema),
   });
 
-  const [imagePreview, setImagePreview] = useState<File | undefined | string>(
-    IMAGE_VALUES.DEFAULT_VALUE
-  );
   const [loading, setLoading] = useState(false);
-  const fileRef = useRef<HTMLInputElement | null | undefined>();
 
-  const [createAnnouncement, { data, error, isLoading, status }] =
-    useCreateAnnouncementMutation();
+  const [createProgram, { data, error, isLoading, status }] =
+    useCreateSuggestedProgramMutation();
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/announcements", { replace: true });
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setImagePreview(event?.target?.files?.[0]);
-    console.log(event?.target?.files?.[0].name);
-  };
-
-  const toggleImageUpload = () => {
-    fileRef.current?.click();
+    navigate("/dashboard/suggested_programs", { replace: true });
   };
 
   useEffect(() => {
@@ -63,8 +54,7 @@ const CreateAnnouncementPage = () => {
 
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/announcements", { replace: true });
-        setImagePreview(IMAGE_VALUES.DEFAULT_VALUE);
+        navigate("/dashboard/suggested_programs", { replace: true });
         reset();
       };
       delayRedirect();
@@ -74,36 +64,24 @@ const CreateAnnouncementPage = () => {
     }
   }, [status, data?.message]);
 
-  const onSubmit = async (data: TannouncementSchema) => {
+  const onSubmit = async (data: TProgramSchema) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    const url = await uploadImage(
-      imagePreview,
-      "GymAnnouncements/",
-      "image",
-      loading,
-      setLoading
-    );
-
-    console.log("hey", url);
     const arg = {
-      AnnouncementImage:
-        url === IMAGE_VALUES.DEFAULT_VALUE ? IMAGE_VALUES.DEFAULT_VALUE : url,
-      AnnouncementTitle: data?.AnnouncementTitle,
-      AnnouncementDescription: data?.AnnouncementDescription,
-      AnnouncementDate: getCurrentDate(),
+      SuggestedProgramTitle: data?.SuggestedProgramTitle,
+      SuggestedProgramDescription: data?.SuggestedProgramDescription,
+      SuggestedProgramEntryDate: getCurrentDate(),
     };
 
-    createAnnouncement(arg);
+    createProgram(arg);
     reset();
   };
 
-  console.log("data announce status", status);
-  console.log("data announce data", data?.message);
+  console.log("data program status", status);
+  console.log("data program data", data?.message);
+  console.log("data program error", error);
 
-  console.log("is loading", isLoading);
-
-  if (loading) {
+  if (status === "pending") {
     return <LoadingIndicator />;
   }
   return (
@@ -119,56 +97,40 @@ const CreateAnnouncementPage = () => {
         >
           Back
         </Button>
-        <h1>CREATE ANNOUNCEMENT</h1>
+        <h1>CREATE SUGGESTED PROGRAM</h1>
         <br />
-        <img
-          onClick={toggleImageUpload}
-          src={
-            imagePreview === IMAGE_VALUES.DEFAULT_VALUE
-              ? thumbnail
-              : URL.createObjectURL(imagePreview)
-          }
-          height={400}
-          style={{ cursor: "pointer" }}
-        />
         <br />
 
-        <input
-          type="file"
-          accept=".jpeg,.png"
-          hidden
-          ref={fileRef}
-          onChange={handleImageChange}
-        />
         <TextField
-          {...register("AnnouncementTitle")}
+          {...register("SuggestedProgramTitle")}
           inputMode="text"
           required
-          error={errors.AnnouncementTitle ? true : false}
-          label="Enter announcement title"
+          error={errors.SuggestedProgramTitle ? true : false}
+          label="Enter suggested program title"
           sx={{ width: "100%" }}
         />
-        {errors.AnnouncementTitle && (
+        {errors.SuggestedProgramTitle && (
           <h4 style={{ color: "#d9534f" }}>
-            {errors.AnnouncementTitle?.message}
+            {errors.SuggestedProgramTitle?.message}
           </h4>
         )}
         <TextField
-          {...register("AnnouncementDescription")}
+          {...register("SuggestedProgramDescription")}
           inputMode="text"
           required
-          error={errors.AnnouncementDescription ? true : false}
+          error={errors.SuggestedProgramDescription ? true : false}
           rows={10}
-          label="Enter announcement description"
+          label="Enter suggested program description"
           multiline={true}
           style={{ width: "100%" }}
         />
-        {errors.AnnouncementDescription && (
+        {errors.SuggestedProgramDescription && (
           <h4 style={{ color: "#d9534f" }}>
-            {errors.AnnouncementDescription?.message}
+            {errors.SuggestedProgramDescription?.message}
           </h4>
         )}
         <Button
+          disabled={isSubmitting}
           endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           variant="contained"
           color="success"
@@ -185,4 +147,4 @@ const CreateAnnouncementPage = () => {
   );
 };
 
-export default CreateAnnouncementPage;
+export default CreateProgramPage;

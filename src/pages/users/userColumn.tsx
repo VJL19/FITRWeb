@@ -11,6 +11,7 @@ import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 import IAttendance from "src/utils/types/attendance.types";
 import IUser from "src/utils/types/users.types";
+import { setUserData } from "src/reducers/users";
 const _columns: GridColDef[] = [
   {
     field: "UserID",
@@ -32,7 +33,6 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    flex: 1,
     align: "center",
     width: 100,
     headerAlign: "center",
@@ -45,7 +45,6 @@ const _columns: GridColDef[] = [
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -75,7 +74,6 @@ const _columns: GridColDef[] = [
     },
   },
   {
-    flex: 1,
     align: "center",
     field: "FirstName",
     headerName: "First Name",
@@ -93,9 +91,7 @@ const _columns: GridColDef[] = [
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
@@ -106,9 +102,7 @@ const _columns: GridColDef[] = [
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
@@ -119,7 +113,6 @@ const _columns: GridColDef[] = [
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -132,36 +125,32 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
     flex: 1,
+    width: 180,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "Birthday",
     headerName: "Birth Day",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
-    align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "ContactNumber",
     headerName: "Contact Number",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
@@ -177,18 +166,19 @@ const _columns: GridColDef[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "Email",
     headerName: "Email",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "Height",
     headerName: "Height",
     renderHeader: (params) => {
@@ -201,6 +191,7 @@ const _columns: GridColDef[] = [
     valueGetter: (params, row) => `${row.Height} cm`,
   },
   {
+    flex: 1,
     field: "Weight",
     headerName: "Weight",
     renderHeader: (params) => {
@@ -228,13 +219,41 @@ const _columns: GridColDef[] = [
     field: "SubscriptionType",
     headerName: "Subscription Type",
     renderHeader: (params) => {
-      return <b>{params.field}</b>;
+      return <b>Type</b>;
     },
-    flex: 1,
     align: "center",
     width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+  },
+  {
+    field: "Activation",
+    headerName: "Activation",
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 150,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    renderCell: (params) => {
+      const currentRow: IUser = params.row;
+      return (
+        <Stack
+          direction="row"
+          sx={{
+            flex: 0.5,
+            alignSelf: "center",
+            justifyContent: "center",
+            color: "#f5f5f5",
+            backgroundColor:
+              currentRow.Activation === "activated" ? "#388e3c" : "#d32f2f",
+          }}
+        >
+          {currentRow?.Activation?.toUpperCase()}
+        </Stack>
+      );
+    },
   },
 
   {
@@ -249,20 +268,32 @@ const _columns: GridColDef[] = [
     renderCell: (params) => {
       const dispatch = useDispatch();
       const currentRowData: IUser = params.row;
-      // const arg: IAnnouncements = {
-      //   AnnouncementID: currentRowData.AnnouncementID,
-      //   AnnouncementTitle: currentRowData.AnnouncementTitle,
-      //   AnnouncementDate: currentRowData.AnnouncementDate,
-      //   AnnouncementDescription: currentRowData.AnnouncementDescription,
-      //   AnnouncementImage: currentRowData.AnnouncementImage,
-      // };
+      const arg: IUser = {
+        UserID: currentRowData.UserID,
+        Birthday: currentRowData.Birthday,
+        Address: currentRowData.Address,
+        SubscriptionType: currentRowData.SubscriptionType,
+        LastName: currentRowData.LastName,
+        FirstName: currentRowData.FirstName,
+        MiddleName: currentRowData.MiddleName,
+        Age: currentRowData.Age,
+        ContactNumber: currentRowData.ContactNumber,
+        Email: currentRowData.Email,
+        Gender: currentRowData.Gender,
+        Password: currentRowData.Password,
+        ConfirmPassword: currentRowData.ConfirmPassword,
+        Height: currentRowData.Height,
+        Weight: currentRowData.Weight,
+        ProfilePic: currentRowData.ProfilePic,
+        Username: currentRowData.Username,
+      };
       const onClick = () => {
-        // dispatch(setAnnouncementData(arg));
+        dispatch(setUserData(arg));
       };
 
       const handleDelete = () => {
         dispatch(handleOpen());
-        // dispatch(setAnnouncementData(arg));
+        dispatch(setUserData(arg));
       };
 
       return (

@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,8 +11,13 @@ import { AppDispatch, RootState } from "src/store/store";
 import _columns from "./userColumn";
 import { useGetUsersAttendanceQuery } from "src/reducers/attendance";
 import AddIcon from "@mui/icons-material/Add";
-import { useGetAllUsersQuery } from "src/reducers/users";
+import {
+  useDeleteUserAccountMutation,
+  useGetAllUsersQuery,
+} from "src/reducers/users";
 import { handleClose } from "src/reducers/modal";
+import LoadingIndicator from "src/components/LoadingIndicator";
+import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -20,12 +25,14 @@ const UserPage = () => {
     dispatch(setRoute("Users"));
   }, []);
 
+  const { UserID } = useSelector((state: RootState) => state.user.userData);
+  const [deleteUser, { status: deleteStatus }] = useDeleteUserAccountMutation();
+
   const { data, isFetching, isUninitialized } = useGetAllUsersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
   const VISIBLE_FIELDS = [
-    "Username",
     "ProfilePic",
     "FullName",
     "ContactNumber",
@@ -33,6 +40,7 @@ const UserPage = () => {
     "Height",
     "Weight",
     "SubscriptionType",
+    "Activation",
     "Actions",
   ];
 
@@ -43,11 +51,16 @@ const UserPage = () => {
 
   const handleDeleteUser = () => {
     dispatch(handleClose());
+    deleteUser({ UserID: UserID });
   };
 
   const { open } = useSelector((state: RootState) => state.modal);
 
   const rows = data?.result.map((user) => ({ ...user, id: user.UserID }));
+
+  if (deleteStatus === "pending") {
+    return <LoadingIndicator />;
+  }
   return (
     <Box
       sx={{
@@ -88,6 +101,19 @@ const UserPage = () => {
         }}
         slots={{
           toolbar: GridToolbar,
+          noResultsOverlay: () => (
+            <Stack
+              height="100%"
+              alignItems="center"
+              justifyContent="center"
+              flex={1}
+              flexDirection={"row"}
+              gap={1.5}
+            >
+              <PlaylistRemoveIcon fontSize="large" htmlColor="#202020" />
+              No results found
+            </Stack>
+          ),
         }}
       />
 

@@ -24,13 +24,12 @@ const RecordPage = () => {
   );
 
   const VISIBLE_FIELDS = [
-    "UserID",
     "ProfilePic",
     "FullName",
     "TimeIn",
     "TimeOut",
     "DateTapped",
-    "SubscriptionExpectedEnd",
+    "SubscriptionType",
     "IsPaid",
   ];
 

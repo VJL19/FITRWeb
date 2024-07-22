@@ -24,13 +24,11 @@ export const userSchema = z
     Username: z
       .string()
       .min(1, { message: "Username is required" })
-      .min(5, { message: "Username should not be less than 5 letters" })
-      .max(30, { message: "Username should not be more than 30 letters" }),
+      .min(5, { message: "Username should not be less than 5 letters" }),
     Password: z
       .string()
       .min(1, { message: "Password is required" })
-      .min(5, { message: "Password should not be less than 5 letters" })
-      .max(30, { message: "Password should not be more than 30 letters" }),
+      .min(5, { message: "Password should not be less than 5 letters" }),
     ConfirmPassword: z
       .string()
       .min(1, { message: "Confirm password is required" }),
@@ -44,4 +42,11 @@ export const userSchema = z
     path: ["ConfirmPassword"],
   });
 
+export const otpSchema = z.object({
+  OTPCode: z
+    .string()
+    .min(1, { message: "OTP is required" })
+    .max(6, { message: "OTP code should not be more than 6 numbers" }),
+});
+export type TOtpSchema = z.infer<typeof otpSchema>;
 export type TUserSchema = z.infer<typeof userSchema>;

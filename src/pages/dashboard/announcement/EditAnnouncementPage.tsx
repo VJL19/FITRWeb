@@ -62,8 +62,6 @@ const EditAnnouncementPage = () => {
   };
 
   useEffect(() => {
-    setValue("AnnouncementTitle", AnnouncementTitle);
-    setValue("AnnouncementDescription", AnnouncementDescription);
     setImagePreview(AnnouncementImage);
   }, []);
 
@@ -139,7 +137,6 @@ const EditAnnouncementPage = () => {
   return (
     <div style={{ padding: 15 }}>
       <Container maxWidth="sm">
-        <h1>Edit Announcement</h1>
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           disabled={isLoading}
@@ -150,6 +147,7 @@ const EditAnnouncementPage = () => {
         >
           Back
         </Button>
+        <h1>EDIT ANNOUNCEMENT</h1>
         <br />
         <img
           onClick={toggleImageUpload}
@@ -176,6 +174,7 @@ const EditAnnouncementPage = () => {
           {...register("AnnouncementTitle")}
           inputMode="text"
           required
+          defaultValue={AnnouncementTitle}
           error={errors.AnnouncementTitle ? true : false}
           label="Enter announcement title"
           style={{ width: "100%" }}
@@ -191,6 +190,7 @@ const EditAnnouncementPage = () => {
           inputMode="text"
           rows={10}
           required
+          defaultValue={AnnouncementDescription}
           error={errors.AnnouncementDescription ? true : false}
           label="Enter announcement description"
           multiline={true}

@@ -1,18 +1,22 @@
 import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import CustomModal from "src/components/CustomModal";
 import { navLinkTextStyle } from "src/components/SideBar";
 import { setRoute } from "src/reducers/route";
-import { AppDispatch } from "src/store/store";
+import { AppDispatch, RootState } from "src/store/store";
 import _columns from "./transactionColumn";
-import { useGetUsersAttendanceQuery } from "src/reducers/attendance";
 import AddIcon from "@mui/icons-material/Add";
-import { useGetAllUsersQuery } from "src/reducers/users";
-import { useGetAllUsersTransactionsQuery } from "src/reducers/transaction";
+import {
+  useDeleteTransactionMutation,
+  useGetAllUsersTransactionsQuery,
+} from "src/reducers/transaction";
+import { handleClose } from "src/reducers/modal";
+import LoadingIndicator from "src/components/LoadingIndicator";
+import { showFailedToast, showSuccessToast } from "src/components/showToast";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -38,6 +42,15 @@ const TransactionPage = () => {
     "Actions",
   ];
 
+  const { SubscriptionID } = useSelector(
+    (state: RootState) => state.transaction.transactionData
+  );
+
+  const [deleteTransaction, { status: deleteStatus }] =
+    useDeleteTransactionMutation();
+
+  const { open } = useSelector((state: RootState) => state.modal);
+
   const columns = React.useMemo(
     () => _columns.filter((column) => VISIBLE_FIELDS.includes(column.field)),
     [_columns]
@@ -47,10 +60,28 @@ const TransactionPage = () => {
     ...user,
     id: user.SubscriptionID,
   }));
+
+  const handleDeleteTransaction = async () => {
+    dispatch(handleClose());
+    deleteTransaction({ SubscriptionID: SubscriptionID });
+  };
+
+  useEffect(() => {
+    if (deleteStatus === "fulfilled") {
+      showSuccessToast(data?.message);
+    }
+    if (deleteStatus === "rejected") {
+      showFailedToast(data?.message);
+    }
+  }, [deleteStatus, data?.message]);
+
+  if (deleteStatus === "pending") {
+    return <LoadingIndicator />;
+  }
   return (
     <Box
       sx={{
-        height: 500,
+        height: 800,
         width: "100%",
         "& .super-app-theme--header": {
           backgroundColor: "#ff2e00",
@@ -103,7 +134,11 @@ const TransactionPage = () => {
           create
         </NavLink>
       </Button>
-      {/* <CustomModal open={open} handleDeleteClick={handleDeleteAnnouncement} /> */}
+      <CustomModal
+        open={open}
+        handleDeleteClick={handleDeleteTransaction}
+        title="Delete this transaction?"
+      />
       <ToastContainer />
     </Box>
   );
