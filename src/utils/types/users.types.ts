@@ -18,6 +18,7 @@ interface IUser {
   Gender: string;
   RFIDNumber?: string;
   Activation?: string;
+  TotalUser?: number;
 }
 
 export interface IOTP {

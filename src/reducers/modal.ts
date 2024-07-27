@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface IModalState {
   open: boolean;
+  fileModalOpen: boolean;
 }
 
 const initialState: IModalState = {
   open: false,
+  fileModalOpen: false,
 };
 
 const modalSlice = createSlice({
@@ -18,9 +20,20 @@ const modalSlice = createSlice({
     handleClose: (state) => {
       state.open = false;
     },
+    handleFileModalOpen: (state) => {
+      state.fileModalOpen = true;
+    },
+    handleFileModalClose: (state) => {
+      state.fileModalOpen = false;
+    },
   },
 });
 
-export const { handleOpen, handleClose } = modalSlice.actions;
+export const {
+  handleOpen,
+  handleFileModalOpen,
+  handleClose,
+  handleFileModalClose,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;

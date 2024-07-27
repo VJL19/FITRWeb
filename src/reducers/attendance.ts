@@ -30,6 +30,11 @@ export const attendanceApi = createApi({
       query: () => "/admin/attendance/users_attendance",
       providesTags: ["attendance"],
     }),
+
+    getAllRecentAttendance: builder.query<IAttendanceState, void>({
+      query: () => "/admin/attendance/all_recent_attendance",
+      providesTags: ["attendance"],
+    }),
     getAttendanceByDate: builder.mutation<
       IAttendanceState,
       { selectedDate: string }
@@ -38,6 +43,7 @@ export const attendanceApi = createApi({
         url: `/admin/generate_report/attendance/specific_date:${selectedDate}`,
         method: "GET",
       }),
+      invalidatesTags: ["attendance"],
     }),
   }),
 });
@@ -56,6 +62,9 @@ export const attendanceSlice = createSlice({
 });
 
 export const { setAttendanceData } = attendanceSlice.actions;
-export const { useGetUsersAttendanceQuery, useGetAttendanceByDateMutation } =
-  attendanceApi;
+export const {
+  useGetUsersAttendanceQuery,
+  useGetAttendanceByDateMutation,
+  useGetAllRecentAttendanceQuery,
+} = attendanceApi;
 export default attendanceSlice.reducer;

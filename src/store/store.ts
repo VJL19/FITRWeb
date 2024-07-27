@@ -11,6 +11,7 @@ import users, { usersApi } from "src/reducers/users";
 import { transactionApi, transactionSlice } from "src/reducers/transaction";
 import { programApi, programSlice } from "src/reducers/program";
 import { salesAnalyticsApi } from "src/reducers/sales_analytics";
+import { recordApi } from "src/reducers/records";
 
 export const store = configureStore({
   reducer: {
@@ -29,6 +30,7 @@ export const store = configureStore({
     [transactionApi.reducerPath]: transactionApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
     [salesAnalyticsApi.reducerPath]: salesAnalyticsApi.reducer,
+    [recordApi.reducerPath]: recordApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -38,6 +40,7 @@ export const store = configureStore({
       transactionApi.middleware,
       programApi.middleware,
       salesAnalyticsApi.middleware,
+      recordApi.middleware,
     ]),
 });
 setupListeners(store.dispatch);

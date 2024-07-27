@@ -63,6 +63,18 @@ export const usersApi = createApi({
       query: () => "/admin/user/all_users",
       providesTags: ["users"],
     }),
+    getAllTotalUsers: builder.query<IUserApiState, void>({
+      query: () => "/admin/user/all_total_users",
+      providesTags: ["users"],
+    }),
+    getAllTotalSessionUsers: builder.query<IUserApiState, void>({
+      query: () => "/admin/user/all_total_session_users",
+      providesTags: ["users"],
+    }),
+    getAllTotalMonthlyUsers: builder.query<IUserApiState, void>({
+      query: () => "/admin/user/all_total_monthly_users",
+      providesTags: ["users"],
+    }),
     registerUser: builder.mutation<IUserApiState, IUser>({
       query: (arg) => ({
         url: "/admin/user/register_user_account",
@@ -129,6 +141,9 @@ const userSlice = createSlice({
 export const { setUserData, setOTPToken } = userSlice.actions;
 export const {
   useGetAllUsersQuery,
+  useGetAllTotalUsersQuery,
+  useGetAllTotalSessionUsersQuery,
+  useGetAllTotalMonthlyUsersQuery,
   useRegisterUserMutation,
   useUpdateUserMutation,
   useSendEmailMutation,

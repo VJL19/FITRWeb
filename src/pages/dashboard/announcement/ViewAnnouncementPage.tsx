@@ -56,15 +56,18 @@ const ViewAnnouncementPage = () => {
         </Button>
         <h1>VIEW ANNOUNCEMENT</h1>
         <br />
-        <img
-          src={
-            AnnouncementImage === "default_poster.png"
-              ? thumbnail
-              : AnnouncementImage
-          }
-          height={400}
-          style={{ cursor: "pointer" }}
-        />
+        <a target="_blank" href={AnnouncementImage}>
+          <img
+            src={
+              AnnouncementImage === "default_poster.png"
+                ? thumbnail
+                : AnnouncementImage
+            }
+            height={400}
+            style={{ cursor: "pointer" }}
+          />
+        </a>
+
         <h2>{AnnouncementTitle}</h2>
         <p>{AnnouncementDescription}</p>
       </Container>

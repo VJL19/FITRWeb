@@ -1,170 +1,64 @@
-import { Container } from "@mui/material";
-import React, { useEffect } from "react";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setRoute } from "src/reducers/route";
 import { AppDispatch } from "src/store/store";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Bar,
-  BarChart,
-  Rectangle,
-} from "recharts";
-import {
-  useGetDailySessionUserSalesQuery,
-  useGetDailyMonthlyUserSalesQuery,
-} from "src/reducers/sales_analytics";
-import { IDailySalesAnalytics } from "src/utils/types/sales_analytics.types";
+import DailySales from "./DailySales";
+import WeeklySales from "./WeeklySales";
+import MonthlySales from "./MonthlySales";
 
-const weekly_data = [
-  {
-    name: "Sunday",
-    session: 2000,
-    monthly: 4000,
-    amt: 2400,
-  },
-  {
-    name: "Monday",
-    session: 2000,
-    monthly: 3000,
-    amt: 2210,
-  },
-  {
-    name: "Tuesday",
-    session: 2000,
-    monthly: 2000,
-    amt: 2290,
-  },
-  {
-    name: "Wednesday",
-    session: 2000,
-    monthly: 2780,
-    amt: 2000,
-  },
-  {
-    name: "Thursday",
-    session: 2000,
-    monthly: 1890,
-    amt: 2181,
-  },
-  {
-    name: "Friday",
-    session: 2000,
-    monthly: 2390,
-    amt: 2500,
-  },
-  {
-    name: "Saturday",
-
-    session: 2000,
-    monthly: 3490,
-    amt: 2100,
-  },
-];
 const SalePage = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const { data: sessionUserSales } = useGetDailySessionUserSalesQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
-  const { data: monthlyUserSales } = useGetDailyMonthlyUserSalesQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const activeFilter = useMemo(() => {
+    if (selectedValue === "Daily") {
+      return <DailySales />;
+    }
+    if (selectedValue === "Weekly") {
+      return <WeeklySales />;
+    }
+    if (selectedValue === "Monthly") {
+      return <MonthlySales />;
+    }
+  }, [selectedValue]);
 
   useEffect(() => {
     dispatch(setRoute("Sales"));
   }, []);
 
-  const monthlyUsers = monthlyUserSales?.result?.map(
-    (item: IDailySalesAnalytics) => item
-  );
-  const data = sessionUserSales?.result?.map((item: IDailySalesAnalytics) => ({
-    Day: item.Day,
-    SubscriptionEntryDate: item.SubscriptionEntryDate,
-    sessionUserSales: item.TotalSales,
-    monthlyUserSales: Number(
-      monthlyUsers
-        ?.filter(
-          (mUsers) =>
-            mUsers.SubscriptionEntryDate === item.SubscriptionEntryDate
-        )
-        .map((e) => e.TotalSales)
-    ),
-  }));
-
-  console.log(data);
   return (
-    <Container sx={{ height: 450 }}>
+    <Box sx={{ height: 450, width: "100%" }}>
       <h1>SALES OVERVIEW</h1>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="Day" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="sessionUserSales"
-            stroke="#202020"
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            type="monotone"
-            dataKey="monthlyUserSales"
-            stroke="#ff2e00"
-            activeDot={{ r: 8 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar
-            dataKey="sessionUserSales"
-            fill="#202020"
-            activeBar={<Rectangle fill="pink" stroke="blue" />}
-          />
-          <Bar
-            dataKey="monthlyUserSales"
-            fill="#ff2e00"
-            activeBar={<Rectangle fill="gold" stroke="purple" />}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </Container>
+      <Stack width={"100%"}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">
+            Choose between daily, weekly, and monthly
+          </InputLabel>
+          <Select
+            id="demo-simple-select-label"
+            label="reportType"
+            placeholder="Choose between daily, weekly, and monthly"
+            required
+            onChange={(event) => setSelectedValue(event.target.value)}
+          >
+            <MenuItem value="Daily">Daily Report</MenuItem>
+            <MenuItem value="Weekly">Weekly Report</MenuItem>
+            <MenuItem value="Monthly">Monthly Report</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
+      <br />
+      {activeFilter}
+    </Box>
   );
 };
 

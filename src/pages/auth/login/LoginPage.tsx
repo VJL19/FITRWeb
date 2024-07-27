@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "src/reducers/auth";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "src/store/store";
 import logo from "src/assets/logo_1.png";
 import "./styles.css";
-
 const LoginPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();

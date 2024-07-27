@@ -1,24 +1,12 @@
-import {
-  Container,
-  Button,
-  CircularProgress,
-  TextField,
-  Box,
-} from "@mui/material";
+import { Container, Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  TannouncementSchema,
-  announcementSchema,
-} from "src/utils/validations/announcementSchema";
 import getCurrentDate from "src/utils/functions/date_fns";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import "react-toastify/dist/ReactToastify.css";
-import { uploadImage } from "src/utils/functions/uploadImage";
-import { IMAGE_VALUES } from "src/utils/enums/IMAGE_VALUES";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -37,8 +25,6 @@ const CreateProgramPage = () => {
   } = useForm<TProgramSchema>({
     resolver: zodResolver(programSchema),
   });
-
-  const [loading, setLoading] = useState(false);
 
   const [createProgram, { data, error, isLoading, status }] =
     useCreateSuggestedProgramMutation();

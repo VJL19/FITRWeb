@@ -1,7 +1,4 @@
-import {
-  Box,
-  Button,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +15,12 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import { handleClose } from "src/reducers/modal";
 import { ToastContainer } from "react-toastify";
 import {
+  programApi,
   useDeleteSuggestedProgramMutation,
   useGetSuggestedProgramQuery,
 } from "src/reducers/program";
 import "react-toastify/dist/ReactToastify.css";
+import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -40,7 +39,6 @@ const ProgramPage = () => {
     data: suggested_programs,
     isFetching,
     isUninitialized,
-    refetch,
     status,
   } = useGetSuggestedProgramQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -53,6 +51,9 @@ const ProgramPage = () => {
   const [deleteProgram, { data, status: deleteStatus, error }] =
     useDeleteSuggestedProgramMutation();
 
+  useRefetchOnMessage("refresh_suggested_programs", () => {
+    dispatch(programApi.util.invalidateTags(["suggested_program"]));
+  });
   useEffect(() => {
     dispatch(setRoute("Programs"));
   }, []);
@@ -60,8 +61,6 @@ const ProgramPage = () => {
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
       showSuccessToast(data?.message);
-
-      refetch();
     }
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message);

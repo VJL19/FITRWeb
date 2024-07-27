@@ -1,0 +1,157 @@
+import { Stack, Button } from "@mui/material";
+import { GridColDef } from "@mui/x-data-grid";
+import { useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
+import { navLinkTextStyle } from "src/components/SideBar";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import { handleOpen } from "src/reducers/modal";
+import { IRecords } from "src/utils/types/records.types";
+const _record_files_columns: GridColDef[] = [
+  {
+    field: "RecordID",
+    headerName: "Record ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field.split("Record")[1]}</b>;
+    },
+    flex: 1,
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+  },
+  {
+    field: "RecordName",
+    headerName: "Record Name",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Record")[1]}</b>;
+    },
+    width: 180,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+  },
+  {
+    flex: 1,
+    align: "center",
+    field: "RecordDownloadLink",
+    headerName: "First Name",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Record")[1]}</b>;
+    },
+    width: 180,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    renderCell: (params) => {
+      const currentRowData: IRecords = params.row;
+
+      return (
+        <a href={`${currentRowData.RecordDownloadLink}`} target="_blank">
+          www.download.com
+        </a>
+      );
+    },
+  },
+  {
+    field: "RecordEntryDate",
+    headerName: "Last Name",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Record")[1]}</b>;
+    },
+    width: 180,
+    flex: 1,
+    align: "center",
+
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    valueFormatter: (value) =>
+      `${new Date(value).toDateString()} ${new Date(value).toLocaleString(
+        "en-US",
+        {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }
+      )}`,
+  },
+
+  {
+    field: "Actions",
+    headerName: "Actions",
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    width: 310,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    renderCell: (params) => {
+      const dispatch = useDispatch();
+      const currentRowData: IRecords = params.row;
+      // const arg: IAnnouncements = {
+      //   AnnouncementID: currentRowData.AnnouncementID,
+      //   AnnouncementTitle: currentRowData.AnnouncementTitle,
+      //   AnnouncementDate: currentRowData.AnnouncementDate,
+      //   AnnouncementDescription: currentRowData.AnnouncementDescription,
+      //   AnnouncementImage: currentRowData.AnnouncementImage,
+      // };
+      const onClick = () => {
+        //   dispatch(setAnnouncementData(arg));
+        window.scrollTo(0, 0);
+      };
+
+      const handleDelete = () => {
+        dispatch(handleOpen());
+        // dispatch(setAnnouncementData(arg));
+      };
+
+      return (
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="contained"
+            color="info"
+            size="medium"
+            onClick={onClick}
+            startIcon={
+              <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
+            }
+          >
+            <NavLink
+              to={`/dashboard/records/view_record/:${currentRowData.RecordID}`}
+              style={navLinkTextStyle}
+            >
+              View
+            </NavLink>
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            size="medium"
+            onClick={onClick}
+            startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+          >
+            <NavLink
+              to={`/dashboard/records/edit_record/:${currentRowData.RecordID}`}
+              style={navLinkTextStyle}
+            >
+              Edit
+            </NavLink>
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="medium"
+            onClick={handleDelete}
+            startIcon={<DeleteIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+          >
+            Delete
+          </Button>
+        </Stack>
+      );
+    },
+  },
+];
+
+export default _record_files_columns;

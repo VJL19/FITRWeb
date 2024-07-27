@@ -3,6 +3,7 @@ interface IProgramSuggested {
   SuggestedProgramTitle: string;
   SuggestedProgramDescription: string;
   SuggestedProgramEntryDate: string;
+  TotalProgramSuggested?: number;
 }
 
 export default IProgramSuggested;

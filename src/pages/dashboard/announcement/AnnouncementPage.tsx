@@ -1,16 +1,9 @@
-import {
-  Box,
-  Button,
-  MenuItem,
-  Modal,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
-import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
-import React, { useEffect, useMemo, useState } from "react";
+import { Box, Button } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  announcementApi,
   useDeleteAnnouncementMutation,
   useGetAnnouncementsQuery,
 } from "src/reducers/announcement";
@@ -25,6 +18,9 @@ import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { handleClose } from "src/reducers/modal";
 import { ToastContainer } from "react-toastify";
+import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
+import { storage } from "src/global/firebaseConfig";
+import { ref, deleteObject } from "firebase/storage";
 const AnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -44,11 +40,15 @@ const AnnouncementPage = () => {
     data: announcements,
     isFetching,
     isUninitialized,
-    refetch,
-    status,
-  } = useGetAnnouncementsQuery(undefined, { refetchOnMountOrArgChange: true });
+  } = useGetAnnouncementsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  const { AnnouncementID } = useSelector(
+  useRefetchOnMessage("refresh_announcement", () => {
+    dispatch(announcementApi.util.invalidateTags(["admin_announments"]));
+  });
+
+  const { AnnouncementID, AnnouncementImage } = useSelector(
     (state: RootState) => state.announcement.announcementData
   );
   const [deleteAnnouncement, { data, status: deleteStatus, error }] =
@@ -58,11 +58,23 @@ const AnnouncementPage = () => {
     dispatch(setRoute("Announcements"));
   }, []);
 
+  // useEffect(() => {
+  //   const handleMessage = () => {
+  //     dispatch(announcementApi.util.invalidateTags(["admin_announments"]));
+  //     console.log("run");
+  //     refetch();
+  //   };
+  //   //listens to any event emitted by the server and refetch the data
+  //   socket?.on("refresh_announcement", handleMessage);
+
+  //   return () => {
+  //     socket?.off("refresh_announcement", handleMessage);
+  //   };
+  // }, [socket]);
+
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
       showSuccessToast(data?.message);
-
-      refetch();
     }
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message);
@@ -83,13 +95,21 @@ const AnnouncementPage = () => {
     const arg = {
       AnnouncementID: AnnouncementID,
     };
+    let imageRef = ref(storage, AnnouncementImage);
+
+    try {
+      await deleteObject(imageRef);
+      console.log("success");
+    } catch (err) {
+      console.log("there was an error in deleting an image");
+    }
     deleteAnnouncement(arg);
     dispatch(handleClose());
   };
 
-  console.log("delete announcements status", deleteStatus);
-  console.log("delete announcements data", data?.message);
-  console.log("delete announcements error", error);
+  // console.log("delete announcements status", deleteStatus);
+  // console.log("delete announcements data", data?.message);
+  // console.log("delete announcements error", error);
 
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;

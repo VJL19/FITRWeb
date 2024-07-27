@@ -65,6 +65,18 @@ export const transactionApi = createApi({
       }),
       invalidatesTags: ["transaction"],
     }),
+    getAllUserRecentTransactions: builder.query<ITransactionApiState, void>({
+      query: () => "/admin/subscription/all_recent_subscriptions",
+      providesTags: ["transaction"],
+    }),
+    getAllPendingTransactions: builder.query<ITransactionApiState, void>({
+      query: () => "/admin/subscription/all_pending_subscriptions",
+      providesTags: ["transaction"],
+    }),
+    getAllFulfillTransactions: builder.query<ITransactionApiState, void>({
+      query: () => "/admin/subscription/all_fulfill_subscriptions",
+      providesTags: ["transaction"],
+    }),
     fulfillUserTransaction: builder.mutation<
       ITransactionApiState,
       { SubscriptionID: number | undefined; SubscriptionStatus: string }
@@ -104,8 +116,11 @@ export const { setTransactionData } = transactionSlice.actions;
 export const {
   useGetAllUsersTransactionsQuery,
   useFulfillUserTransactionMutation,
-  useDeleteTransactionMutation,
+  useGetAllPendingTransactionsQuery,
+  useGetAllFulfillTransactionsQuery,
   useGetAllUsersTransactionsByDateMutation,
+  useGetAllUserRecentTransactionsQuery,
+  useDeleteTransactionMutation,
 } = transactionApi;
 
 export default transactionSlice.reducer;

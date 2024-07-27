@@ -24,6 +24,8 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { showSuccessToast } from "src/components/showToast";
+import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
+
 const CreateAnnouncementPage = () => {
   const {
     register,
@@ -60,11 +62,11 @@ const CreateAnnouncementPage = () => {
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       showSuccessToast(data?.message);
-
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/announcements", { replace: true });
         setImagePreview(IMAGE_VALUES.DEFAULT_VALUE);
+
         reset();
       };
       delayRedirect();

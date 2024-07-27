@@ -9,6 +9,8 @@ interface ISubscriptions extends IUser {
   SubscriptionUploadedImage: string;
   SubscriptionEntryDate: string;
   No_M_SubscriptionID: number;
+  TotalPending?: number;
+  TotalFulfill?: number;
 }
 
 export interface IEditSubscription {

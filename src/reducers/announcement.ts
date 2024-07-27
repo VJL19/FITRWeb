@@ -3,7 +3,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { loadConfig } from "src/global/config";
 import { IAnnouncements } from "src/utils/types/announcement.types";
-
 interface IAnnouncementState {
   error: string;
   message: string;
@@ -28,9 +27,7 @@ const initialState: IAnnouncementSliceState = {
     AnnouncementDescription: "",
   },
 };
-
 const config = loadConfig();
-
 export const announcementApi = createApi({
   tagTypes: ["admin_announments"],
   reducerPath: "admin/announcements",
@@ -40,6 +37,11 @@ export const announcementApi = createApi({
   endpoints: (builder) => ({
     getAnnouncements: builder.query<IAnnouncementState, void>({
       query: () => "/admin/announcement/all_announcements",
+      providesTags: ["admin_announments"],
+    }),
+    getTotalAnnouncements: builder.query<IAnnouncementState, void>({
+      query: () => "/admin/announcement/total_announcements",
+      providesTags: ["admin_announments"],
     }),
     createAnnouncement: builder.mutation<
       IAnnouncementState,
@@ -100,6 +102,7 @@ const announcementSlice = createSlice({
 export const { setAnnouncementData } = announcementSlice.actions;
 export const {
   useGetAnnouncementsQuery,
+  useGetTotalAnnouncementsQuery,
   useCreateAnnouncementMutation,
   useEditAnnouncementMutation,
   useDeleteAnnouncementMutation,

@@ -1,10 +1,10 @@
 import {
   Button,
-  Container,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -30,7 +30,7 @@ import {
 import FinancialReportPdfFile from "./FinancialReportPdfFile";
 import { useGetAllUsersTransactionsByDateMutation } from "src/reducers/transaction";
 import LoadingIndicator from "src/components/LoadingIndicator";
-
+import DownloadIcon from "@mui/icons-material/Download";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -38,6 +38,7 @@ const ReportPage = () => {
   const {
     control,
     formState: { errors },
+    getValues,
   } = useForm<TGenerateSchema>({
     resolver: zodResolver(filterGenerateByDateSchema),
   });
@@ -55,7 +56,13 @@ const ReportPage = () => {
   }, []);
 
   return (
-    <Container>
+    <Box
+      sx={{
+        height: 500,
+        width: "100%",
+      }}
+      alignItems={"center"}
+    >
       <h1>GENERATE REPORTS</h1>
       <h3>Select Report Type</h3>
 
@@ -83,86 +90,92 @@ const ReportPage = () => {
         />
 
         <DisplayFormError errors={errors.reportType} />
-        <h3>Select date</h3>
-        <Controller
-          name="selectedDate"
-          control={control}
-          defaultValue={undefined}
-          rules={{ required: true }}
-          render={({ field: { onChange, value, ...restField } }) => (
-            <DatePicker
-              {...restField}
-              value={dayjs(value)}
-              label="Date"
-              onChange={(newDateValue) => {
-                onChange(dayjs(newDateValue).format("YYYY-MM-DD"));
+        {selectedValue !== "" && (
+          <React.Fragment>
+            <h3>Select date</h3>
+            <Controller
+              name="selectedDate"
+              control={control}
+              defaultValue={undefined}
+              rules={{ required: true }}
+              render={({ field: { onChange, value, ...restField } }) => (
+                <DatePicker
+                  {...restField}
+                  value={dayjs(value)}
+                  label="Date"
+                  onChange={(newDateValue) => {
+                    onChange(dayjs(newDateValue).format("YYYY-MM-DD"));
 
-                if (selectedValue === "Attendance Report") {
-                  filterAttendance({
-                    selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
-                  });
-                  return;
-                }
-                filterFinancial({
-                  selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
-                });
+                    if (selectedValue === "Attendance Report") {
+                      filterAttendance({
+                        selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
+                      });
+                      return;
+                    }
+                    filterFinancial({
+                      selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
+                    });
 
-                console.log("your filtered data", data?.result);
-              }}
+                    console.log("your filtered data", data?.result);
+                  }}
+                />
+              )}
             />
-          )}
-        />
+          </React.Fragment>
+        )}
         <DisplayFormError errors={errors.selectedDate} />
       </Stack>
-      {selectedValue === "Attendance Report" && (
-        <React.Fragment>
-          <h2>PDF Document Preview</h2>
-          <PDFViewer width="1000" height="550">
-            <AttendanceReportPdfFile data={data?.result} />
-          </PDFViewer>
-          <br />
+      {selectedValue === "Attendance Report" &&
+        getValues("selectedDate") !== undefined && (
+          <React.Fragment>
+            <h2>PDF Document Preview</h2>
+            <PDFViewer width="1000" height="550">
+              <AttendanceReportPdfFile data={data?.result} />
+            </PDFViewer>
+            <br />
 
-          <PDFDownloadLink
-            document={<AttendanceReportPdfFile data={data?.result} />}
-            fileName={`ATTENDANCE_REPORT_FORM_${new Date().getTime()}`}
-          >
-            {({ loading }) =>
-              loading ? (
-                <LoadingIndicator />
-              ) : (
-                <Button variant="contained" size="medium" color="success">
-                  Download
+            <PDFDownloadLink
+              document={<AttendanceReportPdfFile data={data?.result} />}
+              fileName={`ATTENDANCE_REPORT_FORM_${new Date().getTime()}`}
+            >
+              {({ loading }) => (
+                <Button
+                  variant="contained"
+                  size="medium"
+                  color={loading ? "warning" : "success"}
+                >
+                  {loading ? "Loading..." : "Download"}
                 </Button>
-              )
-            }
-          </PDFDownloadLink>
-        </React.Fragment>
-      )}
-      {selectedValue === "Financial Report" && (
-        <React.Fragment>
-          <h2>PDF Document Preview</h2>
-          <PDFViewer width="1000" height="550">
-            <FinancialReportPdfFile data={financialRes?.result} />
-          </PDFViewer>
-          <br />
+              )}
+            </PDFDownloadLink>
+          </React.Fragment>
+        )}
+      {selectedValue === "Financial Report" &&
+        getValues("selectedDate") !== undefined && (
+          <React.Fragment>
+            <h2>PDF Document Preview</h2>
+            <PDFViewer width="1000" height="550">
+              <FinancialReportPdfFile data={financialRes?.result} />
+            </PDFViewer>
+            <br />
 
-          <PDFDownloadLink
-            document={<FinancialReportPdfFile data={financialRes?.result} />}
-            fileName={`FINANCIAL_REPORT_FORM_${new Date().getTime()}`}
-          >
-            {({ loading }) =>
-              loading ? (
-                <LoadingIndicator />
-              ) : (
-                <Button variant="contained" size="medium" color="success">
-                  Download
+            <PDFDownloadLink
+              document={<FinancialReportPdfFile data={financialRes?.result} />}
+              fileName={`FINANCIAL_REPORT_FORM_${new Date().getTime()}`}
+            >
+              {({ loading }) => (
+                <Button
+                  variant="contained"
+                  size="medium"
+                  color={loading ? "warning" : "success"}
+                >
+                  {loading ? "Loading..." : "Download"}
                 </Button>
-              )
-            }
-          </PDFDownloadLink>
-        </React.Fragment>
-      )}
-    </Container>
+              )}
+            </PDFDownloadLink>
+          </React.Fragment>
+        )}
+    </Box>
   );
 };
 

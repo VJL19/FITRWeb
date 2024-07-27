@@ -4,4 +4,5 @@ export interface IAnnouncements {
   AnnouncementTitle: string;
   AnnouncementDate: string;
   AnnouncementDescription: string;
+  TotalAnnouncements?: number;
 }

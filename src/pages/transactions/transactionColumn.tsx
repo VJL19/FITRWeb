@@ -11,6 +11,10 @@ import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 import ISubscriptions from "src/utils/types/subscription.types";
 import { setTransactionData } from "src/reducers/transaction";
+import { format } from "date-fns";
+import dayjs from "dayjs";
+import { renderDate } from "src/utils/functions/date_fns";
+
 const _columns: GridColDef[] = [
   {
     field: "UserID",
@@ -174,14 +178,10 @@ const _columns: GridColDef[] = [
     width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      `${new Date(row.SubscriptionEntryDate).toDateString()} ${new Date(
-        row.SubscriptionEntryDate
-      ).toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      })}`,
+    type: "date",
+    renderCell: (params) => renderDate(params.row?.SubscriptionEntryDate),
+    valueFormatter: (params: ISubscriptions) =>
+      dayjs(params.SubscriptionEntryDate).format("YYYY/MM/DD"),
   },
   {
     field: "SubscriptionStatus",

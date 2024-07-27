@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Container, Button, Stack } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,17 +62,17 @@ const UserPage = () => {
     return <LoadingIndicator />;
   }
   return (
-    <Box
+    <Container
+      maxWidth="xl"
       sx={{
         height: 500,
-        width: "100%",
+        alignItems: "center",
         "& .super-app-theme--header": {
           backgroundColor: "#ff2e00",
           color: "#f5f5f5",
           fontSize: 18,
         },
       }}
-      alignItems={"center"}
     >
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         GYM MEMBERS
@@ -133,7 +133,7 @@ const UserPage = () => {
         handleDeleteClick={handleDeleteUser}
       />
       <ToastContainer />
-    </Box>
+    </Container>
   );
 };
 

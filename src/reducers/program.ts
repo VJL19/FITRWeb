@@ -34,6 +34,10 @@ export const programApi = createApi({
       query: () => "/admin/program/program_suggested",
       providesTags: ["suggested_program"],
     }),
+    getTotalSuggestedProgram: builder.query<IProgramApiState, void>({
+      query: () => "/admin/program/total_program_suggested",
+      providesTags: ["suggested_program"],
+    }),
     createSuggestedProgram: builder.mutation<
       IProgramApiState,
       {
@@ -95,6 +99,7 @@ export const {
   useCreateSuggestedProgramMutation,
   useEditProgramControllerMutation,
   useGetSuggestedProgramQuery,
+  useGetTotalSuggestedProgramQuery,
   useDeleteSuggestedProgramMutation,
 } = programApi;
 export default programSlice.reducer;
