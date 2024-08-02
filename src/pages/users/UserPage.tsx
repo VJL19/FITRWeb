@@ -18,6 +18,8 @@ import {
 import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
+import { storage } from "src/global/firebaseConfig";
+import { ref, deleteObject } from "firebase/storage";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -25,7 +27,9 @@ const UserPage = () => {
     dispatch(setRoute("Users"));
   }, []);
 
-  const { UserID } = useSelector((state: RootState) => state.user.userData);
+  const { UserID, ProfilePic } = useSelector(
+    (state: RootState) => state.user.userData
+  );
   const [deleteUser, { status: deleteStatus }] = useDeleteUserAccountMutation();
 
   const { data, isFetching, isUninitialized } = useGetAllUsersQuery(undefined, {
@@ -49,7 +53,16 @@ const UserPage = () => {
     [_columns]
   );
 
-  const handleDeleteUser = () => {
+  const handleDeleteUser = async () => {
+    let imageRef = ref(storage, ProfilePic);
+
+    try {
+      await deleteObject(imageRef);
+      console.log("success");
+    } catch (err) {
+      console.log("there was an error in deleting an image");
+    }
+
     dispatch(handleClose());
     deleteUser({ UserID: UserID });
   };

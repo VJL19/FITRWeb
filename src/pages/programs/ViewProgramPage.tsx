@@ -16,7 +16,7 @@ const ViewProgramPage = () => {
   };
   return (
     <div>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           variant="contained"
@@ -29,7 +29,9 @@ const ViewProgramPage = () => {
         <h1>VIEW SUGGESTED PROGRAM PAGE</h1>
 
         <h2>{SuggestedProgramTitle}</h2>
-        <p>{SuggestedProgramDescription}</p>
+        <div
+          dangerouslySetInnerHTML={{ __html: SuggestedProgramDescription }}
+        />
       </Container>
     </div>
   );

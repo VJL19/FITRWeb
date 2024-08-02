@@ -1,5 +1,5 @@
-import { Container, Button, TextField } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Container, Button, TextField, Box } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   TannouncementSchema,
@@ -19,13 +19,18 @@ import { RootState } from "src/store/store";
 import { IMAGE_VALUES } from "src/utils/enums/IMAGE_VALUES";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import React from "react";
+import RichTextEditor from "src/components/RichTextEditor";
+import { ref, deleteObject } from "firebase/storage";
+import { storage } from "src/global/firebaseConfig";
 const EditAnnouncementPage = () => {
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors, isSubmitted },
+    control,
+    formState: { errors, isSubmitted, isSubmitting },
   } = useForm<TannouncementSchema>({
     resolver: zodResolver(announcementSchema),
   });
@@ -104,6 +109,14 @@ const EditAnnouncementPage = () => {
   const onSubmit = async (data: TannouncementSchema) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
+    let imageRef = ref(storage, AnnouncementImage);
+
+    try {
+      await deleteObject(imageRef);
+      console.log("success");
+    } catch (err) {
+      console.log("there was an error in deleting an image");
+    }
     const url = await uploadImage(
       imagePreview,
       "GymAnnouncements/",
@@ -136,7 +149,7 @@ const EditAnnouncementPage = () => {
   }
   return (
     <div style={{ padding: 15 }}>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           disabled={isLoading}
@@ -160,6 +173,7 @@ const EditAnnouncementPage = () => {
           }
           height={400}
           style={{ cursor: "pointer" }}
+          width={"100%"}
         />
         <br />
 
@@ -184,18 +198,29 @@ const EditAnnouncementPage = () => {
             {errors.AnnouncementTitle?.message}
           </h4>
         )}
-        <br />
-        <TextField
-          {...register("AnnouncementDescription")}
-          inputMode="text"
-          rows={10}
-          required
-          defaultValue={AnnouncementDescription}
-          error={errors.AnnouncementDescription ? true : false}
-          label="Enter announcement description"
-          multiline={true}
-          style={{ width: "100%" }}
-        />
+        <h2>Description</h2>
+        <Box component="div" sx={{ height: 350 }}>
+          <Controller
+            name="AnnouncementDescription"
+            control={control}
+            defaultValue={AnnouncementDescription}
+            rules={{ required: "Description is required" }}
+            render={({ field: { onChange, value, ...restField } }) => (
+              <React.Fragment>
+                <RichTextEditor
+                  {...restField}
+                  value={value}
+                  setValue={onChange}
+                  style={{ height: "100%" }}
+                />
+                {/* <MDEditor.Markdown
+                  source={value}
+                  style={{ whiteSpace: "pre-wrap" }}
+                /> */}
+              </React.Fragment>
+            )}
+          />
+        </Box>
         {errors.AnnouncementDescription && (
           <h4 style={{ color: "#d9534f" }}>
             {errors.AnnouncementDescription?.message}
@@ -203,6 +228,7 @@ const EditAnnouncementPage = () => {
         )}
         <br />
         <Button
+          disabled={isSubmitting}
           endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           variant="contained"
           color="success"

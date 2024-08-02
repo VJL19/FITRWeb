@@ -1,5 +1,5 @@
 import { Container, Button, TextField, Box } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import getCurrentDate from "src/utils/functions/date_fns";
@@ -19,11 +19,14 @@ import {
 } from "src/utils/validations/programSchema";
 import { useSelector } from "react-redux";
 import { RootState } from "src/store/store";
+import React from "react";
+import RichTextEditor from "src/components/RichTextEditor";
 
 const EditProgramPage = () => {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitted, isSubmitting },
   } = useForm<TProgramSchema>({
@@ -84,7 +87,7 @@ const EditProgramPage = () => {
   }
   return (
     <div style={{ padding: 5 }}>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           disabled={isLoading}
@@ -99,6 +102,7 @@ const EditProgramPage = () => {
         <h1>EDIT SUGGESTED PROGRAM</h1>
         <br />
 
+        <h1>Title</h1>
         <TextField
           {...register("SuggestedProgramTitle")}
           inputMode="text"
@@ -113,17 +117,29 @@ const EditProgramPage = () => {
             {errors.SuggestedProgramTitle?.message}
           </h4>
         )}
-        <TextField
-          {...register("SuggestedProgramDescription")}
-          inputMode="text"
-          required
-          defaultValue={SuggestedProgramDescription}
-          error={errors.SuggestedProgramDescription ? true : false}
-          rows={10}
-          label="Enter suggested program description"
-          multiline={true}
-          style={{ width: "100%" }}
-        />
+        <h2>Description</h2>
+        <Box component="div" sx={{ height: 350 }}>
+          <Controller
+            name="SuggestedProgramDescription"
+            control={control}
+            defaultValue={SuggestedProgramDescription}
+            rules={{ required: "Description is required" }}
+            render={({ field: { onChange, value, ...restField } }) => (
+              <React.Fragment>
+                <RichTextEditor
+                  {...restField}
+                  value={value}
+                  setValue={onChange}
+                  style={{ height: "100%" }}
+                />
+                {/* <MDEditor.Markdown
+                  source={value}
+                  style={{ whiteSpace: "pre-wrap" }}
+                /> */}
+              </React.Fragment>
+            )}
+          />
+        </Box>
         {errors.SuggestedProgramDescription && (
           <h4 style={{ color: "#d9534f" }}>
             {errors.SuggestedProgramDescription?.message}

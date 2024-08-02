@@ -11,7 +11,7 @@ import users, { usersApi } from "src/reducers/users";
 import { transactionApi, transactionSlice } from "src/reducers/transaction";
 import { programApi, programSlice } from "src/reducers/program";
 import { salesAnalyticsApi } from "src/reducers/sales_analytics";
-import { recordApi } from "src/reducers/records";
+import { recordApi, recordSlice } from "src/reducers/records";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +24,7 @@ export const store = configureStore({
     suggested_program: programSlice.reducer,
     transaction: transactionSlice.reducer,
     attendance: attendanceSlice.reducer,
+    record: recordSlice.reducer,
     [announcementApi.reducerPath]: announcementApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,

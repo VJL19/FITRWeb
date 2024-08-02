@@ -64,6 +64,7 @@ const MonthlySales = () => {
           required
           defaultValue={selectedValue}
           onChange={(event) => {
+            setSelectedValue(event.target.value);
             getSessionUsers({ selectedYear: event.target.value });
             getMonthlyUsers({ selectedYear: event.target.value });
           }}
@@ -73,67 +74,70 @@ const MonthlySales = () => {
           ))}
         </Select>
       </FormControl>
-      <React.Fragment></React.Fragment>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="Months" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="sessionUserSales"
-            stroke="#202020"
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            type="monotone"
-            dataKey="monthlyUserSales"
-            stroke="#ff2e00"
-            activeDot={{ r: 8 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="Months" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar
-            dataKey="sessionUserSales"
-            fill="#202020"
-            activeBar={<Rectangle fill="pink" stroke="blue" />}
-          />
-          <Bar
-            dataKey="monthlyUserSales"
-            fill="#ff2e00"
-            activeBar={<Rectangle fill="gold" stroke="purple" />}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+      {selectedValue !== "" && (
+        <React.Fragment>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              width={500}
+              height={300}
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Months" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="sessionUserSales"
+                stroke="#202020"
+                activeDot={{ r: 8 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="monthlyUserSales"
+                stroke="#ff2e00"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              width={500}
+              height={300}
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Months" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="sessionUserSales"
+                fill="#202020"
+                activeBar={<Rectangle fill="pink" stroke="blue" />}
+              />
+              <Bar
+                dataKey="monthlyUserSales"
+                fill="#ff2e00"
+                activeBar={<Rectangle fill="gold" stroke="purple" />}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </React.Fragment>
+      )}
     </Container>
   );
 };

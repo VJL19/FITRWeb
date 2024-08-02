@@ -36,6 +36,15 @@ const _columns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    renderCell: (params) => {
+      return (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: params.row.SuggestedProgramDescription,
+          }}
+        />
+      );
+    },
   },
   {
     field: "SuggestedProgramEntryDate",

@@ -6,3 +6,11 @@ export interface IAnnouncements {
   AnnouncementDescription: string;
   TotalAnnouncements?: number;
 }
+
+export interface IPreviewAnnouncements {
+  AnnouncementID: number;
+  AnnouncementImage: string | File | undefined;
+  AnnouncementTitle: string;
+  AnnouncementDate: string;
+  AnnouncementDescription: string;
+}

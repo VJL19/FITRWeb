@@ -32,7 +32,6 @@ const AnnouncementPage = () => {
     "AnnouncementTitle",
     "AnnouncementDate",
     "AnnouncementTime",
-    "AnnouncementDescription",
     "Actions",
   ];
 

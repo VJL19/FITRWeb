@@ -29,7 +29,6 @@ const ProgramPage = () => {
 
   const VISIBLE_FIELDS = [
     "SuggestedProgramTitle",
-    "SuggestedProgramDescription",
     "SuggestedProgramEntryDate",
     "SuggestedProgramEntryTime",
     "Actions",

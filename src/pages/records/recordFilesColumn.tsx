@@ -8,6 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { handleOpen } from "src/reducers/modal";
 import { IRecords } from "src/utils/types/records.types";
+import { setRecordData } from "src/reducers/records";
 const _record_files_columns: GridColDef[] = [
   {
     field: "RecordID",
@@ -50,7 +51,7 @@ const _record_files_columns: GridColDef[] = [
 
       return (
         <a href={`${currentRowData.RecordDownloadLink}`} target="_blank">
-          www.download.com
+          Download this file
         </a>
       );
     },
@@ -90,21 +91,19 @@ const _record_files_columns: GridColDef[] = [
     renderCell: (params) => {
       const dispatch = useDispatch();
       const currentRowData: IRecords = params.row;
-      // const arg: IAnnouncements = {
-      //   AnnouncementID: currentRowData.AnnouncementID,
-      //   AnnouncementTitle: currentRowData.AnnouncementTitle,
-      //   AnnouncementDate: currentRowData.AnnouncementDate,
-      //   AnnouncementDescription: currentRowData.AnnouncementDescription,
-      //   AnnouncementImage: currentRowData.AnnouncementImage,
-      // };
+      const arg: IRecords = {
+        RecordID: currentRowData.RecordID,
+        RecordName: currentRowData.RecordName,
+        RecordDownloadLink: currentRowData.RecordDownloadLink,
+        RecordEntryDate: currentRowData.RecordEntryDate,
+      };
       const onClick = () => {
-        //   dispatch(setAnnouncementData(arg));
-        window.scrollTo(0, 0);
+        dispatch(setRecordData(arg));
       };
 
       const handleDelete = () => {
         dispatch(handleOpen());
-        // dispatch(setAnnouncementData(arg));
+        dispatch(setRecordData(arg));
       };
 
       return (

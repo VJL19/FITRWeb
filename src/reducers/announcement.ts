@@ -2,7 +2,10 @@ import { GridColDef } from "@mui/x-data-grid";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { loadConfig } from "src/global/config";
-import { IAnnouncements } from "src/utils/types/announcement.types";
+import {
+  IAnnouncements,
+  IPreviewAnnouncements,
+} from "src/utils/types/announcement.types";
 interface IAnnouncementState {
   error: string;
   message: string;
@@ -16,6 +19,7 @@ interface IAnnouncementState {
 
 interface IAnnouncementSliceState {
   announcementData: IAnnouncements;
+  previewAnnouncementData: IPreviewAnnouncements;
 }
 
 const initialState: IAnnouncementSliceState = {
@@ -23,6 +27,13 @@ const initialState: IAnnouncementSliceState = {
     AnnouncementID: 0,
     AnnouncementImage: "",
     AnnouncementTitle: "",
+    AnnouncementDate: "",
+    AnnouncementDescription: "",
+  },
+  previewAnnouncementData: {
+    AnnouncementID: 0,
+    AnnouncementTitle: "",
+    AnnouncementImage: "",
     AnnouncementDate: "",
     AnnouncementDescription: "",
   },
@@ -96,10 +107,17 @@ const announcementSlice = createSlice({
     setAnnouncementData: (state, action: PayloadAction<IAnnouncements>) => {
       state.announcementData = action.payload;
     },
+    setPreviewAnnouncementData: (
+      state,
+      action: PayloadAction<IPreviewAnnouncements>
+    ) => {
+      state.previewAnnouncementData = action.payload;
+    },
   },
 });
 
-export const { setAnnouncementData } = announcementSlice.actions;
+export const { setAnnouncementData, setPreviewAnnouncementData } =
+  announcementSlice.actions;
 export const {
   useGetAnnouncementsQuery,
   useGetTotalAnnouncementsQuery,

@@ -12,7 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "src/store/store";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
 const ViewAnnouncementPage = () => {
   const {
     AnnouncementTitle,
@@ -44,7 +43,7 @@ const ViewAnnouncementPage = () => {
 
   return (
     <div style={{ padding: 15 }}>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           startIcon={<ArrowBackIcon fontSize="large" htmlColor={"#f5f5f5"} />}
           variant="contained"
@@ -69,7 +68,7 @@ const ViewAnnouncementPage = () => {
         </a>
 
         <h2>{AnnouncementTitle}</h2>
-        <p>{AnnouncementDescription}</p>
+        <div dangerouslySetInnerHTML={{ __html: AnnouncementDescription }} />
       </Container>
     </div>
   );

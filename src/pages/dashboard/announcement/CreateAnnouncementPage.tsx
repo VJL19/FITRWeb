@@ -5,14 +5,17 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   TannouncementSchema,
   announcementSchema,
 } from "src/utils/validations/announcementSchema";
 import getCurrentDate from "src/utils/functions/date_fns";
-import { useCreateAnnouncementMutation } from "src/reducers/announcement";
+import {
+  setPreviewAnnouncementData,
+  useCreateAnnouncementMutation,
+} from "src/reducers/announcement";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Bounce, toast, ToastContainer } from "react-toastify";
@@ -25,13 +28,19 @@ import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { showSuccessToast } from "src/components/showToast";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
+import RichTextEditor from "src/components/RichTextEditor";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "src/store/store";
+import PreviewModal from "src/components/PreviewModal";
 
 const CreateAnnouncementPage = () => {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitted },
+    control,
+    formState: { errors, isSubmitted, isSubmitting },
   } = useForm<TannouncementSchema>({
     resolver: zodResolver(announcementSchema),
   });
@@ -40,11 +49,14 @@ const CreateAnnouncementPage = () => {
     IMAGE_VALUES.DEFAULT_VALUE
   );
   const [loading, setLoading] = useState(false);
-  const fileRef = useRef<HTMLInputElement | null | undefined>();
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  const { previewModalOpen } = useSelector((state: RootState) => state.modal);
 
   const [createAnnouncement, { data, error, isLoading, status }] =
     useCreateAnnouncementMutation();
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleBack = () => {
     navigate("/dashboard/announcements", { replace: true });
@@ -77,6 +89,7 @@ const CreateAnnouncementPage = () => {
   }, [status, data?.message]);
 
   const onSubmit = async (data: TannouncementSchema) => {
+    console.log("your md data", data);
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const url = await uploadImage(
@@ -86,8 +99,8 @@ const CreateAnnouncementPage = () => {
       loading,
       setLoading
     );
+    // console.log("hey", url);
 
-    console.log("hey", url);
     const arg = {
       AnnouncementImage:
         url === IMAGE_VALUES.DEFAULT_VALUE ? IMAGE_VALUES.DEFAULT_VALUE : url,
@@ -109,8 +122,8 @@ const CreateAnnouncementPage = () => {
     return <LoadingIndicator />;
   }
   return (
-    <div style={{ padding: 5 }}>
-      <Container maxWidth="sm">
+    <div>
+      <Container maxWidth="md">
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           disabled={isLoading}
@@ -130,7 +143,8 @@ const CreateAnnouncementPage = () => {
               ? thumbnail
               : URL.createObjectURL(imagePreview)
           }
-          height={400}
+          height={450}
+          width={"100%"}
           style={{ cursor: "pointer" }}
         />
         <br />
@@ -142,6 +156,8 @@ const CreateAnnouncementPage = () => {
           ref={fileRef}
           onChange={handleImageChange}
         />
+
+        <h2>Title</h2>
         <TextField
           {...register("AnnouncementTitle")}
           inputMode="text"
@@ -155,7 +171,32 @@ const CreateAnnouncementPage = () => {
             {errors.AnnouncementTitle?.message}
           </h4>
         )}
-        <TextField
+
+        <h2>Description</h2>
+        <Box component="div" sx={{ height: 350 }}>
+          <Controller
+            name="AnnouncementDescription"
+            control={control}
+            rules={{ required: "Description is required" }}
+            render={({ field: { onChange, value, ...restField } }) => (
+              <React.Fragment>
+                <RichTextEditor
+                  {...register("AnnouncementDescription")}
+                  {...restField}
+                  value={value}
+                  setValue={onChange}
+                  style={{ height: "100%" }}
+                />
+                {/* <MDEditor.Markdown
+                  source={value}
+                  style={{ whiteSpace: "pre-wrap" }}
+                /> */}
+              </React.Fragment>
+            )}
+          />
+        </Box>
+
+        {/* <TextField
           {...register("AnnouncementDescription")}
           inputMode="text"
           required
@@ -164,13 +205,18 @@ const CreateAnnouncementPage = () => {
           label="Enter announcement description"
           multiline={true}
           style={{ width: "100%" }}
-        />
+        /> */}
+        <br />
         {errors.AnnouncementDescription && (
           <h4 style={{ color: "#d9534f" }}>
             {errors.AnnouncementDescription?.message}
           </h4>
         )}
+
+        <br />
+
         <Button
+          disabled={isSubmitting}
           endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           variant="contained"
           color="success"
@@ -181,6 +227,8 @@ const CreateAnnouncementPage = () => {
           Submit
         </Button>
       </Container>
+
+      <PreviewModal open={previewModalOpen} title="Preview announcement" />
 
       <ToastContainer />
     </div>

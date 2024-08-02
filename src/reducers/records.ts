@@ -1,3 +1,4 @@
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { loadConfig } from "src/global/config";
 import { IRecords } from "src/utils/types/records.types";
@@ -8,6 +9,18 @@ interface IRecordApiState {
   error: string;
   status: number;
 }
+
+interface IRecordSliceState {
+  recordData: IRecords;
+}
+const initialState: IRecordSliceState = {
+  recordData: {
+    RecordID: 0,
+    RecordName: "",
+    RecordDownloadLink: "",
+    RecordEntryDate: "",
+  },
+};
 
 const config = loadConfig();
 export const recordApi = createApi({
@@ -44,7 +57,7 @@ export const recordApi = createApi({
       }
     >({
       query: (arg) => ({
-        url: "/admin/records/upload_record",
+        url: "/admin/records/edit_record",
         method: "PUT",
         body: arg,
       }),
@@ -59,9 +72,23 @@ export const recordApi = createApi({
     }),
   }),
 });
+
+export const recordSlice = createSlice({
+  name: "record",
+  initialState,
+  reducers: {
+    setRecordData: (state, action: PayloadAction<IRecords>) => {
+      state.recordData = action.payload;
+    },
+  },
+});
+
+export const { setRecordData } = recordSlice.actions;
 export const {
   useGetAllFileRecordsQuery,
   useUploadFileRecordMutation,
   useEditFileRecordMutation,
   useDeleteFileRecordMutation,
 } = recordApi;
+
+export default recordSlice.reducer;

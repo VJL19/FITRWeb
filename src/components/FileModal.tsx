@@ -24,9 +24,7 @@ const FileModal = ({
 }: {
   open: boolean;
   title: string;
-  handleConfirmationUpload: (
-    value: React.SetStateAction<File | undefined>
-  ) => void;
+  handleConfirmationUpload: () => void;
 }) => {
   const dispatch: AppDispatch = useDispatch();
   return (
@@ -67,7 +65,7 @@ const FileModal = ({
               variant="contained"
               color="success"
               size="medium"
-              onClick={() => handleConfirmationUpload}
+              onClick={() => handleConfirmationUpload()}
             >
               Confirm
             </Button>
