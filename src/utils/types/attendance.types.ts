@@ -8,6 +8,9 @@ interface IAttendance extends IUser {
   SubscriptionExpectedEnd: string;
   DateTapped: string;
   IsPaid: string;
+  TotalUsers?: number;
+  TotalSessionUsers?: number;
+  TotalMonthlyUsers?: number;
 }
 
 export default IAttendance;

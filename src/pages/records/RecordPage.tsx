@@ -57,7 +57,6 @@ const RecordPage = () => {
     "IsPaid",
   ];
   const VISIBLE_FILES_FIELDS = [
-    "RecordID",
     "RecordName",
     "RecordDownloadLink",
     "RecordEntryDate",

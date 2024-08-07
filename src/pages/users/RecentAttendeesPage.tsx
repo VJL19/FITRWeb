@@ -54,32 +54,34 @@ const RecentAttendeesPage = () => {
         </div>
       </div>{" "}
       {recentAttendees?.result?.map((recentUser) => (
-        <Container
-          sx={{
-            borderBottomWidth: 3,
-            borderBottomColor: "gray",
-            display: "flex",
-            alignItems: "center",
-            justfiyContent: "center",
-            gap: 3,
-          }}
-        >
-          <img
-            style={{
-              border: 5,
-              borderWidth: 5,
-              borderColor: "#ff2e00",
-              borderRadius: "50%",
+        <React.Fragment key={recentUser.AttendanceID}>
+          <Container
+            sx={{
+              borderBottomWidth: 3,
+              borderBottomColor: "gray",
+              display: "flex",
+              alignItems: "center",
+              justfiyContent: "center",
+              gap: 3,
             }}
-            src={recentUser.ProfilePic}
-            alt="a user profile"
-            height={40}
-          />
-          <h5>
-            {recentUser.FirstName} {recentUser.LastName}
-          </h5>
-          <p>{new Date(recentUser.DateTapped).toLocaleString()}</p>
-        </Container>
+          >
+            <img
+              style={{
+                border: 5,
+                borderWidth: 5,
+                borderColor: "#ff2e00",
+                borderRadius: "50%",
+              }}
+              src={recentUser.ProfilePic}
+              alt="a user profile"
+              height={40}
+            />
+            <h5>
+              {recentUser.FirstName} {recentUser.LastName}
+            </h5>
+            <p>{new Date(recentUser.DateTapped).toLocaleString()}</p>
+          </Container>
+        </React.Fragment>
       ))}
     </Box>
   );

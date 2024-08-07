@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import dayjs from "dayjs";
 import { renderDate } from "src/utils/functions/date_fns";
 
-const _columns: GridColDef[] = [
+const _columns: GridColDef<ISubscriptions>[] = [
   {
     field: "UserID",
     headerName: "User ID",
@@ -34,7 +34,7 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
+    width: 100,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -43,7 +43,7 @@ const _columns: GridColDef[] = [
       return (
         <Stack
           direction="row"
-          sx={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+          sx={{ alignSelf: "center", justifyContent: "center" }}
         >
           <img
             style={{
@@ -99,12 +99,13 @@ const _columns: GridColDef[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "FullName",
     headerName: "Full Name",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
+    width: 120,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -113,28 +114,27 @@ const _columns: GridColDef[] = [
   },
 
   {
+    flex: 1,
     field: "SubscriptionAmount",
     headerName: "Subscription Amount",
     renderHeader: (params) => {
       return <b>{params.field.split("Subscription")[1]}</b>;
     },
-    width: 180,
-    flex: 1,
+    width: 120,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     valueGetter: (params, row) => `${row.SubscriptionAmount} PHP`,
   },
   {
+    flex: 1,
     field: "SubscriptionType",
     headerName: "Subscription Type",
     renderHeader: (params) => {
       return <b>{params.field.split("Subscription")[1]}</b>;
     },
-    width: 180,
+    width: 120,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
@@ -153,7 +153,7 @@ const _columns: GridColDef[] = [
       return (
         <Stack
           direction="row"
-          sx={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+          sx={{ alignSelf: "center", justifyContent: "center" }}
         >
           <img
             height={65}
@@ -169,6 +169,7 @@ const _columns: GridColDef[] = [
   },
 
   {
+    flex: 1,
     field: "SubscriptionEntryDate",
     headerName: "Subscription Entry Date",
     renderHeader: (params) => {

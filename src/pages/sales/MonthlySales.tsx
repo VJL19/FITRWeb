@@ -1,4 +1,5 @@
 import {
+  Box,
   Container,
   FormControl,
   InputLabel,
@@ -23,7 +24,18 @@ import {
   useGetMonthlySessionUserSalesMutation,
   useGetMonthlyMUserSalesMutation,
 } from "src/reducers/sales_analytics";
-import { IMonthlySalesAnalytics } from "src/utils/types/sales_analytics.types";
+import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
+import { formatCurrency } from "src/utils/functions/formatCurrency";
+import {
+  getAverageMonthlyMSales,
+  getAverageMonthlySessionSales,
+  getTotalMonthlyMSales,
+  getTotalMonthlySessionSales,
+} from "src/utils/functions/reports";
+import {
+  IMonthlySalesAnalytics,
+  IMonthlySalesData,
+} from "src/utils/types/sales_analytics.types";
 
 const MonthlySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -35,23 +47,51 @@ const MonthlySales = () => {
   const monthlyUsers = monthlyUserSales?.result?.map(
     (item: IMonthlySalesAnalytics) => item
   );
-  const data = sessionUserSales?.result?.map(
+  const sessionUsers = sessionUserSales?.result?.map(
+    (item: IMonthlySalesAnalytics) => item
+  );
+  let year_items = [];
+
+  const newArr =
+    sessionUserSales?.result.length === 0
+      ? monthlyUserSales?.result
+      : sessionUserSales?.result;
+  const data: IMonthlySalesData[] | undefined = newArr?.map(
     (item: IMonthlySalesAnalytics) => ({
       Months: item.Months,
-      sessionUserSales: item.TotalSalesPerMonth,
+      sessionUserSales: Number(
+        sessionUsers
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
+              mUsers.Months === item.Months
+          )
+          .map((e) => e.TotalSalesPerMonth)
+      ),
       monthlyUserSales: Number(
         monthlyUsers
-          ?.filter((mUsers) => mUsers.Months === item.Months)
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
+              mUsers.Months === item.Months
+          )
           .map((e) => e.TotalSalesPerMonth)
       ),
     })
   );
 
-  let year_items = [];
-
   for (let i = 2003; i <= 2050; i++) {
     year_items.push(i);
   }
+
+  const totalMonthlySalesBySession = getTotalMonthlySessionSales(data);
+  const averageMonthlySalesBySession = getAverageMonthlySessionSales(data);
+  const totalMonthlySalesByMonthly = getTotalMonthlyMSales(data);
+  const averageMonthlySalesByMonthly = getAverageMonthlyMSales(data);
+  const totalMonthlySales =
+    getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data);
+  const averageMonthlySales =
+    (getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data)) / 12;
 
   return (
     <Container sx={{ height: 450 }}>
@@ -76,6 +116,43 @@ const MonthlySales = () => {
       </FormControl>
       {selectedValue !== "" && (
         <React.Fragment>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 5,
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Box component="div">
+              <h2>SESSION</h2>
+              Total Sales : {formatCurrency(totalMonthlySalesBySession)} PHP
+              <Box component="div">
+                Average: {formatCurrency(averageMonthlySalesBySession)} PHP
+              </Box>
+            </Box>
+            <Box component="div">
+              <h2>MONTHLY</h2>
+              Total Sales : {formatCurrency(totalMonthlySalesByMonthly)} PHP
+              <Box component="div">
+                Average: {formatCurrency(averageMonthlySalesByMonthly)} PHP
+              </Box>
+            </Box>
+            <Box component="div">
+              <h2>TOTAL</h2>
+              Total : {formatCurrency(totalMonthlySales)} PHP
+              <Box component="div">
+                Average Sales Per Month: {formatCurrency(averageMonthlySales)}{" "}
+                PHP
+              </Box>
+            </Box>
+          </Box>
+        </React.Fragment>
+      )}
+
+      {selectedValue !== "" && (
+        <React.Fragment>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               width={500}
@@ -90,8 +167,8 @@ const MonthlySales = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Months" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
               <Line
                 type="monotone"
@@ -121,8 +198,8 @@ const MonthlySales = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Months" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
               <Bar
                 dataKey="sessionUserSales"

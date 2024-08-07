@@ -32,11 +32,9 @@ const TransactionPage = () => {
   );
 
   const VISIBLE_FIELDS = [
-    "ProfilePic",
     "FullName",
     "SubscriptionAmount",
     "SubscriptionType",
-    "SubscriptionUploadedImage",
     "SubscriptionStatus",
     "SubscriptionEntryDate",
     "Actions",

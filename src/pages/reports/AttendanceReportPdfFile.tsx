@@ -4,15 +4,25 @@ import logo from "src/assets/logo_1.png";
 import Html from "react-pdf-html";
 import IAttendance from "src/utils/types/attendance.types";
 import dynamicHtml from "./htmlPdf/htmlPage";
+import { REPORT_TYPE } from "src/utils/enums/REPORT.ts";
 
 const AttendanceReportPdfFile = ({
   data,
+  totalUsers,
+  totalSessionUsers,
+  totalMonthlyUsers,
 }: {
   data: IAttendance[] | undefined;
+  totalUsers: number | undefined;
+  totalSessionUsers: number | undefined;
+  totalMonthlyUsers: number | undefined;
 }) => {
   const COLUMNS = ["Full Name", "Type", "Time In", "Time Out", "Date Tapped"];
   const html = dynamicHtml({
-    title: `MJESHTER ATTENDANCE REPORT`,
+    title: REPORT_TYPE.ATTENDANCE,
+    totalUsers: totalUsers,
+    totalSessionUsers: totalSessionUsers,
+    totalMonthlyUsers: totalMonthlyUsers,
     COLUMNS: COLUMNS,
     data: data
       ?.map(

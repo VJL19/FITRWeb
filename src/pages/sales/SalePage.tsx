@@ -39,22 +39,24 @@ const SalePage = () => {
     <Box sx={{ height: 450, width: "100%" }}>
       <h1>SALES OVERVIEW</h1>
       <Stack width={"100%"}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">
-            Choose between daily, weekly, and monthly
-          </InputLabel>
-          <Select
-            id="demo-simple-select-label"
-            label="reportType"
-            placeholder="Choose between daily, weekly, and monthly"
-            required
-            onChange={(event) => setSelectedValue(event.target.value)}
-          >
-            <MenuItem value="Daily">Daily Report</MenuItem>
-            <MenuItem value="Weekly">Weekly Report</MenuItem>
-            <MenuItem value="Monthly">Monthly Report</MenuItem>
-          </Select>
-        </FormControl>
+        <Box sx={{ width: "25%" }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              Choose between daily, weekly, and monthly
+            </InputLabel>
+            <Select
+              id="demo-simple-select-label"
+              label="reportType"
+              placeholder="Choose between daily, weekly, and monthly"
+              required
+              onChange={(event) => setSelectedValue(event.target.value)}
+            >
+              <MenuItem value="Daily">Daily Report</MenuItem>
+              <MenuItem value="Weekly">Weekly Report</MenuItem>
+              <MenuItem value="Monthly">Monthly Report</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Stack>
       <br />
       {activeFilter}

@@ -1,4 +1,5 @@
 import {
+  Box,
   Container,
   FormControl,
   InputLabel,
@@ -23,7 +24,18 @@ import {
   useGetWeeklySessionUserSalesMutation,
   useGetWeeklyMonthlyUserSalesMutation,
 } from "src/reducers/sales_analytics";
-import { IWeeklySalesAnalytics } from "src/utils/types/sales_analytics.types";
+import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
+import { formatCurrency } from "src/utils/functions/formatCurrency";
+import {
+  getAverageWeeklyMonthlySales,
+  getAverageWeeklySessionSales,
+  getTotalWeeklyMonthlySales,
+  getTotalWeeklySessionSales,
+} from "src/utils/functions/reports";
+import {
+  IWeeklySalesAnalytics,
+  IWeeklySalesData,
+} from "src/utils/types/sales_analytics.types";
 
 const WeeklySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -34,18 +46,49 @@ const WeeklySales = () => {
   const monthlyUsers = monthlyUserSales?.result?.map(
     (item: IWeeklySalesAnalytics) => item
   );
-  const data = sessionUserSales?.result?.map(
+
+  const sessionUsers = sessionUserSales?.result?.map(
+    (item: IWeeklySalesAnalytics) => item
+  );
+  const newArr =
+    sessionUserSales?.result.length === 0
+      ? monthlyUserSales?.result
+      : sessionUserSales?.result;
+  const data: IWeeklySalesData[] | undefined = newArr?.map(
     (item: IWeeklySalesAnalytics, index: number) => ({
       Week: `Week ${index + 1}`,
-      sessionUserSales: item.TotalSalesPerWeek,
+      SubscriptionType: item.SubscriptionType,
+      sessionUserSales: Number(
+        sessionUsers
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
+              mUsers.Week === item.Week
+          )
+          .map((e) => e.TotalSalesPerWeek)
+      ),
       monthlyUserSales: Number(
         monthlyUsers
-          ?.filter((mUsers) => mUsers.Week === item.Week)
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
+              mUsers.Week === item.Week
+          )
           .map((e) => e.TotalSalesPerWeek)
       ),
     })
   );
 
+  console.log(data);
+
+  const totalWeeklySalesBySession = getTotalWeeklySessionSales(data);
+  const averageWeeklySalesBySession = getAverageWeeklySessionSales(data);
+  const totalWeeklySalesByMonthly = getTotalWeeklyMonthlySales(data);
+  const averageWeeklySalesByMonthly = getAverageWeeklyMonthlySales(data);
+  const totalWeeklySales =
+    getTotalWeeklySessionSales(data) + getTotalWeeklyMonthlySales(data);
+  const averageWeeklySales =
+    (getTotalWeeklySessionSales(data) + getTotalWeeklyMonthlySales(data)) / 5;
   const MONTHS = [
     "January",
     "February",
@@ -83,6 +126,42 @@ const WeeklySales = () => {
       </FormControl>
       {selectedValue !== "" && (
         <React.Fragment>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 5,
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Box component="div">
+              <h2>SESSION</h2>
+              Total Sales : {formatCurrency(totalWeeklySalesBySession)} PHP
+              <Box component="div">
+                Average : {formatCurrency(averageWeeklySalesBySession)} PHP
+              </Box>
+            </Box>
+            <Box component="div">
+              <h2>MONTHLY</h2>
+              Total Sales : {formatCurrency(totalWeeklySalesByMonthly)} PHP
+              <Box component="div">
+                Average : {formatCurrency(averageWeeklySalesByMonthly)} PHP
+              </Box>
+            </Box>
+            <Box component="div">
+              <h2>TOTAL</h2>
+              Total : {formatCurrency(totalWeeklySales)} PHP
+              <Box component="div">
+                Average Sales Per Week: {formatCurrency(averageWeeklySales)} PHP
+              </Box>
+            </Box>
+          </Box>
+        </React.Fragment>
+      )}
+
+      {selectedValue !== "" && (
+        <React.Fragment>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               width={500}
@@ -97,8 +176,8 @@ const WeeklySales = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Week" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
               <Line
                 type="monotone"
@@ -128,8 +207,8 @@ const WeeklySales = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Week" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
               <Bar
                 dataKey="sessionUserSales"

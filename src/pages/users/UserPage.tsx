@@ -40,7 +40,6 @@ const UserPage = () => {
     "ProfilePic",
     "FullName",
     "ContactNumber",
-    "Email",
     "Height",
     "Weight",
     "SubscriptionType",

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { loadConfig } from "src/global/config";
 import ISubscriptions from "src/utils/types/subscription.types";
 
-interface ITransactionApiState {
+export interface ITransactionApiState {
   message: string;
   error: string;
   status: number;

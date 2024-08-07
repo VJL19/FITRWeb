@@ -29,7 +29,7 @@ const _record_files_columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field.split("Record")[1]}</b>;
     },
-    width: 180,
+    width: 150,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -43,7 +43,7 @@ const _record_files_columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field.split("Record")[1]}</b>;
     },
-    width: 180,
+    width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     renderCell: (params) => {
@@ -62,7 +62,7 @@ const _record_files_columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field.split("Record")[1]}</b>;
     },
-    width: 180,
+    width: 150,
     flex: 1,
     align: "center",
 

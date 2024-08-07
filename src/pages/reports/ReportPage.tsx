@@ -15,7 +15,6 @@ import AttendanceReportPdfFile from "./AttendanceReportPdfFile";
 import {
   setAttendanceData,
   useGetAttendanceByDateMutation,
-  useGetUsersAttendanceQuery,
 } from "src/reducers/attendance";
 import { useForm, Controller } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -29,8 +28,18 @@ import {
 } from "src/utils/validations/generateReportSchema";
 import FinancialReportPdfFile from "./FinancialReportPdfFile";
 import { useGetAllUsersTransactionsByDateMutation } from "src/reducers/transaction";
-import LoadingIndicator from "src/components/LoadingIndicator";
-import DownloadIcon from "@mui/icons-material/Download";
+import {
+  getAverageMonthlySalesByDate,
+  getAverageSalesByDate,
+  getAverageSessionSalesByDate,
+  getTotalMonthlyUsersAttendanceByDate,
+  getTotalSessionUsersAttendanceByDate,
+  getTotalUserMonthlySalesByDate,
+  getTotalUserSalesByDate,
+  getTotalUserSessionSalesByDate,
+  getTotalUsersAttendanceByDate,
+} from "src/utils/functions/reports";
+import { generateExcelAttendanceReport } from "src/utils/functions/generateFile";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -43,17 +52,72 @@ const ReportPage = () => {
     resolver: zodResolver(filterGenerateByDateSchema),
   });
 
+  //generate reports - attendance
   const [
     filterAttendance,
     { data, isFetching, isUninitialized, originalArgs, error },
   ] = useGetAttendanceByDateMutation();
 
+  //generate reports - financial
   const [filterFinancial, { data: financialRes }] =
     useGetAllUsersTransactionsByDateMutation();
+
   useEffect(() => {
     dispatch(setRoute("Reports"));
     dispatch(setAttendanceData(data?.result));
   }, []);
+
+  //generate reports - attendance
+  const totalUsers = getTotalUsersAttendanceByDate(data);
+  const totalSessionUsers = getTotalSessionUsersAttendanceByDate(data);
+  const totalMonthlyUsers = getTotalMonthlyUsersAttendanceByDate(data);
+
+  //generate reports - financial
+  const totalUserSalesByDate = getTotalUserSalesByDate(financialRes);
+  const totalSessionUserSalesByDate =
+    getTotalUserSessionSalesByDate(financialRes);
+  const totalMonthlyUserSalesByDate =
+    getTotalUserMonthlySalesByDate(financialRes);
+
+  const averageSalesByDate = getAverageSalesByDate(financialRes);
+  const averageSessionSalesByDate = getAverageSessionSalesByDate(financialRes);
+  const averageMonthlySalesByDate = getAverageMonthlySalesByDate(financialRes);
+
+  const attendanceArgs = {
+    totalUsers: totalUsers,
+    totalSessionUsers: totalSessionUsers,
+    totalMonthlyUsers: totalMonthlyUsers,
+  };
+  const financialArgs = {
+    totalSales: totalUserSalesByDate.toFixed(2),
+    totalSessionSales: totalSessionUserSalesByDate.toFixed(2),
+    totalMonthlySales: totalMonthlyUserSalesByDate.toFixed(2),
+    averageSales: averageSalesByDate.toFixed(2),
+    averageSessionSales: averageSessionSalesByDate.toFixed(2),
+    averageMonthlySales: averageMonthlySalesByDate.toFixed(2),
+  };
+
+  const handleDateChange = (
+    newDateValue: dayjs.Dayjs | null,
+    onChange: (...event: any[]) => void
+  ) => {
+    const formatDate = dayjs(newDateValue).format("YYYY-MM-DD");
+    onChange(formatDate);
+    if (selectedValue === "Attendance Report") {
+      filterAttendance({
+        selectedDate: formatDate,
+      });
+
+      return;
+    }
+    filterFinancial({
+      selectedDate: formatDate,
+    });
+  };
+
+  const handleExcelAttendance = async () => {
+    generateExcelAttendanceReport({ data: data });
+  };
 
   return (
     <Box
@@ -71,56 +135,52 @@ const ReportPage = () => {
           name="reportType"
           control={control}
           render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Report Type</InputLabel>
-              <Select
-                {...field}
-                id="demo-simple-select-label"
-                label="reportType"
-                placeholder="Type of report"
-                required
-                error={errors.reportType && true}
-                onChange={(event) => setSelectedValue(event.target.value)}
-              >
-                <MenuItem value="Attendance Report">Attendance Report</MenuItem>
-                <MenuItem value="Financial Report">Financial Report</MenuItem>
-              </Select>
-            </FormControl>
+            <Box component="div" sx={{ width: "15%" }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Report Type
+                </InputLabel>
+                <Select
+                  {...field}
+                  id="demo-simple-select-label"
+                  label="reportType"
+                  placeholder="Type of report"
+                  required
+                  error={errors.reportType && true}
+                  onChange={(event) => setSelectedValue(event.target.value)}
+                >
+                  <MenuItem value="Attendance Report">
+                    Attendance Report
+                  </MenuItem>
+                  <MenuItem value="Financial Report">Financial Report</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
           )}
         />
 
         <DisplayFormError errors={errors.reportType} />
         {selectedValue !== "" && (
           <React.Fragment>
-            <h3>Select date</h3>
-            <Controller
-              name="selectedDate"
-              control={control}
-              defaultValue={undefined}
-              rules={{ required: true }}
-              render={({ field: { onChange, value, ...restField } }) => (
-                <DatePicker
-                  {...restField}
-                  value={dayjs(value)}
-                  label="Date"
-                  onChange={(newDateValue) => {
-                    onChange(dayjs(newDateValue).format("YYYY-MM-DD"));
-
-                    if (selectedValue === "Attendance Report") {
-                      filterAttendance({
-                        selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
-                      });
-                      return;
+            <Box component="div" sx={{ width: "15%" }}>
+              <h3>Select date</h3>
+              <Controller
+                name="selectedDate"
+                control={control}
+                defaultValue={undefined}
+                rules={{ required: true }}
+                render={({ field: { onChange, value, ...restField } }) => (
+                  <DatePicker
+                    {...restField}
+                    value={dayjs(value)}
+                    label="Date"
+                    onChange={(newDateValue) =>
+                      handleDateChange(newDateValue, onChange)
                     }
-                    filterFinancial({
-                      selectedDate: dayjs(newDateValue).format("YYYY-MM-DD"),
-                    });
-
-                    console.log("your filtered data", data?.result);
-                  }}
-                />
-              )}
-            />
+                  />
+                )}
+              />
+            </Box>
           </React.Fragment>
         )}
         <DisplayFormError errors={errors.selectedDate} />
@@ -130,12 +190,29 @@ const ReportPage = () => {
           <React.Fragment>
             <h2>PDF Document Preview</h2>
             <PDFViewer width="1000" height="550">
-              <AttendanceReportPdfFile data={data?.result} />
+              <AttendanceReportPdfFile
+                data={data?.result}
+                {...attendanceArgs}
+              />
             </PDFViewer>
             <br />
 
+            <Button
+              variant="contained"
+              size="medium"
+              color="success"
+              onClick={handleExcelAttendance}
+            >
+              Download Excel File Attendance
+            </Button>
+
             <PDFDownloadLink
-              document={<AttendanceReportPdfFile data={data?.result} />}
+              document={
+                <AttendanceReportPdfFile
+                  data={data?.result}
+                  {...attendanceArgs}
+                />
+              }
               fileName={`ATTENDANCE_REPORT_FORM_${new Date().getTime()}`}
             >
               {({ loading }) => (
@@ -155,12 +232,20 @@ const ReportPage = () => {
           <React.Fragment>
             <h2>PDF Document Preview</h2>
             <PDFViewer width="1000" height="550">
-              <FinancialReportPdfFile data={financialRes?.result} />
+              <FinancialReportPdfFile
+                data={financialRes?.result}
+                {...financialArgs}
+              />
             </PDFViewer>
             <br />
 
             <PDFDownloadLink
-              document={<FinancialReportPdfFile data={financialRes?.result} />}
+              document={
+                <FinancialReportPdfFile
+                  data={financialRes?.result}
+                  {...financialArgs}
+                />
+              }
               fileName={`FINANCIAL_REPORT_FORM_${new Date().getTime()}`}
             >
               {({ loading }) => (

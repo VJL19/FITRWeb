@@ -3,6 +3,7 @@ import { loadConfig } from "src/global/config";
 import {
   IDailySalesAnalytics,
   IMonthlySalesAnalytics,
+  ITodaySalesAnalytics,
   IWeeklySalesAnalytics,
 } from "src/utils/types/sales_analytics.types";
 
@@ -11,6 +12,12 @@ interface IDailySalesAnalyticsApiState {
   message: string;
   status: number;
   result: IDailySalesAnalytics[];
+}
+interface ITodaySalesAnalyticsApiState {
+  error: string;
+  message: string;
+  status: number;
+  result: ITodaySalesAnalytics[];
 }
 interface IWeeklySalesAnalyticsApiState {
   error: string;
@@ -42,6 +49,18 @@ export const salesAnalyticsApi = createApi({
     getDailyMonthlyUserSales: builder.query<IDailySalesAnalyticsApiState, void>(
       {
         query: () => `/admin/sales_analytics/daily_monthlyUsers_sales`,
+        providesTags: ["sales_analytics"],
+      }
+    ),
+    getTodaySessionUserSales: builder.query<ITodaySalesAnalyticsApiState, void>(
+      {
+        query: () => `/admin/sales_analytics/today_sessionUsers_sales`,
+        providesTags: ["sales_analytics"],
+      }
+    ),
+    getTodayMonthlyUserSales: builder.query<ITodaySalesAnalyticsApiState, void>(
+      {
+        query: () => `/admin/sales_analytics/today_monthlyUsers_sales`,
         providesTags: ["sales_analytics"],
       }
     ),
@@ -91,6 +110,8 @@ export const salesAnalyticsApi = createApi({
 export const {
   useGetDailySessionUserSalesQuery,
   useGetDailyMonthlyUserSalesQuery,
+  useGetTodaySessionUserSalesQuery,
+  useGetTodayMonthlyUserSalesQuery,
   useGetWeeklySessionUserSalesMutation,
   useGetWeeklyMonthlyUserSalesMutation,
   useGetMonthlySessionUserSalesMutation,

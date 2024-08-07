@@ -30,7 +30,7 @@ const SideBar = () => {
     <main className="main--container">
       <aside className="sideNav">
         <div>
-          <img src={logo} height={80} width={"100%"} />
+          <img src={logo} height={75} width={"100%"} />
         </div>
         <NavLink to="/dashboard" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Home")}>

@@ -53,24 +53,26 @@ const RecentTransactionPage = () => {
         </div>
       </div>
       {recentTransactions?.result?.map((recentUser) => (
-        <Container
-          sx={{
-            borderBottomWidth: 3,
-            borderBottomColor: "gray",
-            display: "flex",
-            alignItems: "center",
-            justfiyContent: "center",
-            gap: 3,
-          }}
-        >
-          <h5>
-            {recentUser.FirstName} {recentUser.LastName}
-          </h5>
+        <React.Fragment key={recentUser.SubscriptionID}>
+          <Container
+            sx={{
+              borderBottomWidth: 3,
+              borderBottomColor: "gray",
+              display: "flex",
+              alignItems: "center",
+              justfiyContent: "center",
+              gap: 3,
+            }}
+          >
+            <h5>
+              {recentUser.FirstName} {recentUser.LastName}
+            </h5>
 
-          <h4>{recentUser.SubscriptionAmount} PHP</h4>
-          <h4>{recentUser.SubscriptionStatus}</h4>
-          <p>{new Date(recentUser.SubscriptionEntryDate).toLocaleString()}</p>
-        </Container>
+            <h4>{recentUser.SubscriptionAmount} PHP</h4>
+            <h4>{recentUser.SubscriptionStatus}</h4>
+            <p>{new Date(recentUser.SubscriptionEntryDate).toLocaleString()}</p>
+          </Container>
+        </React.Fragment>
       ))}
     </Box>
   );

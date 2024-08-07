@@ -79,8 +79,6 @@ const Dashboard = () => {
               element={<ViewRecordPage />}
               path="/dashboard/records/view_record/:id"
             />
-            <Route element={<RecordPage />} path="/dashboard/records" />
-            <Route element={<RecordPage />} path="/dashboard/records" />
             <Route element={<ReportPage />} path="/dashboard/reports" />
             <Route element={<SalePage />} path="/dashboard/sales" />
             <Route

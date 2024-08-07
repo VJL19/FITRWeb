@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { Box } from "@mui/material";
 import {
   programApi,
+  setSuggestedProgramLength,
   useGetTotalSuggestedProgramQuery,
 } from "src/reducers/program";
 import LoadingIndicator from "src/components/LoadingIndicator";

@@ -4,15 +4,34 @@ import logo from "src/assets/logo_1.png";
 import Html from "react-pdf-html";
 import dynamicHtml from "./htmlPdf/htmlPage";
 import ISubscriptions from "src/utils/types/subscription.types";
+import { REPORT_TYPE } from "src/utils/enums/REPORT.ts";
 
 const FinancialReportPdfFile = ({
   data,
+  totalSales,
+  totalSessionSales,
+  totalMonthlySales,
+  averageSales,
+  averageSessionSales,
+  averageMonthlySales,
 }: {
   data: ISubscriptions[] | undefined;
+  totalSales: number | undefined;
+  totalSessionSales: number | undefined;
+  totalMonthlySales: number | undefined;
+  averageSales: number | undefined;
+  averageSessionSales: number | undefined;
+  averageMonthlySales: number | undefined;
 }) => {
   const COLUMNS = ["Full Name", "Type", "Amount", "Status", "Entry Date"];
   const html = dynamicHtml({
-    title: `MJESHTER FINANCIAL REPORT`,
+    title: REPORT_TYPE.FINANCIAL,
+    totalSales: totalSales,
+    totalSessionSales: totalSessionSales,
+    totalMonthlySales: totalMonthlySales,
+    averageSales: averageSales,
+    averageSessionSales: averageSessionSales,
+    averageMonthlySales: averageMonthlySales,
     COLUMNS: COLUMNS,
     data: data
       ?.map(

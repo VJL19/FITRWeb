@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { AppDispatch } from "../store/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
 import { setRoute } from "../reducers/route";
 import { Box, Container } from "@mui/material";
 import {
@@ -25,39 +25,8 @@ import TotalMonthlyUsersPage from "./users/TotalMonthlyUsersPage";
 import TotalFulfilledTransactionPage from "./transactions/TotalFulfilledTransactionPage";
 import TotalPendingTransactionPage from "./transactions/TotalPendingTransactionPage";
 import TotalAnnouncementCreatedPage from "./dashboard/announcement/TotalAnnouncementCreatedPage";
+import TodaySales from "./sales/TodaySales";
 
-const data = [
-  {
-    name: "24hrs",
-    session: 4000,
-    monthly: 2400,
-    amt: 2400,
-  },
-  {
-    name: "16hrs",
-    session: 3000,
-    monthly: 1398,
-    amt: 2210,
-  },
-  {
-    name: "12hrs",
-    session: 2000,
-    monthly: 9800,
-    amt: 2290,
-  },
-  {
-    name: "8hrs",
-    session: 2780,
-    monthly: 3908,
-    amt: 2000,
-  },
-  {
-    name: "4hrs",
-    session: 1890,
-    monthly: 4800,
-    amt: 2181,
-  },
-];
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -137,43 +106,10 @@ const Home = () => {
         >
           <h2>SALES</h2>
           <MonetizationOnIcon fontSize="large" htmlColor="#121212" />
-        </Box>{" "}
+        </Box>
       </Container>
 
-      <h2>TODAYS SALE</h2>
-      <Container sx={{ display: "flex", height: 400 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="session"
-              stroke="#202020"
-              activeDot={{ r: 8 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="monthly"
-              stroke="#ff2e00"
-              activeDot={{ r: 8 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </Container>
+      <TodaySales />
       <Container
         sx={{
           display: "flex",

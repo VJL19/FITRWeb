@@ -12,7 +12,7 @@ import { handleOpen } from "src/reducers/modal";
 import IAttendance from "src/utils/types/attendance.types";
 import IUser from "src/utils/types/users.types";
 import { setUserData } from "src/reducers/users";
-const _columns: GridColDef[] = [
+const _columns: GridColDef<IAttendance>[] = [
   {
     field: "UserID",
     headerName: "User ID",
@@ -44,7 +44,7 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
+    width: 150,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -112,7 +112,7 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
+    width: 120,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -216,6 +216,7 @@ const _columns: GridColDef[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
     field: "SubscriptionType",
     headerName: "Subscription Type",
     renderHeader: (params) => {

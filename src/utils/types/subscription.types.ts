@@ -11,6 +11,12 @@ interface ISubscriptions extends IUser {
   No_M_SubscriptionID: number;
   TotalPending?: number;
   TotalFulfill?: number;
+  TotalSales?: number;
+  TotalSessionUserSales?: number;
+  TotalMonthlyUserSales?: number;
+  AverageSales?: number;
+  AverageSessionSales?: number;
+  AverageMonthlySales?: number;
 }
 
 export interface IEditSubscription {
