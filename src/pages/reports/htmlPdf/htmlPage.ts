@@ -72,17 +72,17 @@ const dynamicHtml = ({
           <p>Total Session Users Sales - ${
             totalSessionSales !== null ? totalSessionSales : 0
           } PHP</p>
-          <p>Total Average Session Sales - ${
+          <p>Average Session Sales - ${
             averageSessionSales !== null ? averageSessionSales : 0
           } PHP </p>
           <p>Total Monthly Users Sales - ${
             totalMonthlySales !== null ? totalMonthlySales : 0
           } PHP</p>
-          <p>Total Average Monthly Sales - ${
+          <p>Average Monthly Sales - ${
             averageMonthlySales !== null ? averageMonthlySales : 0
           } PHP </p>
           <p>Total Sales - ${totalSales !== null ? totalSales : 0} PHP </p>
-          <p>Total Average Sales - ${
+          <p>Average Sales For This Day - ${
             averageSales !== null ? averageSales : 0
           } PHP </p>
         </div>`

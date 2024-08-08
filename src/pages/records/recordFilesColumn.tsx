@@ -49,6 +49,14 @@ const _record_files_columns: GridColDef[] = [
     renderCell: (params) => {
       const currentRowData: IRecords = params.row;
 
+      if (currentRowData.RecordName.split(".")[1] === "xlsx") {
+        <a
+          href={`https://view.officeapps.live.com/op/embed.aspx?src=${currentRowData.RecordDownloadLink}`}
+          target="_blank"
+        >
+          Download this file
+        </a>;
+      }
       return (
         <a href={`${currentRowData.RecordDownloadLink}`} target="_blank">
           Download this file

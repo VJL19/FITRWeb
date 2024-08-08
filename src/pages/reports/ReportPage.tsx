@@ -39,7 +39,10 @@ import {
   getTotalUserSessionSalesByDate,
   getTotalUsersAttendanceByDate,
 } from "src/utils/functions/reports";
-import { generateExcelAttendanceReport } from "src/utils/functions/generateFile";
+import {
+  generateExcelAttendanceReport,
+  generateExcelFinancialReport,
+} from "src/utils/functions/generateFile";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -118,6 +121,9 @@ const ReportPage = () => {
   const handleExcelAttendance = async () => {
     generateExcelAttendanceReport({ data: data });
   };
+  const handleExcelFinancial = async () => {
+    generateExcelFinancialReport({ data: financialRes });
+  };
 
   return (
     <Box
@@ -188,7 +194,7 @@ const ReportPage = () => {
       {selectedValue === "Attendance Report" &&
         getValues("selectedDate") !== undefined && (
           <React.Fragment>
-            <h2>PDF Document Preview</h2>
+            <h2>Preview</h2>
             <PDFViewer width="1000" height="550">
               <AttendanceReportPdfFile
                 data={data?.result}
@@ -230,7 +236,7 @@ const ReportPage = () => {
       {selectedValue === "Financial Report" &&
         getValues("selectedDate") !== undefined && (
           <React.Fragment>
-            <h2>PDF Document Preview</h2>
+            <h2>Preview</h2>
             <PDFViewer width="1000" height="550">
               <FinancialReportPdfFile
                 data={financialRes?.result}
@@ -238,6 +244,14 @@ const ReportPage = () => {
               />
             </PDFViewer>
             <br />
+            <Button
+              variant="contained"
+              size="medium"
+              color="success"
+              onClick={handleExcelFinancial}
+            >
+              Download As Excel File
+            </Button>
 
             <PDFDownloadLink
               document={
@@ -254,7 +268,7 @@ const ReportPage = () => {
                   size="medium"
                   color={loading ? "warning" : "success"}
                 >
-                  {loading ? "Loading..." : "Download"}
+                  {loading ? "Loading..." : "Download As Pdf File"}
                 </Button>
               )}
             </PDFDownloadLink>
