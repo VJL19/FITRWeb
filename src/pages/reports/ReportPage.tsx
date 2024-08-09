@@ -51,6 +51,7 @@ const ReportPage = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<TGenerateSchema>({
     resolver: zodResolver(filterGenerateByDateSchema),
   });
@@ -153,7 +154,10 @@ const ReportPage = () => {
                   placeholder="Type of report"
                   required
                   error={errors.reportType && true}
-                  onChange={(event) => setSelectedValue(event.target.value)}
+                  onChange={(event) => {
+                    setSelectedValue(event.target.value);
+                    setValue("selectedDate", undefined);
+                  }}
                 >
                   <MenuItem value="Attendance Report">
                     Attendance Report

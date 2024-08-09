@@ -29,6 +29,7 @@ import {
   IDailySalesAnalytics,
   IDailySalesData,
 } from "src/utils/types/sales_analytics.types";
+import DailyGrowthRate from "./DailyGrowthRate";
 
 const DailySales = () => {
   const { data: sessionUserSales } = useGetDailySessionUserSalesQuery(
@@ -59,7 +60,8 @@ const DailySales = () => {
         sessionUsers
           ?.filter(
             (mUsers) =>
-              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION && item.Day
+              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
+              item.Day === mUsers.Day
           )
           .map((e) => e.TotalSales)
       ),
@@ -67,7 +69,8 @@ const DailySales = () => {
         monthlyUsers
           ?.filter(
             (mUsers) =>
-              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY && item.Day
+              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
+              item.Day === mUsers.Day
           )
           .map((e) => e.TotalSales)
       ),
@@ -178,6 +181,7 @@ const DailySales = () => {
           />
         </BarChart>
       </ResponsiveContainer>
+      <DailyGrowthRate />
     </Container>
   );
 };

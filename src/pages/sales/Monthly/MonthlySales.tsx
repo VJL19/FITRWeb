@@ -21,106 +21,97 @@ import {
   Rectangle,
 } from "recharts";
 import {
-  useGetWeeklySessionUserSalesMutation,
-  useGetWeeklyMonthlyUserSalesMutation,
+  useGetMonthlySessionUserSalesMutation,
+  useGetMonthlyMUserSalesMutation,
 } from "src/reducers/sales_analytics";
 import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
 import { formatCurrency } from "src/utils/functions/formatCurrency";
 import {
-  getAverageWeeklyMonthlySales,
-  getAverageWeeklySessionSales,
-  getTotalWeeklyMonthlySales,
-  getTotalWeeklySessionSales,
+  getAverageMonthlyMSales,
+  getAverageMonthlySessionSales,
+  getTotalMonthlyMSales,
+  getTotalMonthlySessionSales,
 } from "src/utils/functions/reports";
 import {
-  IWeeklySalesAnalytics,
-  IWeeklySalesData,
+  IMonthlySalesAnalytics,
+  IMonthlySalesData,
 } from "src/utils/types/sales_analytics.types";
+import MonthlyGrowthRate from "./MonthlyGrowthRate";
 
-const WeeklySales = () => {
+const MonthlySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
-  const [getWeeklySession, { data: sessionUserSales }] =
-    useGetWeeklySessionUserSalesMutation();
-  const [getWeeklyMonthly, { data: monthlyUserSales }] =
-    useGetWeeklyMonthlyUserSalesMutation();
-  const monthlyUsers = monthlyUserSales?.result?.map(
-    (item: IWeeklySalesAnalytics) => item
-  );
+  const [getSessionUsers, { data: sessionUserSales }] =
+    useGetMonthlySessionUserSalesMutation();
+  const [getMonthlyUsers, { data: monthlyUserSales }] =
+    useGetMonthlyMUserSalesMutation();
 
-  const sessionUsers = sessionUserSales?.result?.map(
-    (item: IWeeklySalesAnalytics) => item
+  const monthlyUsers = monthlyUserSales?.result?.map(
+    (item: IMonthlySalesAnalytics) => item
   );
+  const sessionUsers = sessionUserSales?.result?.map(
+    (item: IMonthlySalesAnalytics) => item
+  );
+  let year_items = [];
+
   const newArr =
     sessionUserSales?.result.length === 0
       ? monthlyUserSales?.result
       : sessionUserSales?.result;
-  const data: IWeeklySalesData[] | undefined = newArr?.map(
-    (item: IWeeklySalesAnalytics, index: number) => ({
-      Week: `Week ${index + 1}`,
-      SubscriptionType: item.SubscriptionType,
+  const data: IMonthlySalesData[] | undefined = newArr?.map(
+    (item: IMonthlySalesAnalytics) => ({
+      Months: item.Months,
       sessionUserSales: Number(
         sessionUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
-              mUsers.Week === item.Week
+              mUsers.Months === item.Months
           )
-          .map((e) => e.TotalSalesPerWeek)
+          .map((e) => e.TotalSalesPerMonth)
       ),
       monthlyUserSales: Number(
         monthlyUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
-              mUsers.Week === item.Week
+              mUsers.Months === item.Months
           )
-          .map((e) => e.TotalSalesPerWeek)
+          .map((e) => e.TotalSalesPerMonth)
       ),
     })
   );
 
-  console.log(data);
+  for (let i = 2003; i <= 2050; i++) {
+    year_items.push(i);
+  }
 
-  const totalWeeklySalesBySession = getTotalWeeklySessionSales(data);
-  const averageWeeklySalesBySession = getAverageWeeklySessionSales(data);
-  const totalWeeklySalesByMonthly = getTotalWeeklyMonthlySales(data);
-  const averageWeeklySalesByMonthly = getAverageWeeklyMonthlySales(data);
-  const totalWeeklySales =
-    getTotalWeeklySessionSales(data) + getTotalWeeklyMonthlySales(data);
-  const averageWeeklySales =
-    (getTotalWeeklySessionSales(data) + getTotalWeeklyMonthlySales(data)) / 5;
-  const MONTHS = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const totalMonthlySalesBySession = getTotalMonthlySessionSales(data);
+  const averageMonthlySalesBySession = getAverageMonthlySessionSales(data);
+  const totalMonthlySalesByMonthly = getTotalMonthlyMSales(data);
+  const averageMonthlySalesByMonthly = getAverageMonthlyMSales(data);
+  const totalMonthlySales =
+    getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data);
+  const averageMonthlySales =
+    (getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data)) / 12;
+
   return (
     <Container sx={{ height: 450 }}>
       <FormControl sx={{ width: "10%" }}>
-        <InputLabel id="demo-simple-select-label">Month</InputLabel>
+        <InputLabel id="demo-simple-select-label">Year</InputLabel>
         <Select
           id="demo-simple-select-label"
           label="reportType"
-          placeholder="Select month"
+          placeholder="Select year"
           required
           defaultValue={selectedValue}
           onChange={(event) => {
             setSelectedValue(event.target.value);
-            getWeeklySession({ selectedMonth: event.target.value });
-            getWeeklyMonthly({ selectedMonth: event.target.value });
+            getSessionUsers({ selectedYear: event.target.value });
+            getMonthlyUsers({ selectedYear: event.target.value });
           }}
         >
-          {MONTHS.map((month: string) => (
-            <MenuItem value={month}>{month}</MenuItem>
+          {year_items.map((year_item) => (
+            <MenuItem value={year_item}>{year_item}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -137,23 +128,24 @@ const WeeklySales = () => {
           >
             <Box component="div">
               <h2>SESSION</h2>
-              Total Sales : {formatCurrency(totalWeeklySalesBySession)} PHP
+              Total Sales : {formatCurrency(totalMonthlySalesBySession)} PHP
               <Box component="div">
-                Average : {formatCurrency(averageWeeklySalesBySession)} PHP
+                Average: {formatCurrency(averageMonthlySalesBySession)} PHP
               </Box>
             </Box>
             <Box component="div">
               <h2>MONTHLY</h2>
-              Total Sales : {formatCurrency(totalWeeklySalesByMonthly)} PHP
+              Total Sales : {formatCurrency(totalMonthlySalesByMonthly)} PHP
               <Box component="div">
-                Average : {formatCurrency(averageWeeklySalesByMonthly)} PHP
+                Average: {formatCurrency(averageMonthlySalesByMonthly)} PHP
               </Box>
             </Box>
             <Box component="div">
               <h2>TOTAL</h2>
-              Total : {formatCurrency(totalWeeklySales)} PHP
+              Total : {formatCurrency(totalMonthlySales)} PHP
               <Box component="div">
-                Average Sales Per Week: {formatCurrency(averageWeeklySales)} PHP
+                Average Sales Per Month: {formatCurrency(averageMonthlySales)}{" "}
+                PHP
               </Box>
             </Box>
           </Box>
@@ -175,7 +167,7 @@ const WeeklySales = () => {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="Week" />
+              <XAxis dataKey="Months" />
               <YAxis tickFormatter={(value) => formatCurrency(value)} />
               <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
@@ -206,7 +198,7 @@ const WeeklySales = () => {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="Week" />
+              <XAxis dataKey="Months" />
               <YAxis tickFormatter={(value) => formatCurrency(value)} />
               <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />
@@ -222,10 +214,11 @@ const WeeklySales = () => {
               />
             </BarChart>
           </ResponsiveContainer>
+          <MonthlyGrowthRate selectedValue={selectedValue} />
         </React.Fragment>
       )}
     </Container>
   );
 };
 
-export default WeeklySales;
+export default MonthlySales;
