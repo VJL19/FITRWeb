@@ -15,6 +15,7 @@ const ViewTransactionPage = () => {
     SubscriptionType,
     SubscriptionUploadedImage,
     SubscriptionEntryDate,
+    SubscriptionMethod,
     SubscriptionStatus,
   } = useSelector((state: RootState) => state.transaction.transactionData);
 
@@ -48,6 +49,7 @@ const ViewTransactionPage = () => {
           Paid By - {FirstName} {LastName}
         </h4>
         <h4>Type - {SubscriptionType}</h4>
+        <h4>Method - {SubscriptionMethod}</h4>
         <h3>Status - {SubscriptionStatus}</h3>
       </Container>
     </div>

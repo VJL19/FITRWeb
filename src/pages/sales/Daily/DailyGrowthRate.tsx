@@ -9,6 +9,7 @@ import {
   IDailyGrowthRateData,
 } from "src/utils/types/sales_analytics.types";
 import DailyGrowthRateItems from "./DailyGrowthRateItems";
+import { formatDate } from "src/utils/functions/date_fns";
 
 const DailyGrowthRate = () => {
   const { data: sessionUsersGrowthRate } =
@@ -51,6 +52,38 @@ const DailyGrowthRate = () => {
       ),
     })
   );
+  const daily_sales_data: Array<{
+    date?: string;
+    sessionUserSales?: number;
+    monthlyUserSales?: number;
+  }> = [];
+
+  for (let i = 0; i < 7; i++) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let formatD = d.toISOString().split("T")[0];
+    daily_sales_data.push({
+      date: new Date(formatDate(d)).toDateString(),
+      sessionUserSales: Number(
+        sessionUsers
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
+              formatD === mUsers.SubscriptionEntryDate.split(" ")[0]
+          )
+          .map((e) => e.GrowthRate)
+      ),
+      monthlyUserSales: Number(
+        monthlyUsers
+          ?.filter(
+            (mUsers) =>
+              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
+              formatD === mUsers.SubscriptionEntryDate.split(" ")[0]
+          )
+          .map((e) => e.GrowthRate)
+      ),
+    });
+  }
   return (
     <Container sx={{ height: 450 }}>
       <Box
@@ -64,19 +97,19 @@ const DailyGrowthRate = () => {
       >
         <Box>
           <h2>GROWTH RATE FOR SESSION USERS</h2>
-          {data?.map((item) => (
+          {daily_sales_data?.map((item) => (
             <DailyGrowthRateItems
-              Day={item.SubscriptionEntryDate}
-              GrowthRate={item.sessionUsersGrowthRate}
+              Day={item.date}
+              GrowthRate={item.sessionUserSales}
             />
           ))}
         </Box>
         <Box>
           <h2>GROWTH RATE FOR MONTHLY USERS</h2>
-          {data?.map((item) => (
+          {daily_sales_data?.map((item) => (
             <DailyGrowthRateItems
-              Day={item.SubscriptionEntryDate}
-              GrowthRate={item.monthlyUsersGrowthRate}
+              Day={item.date}
+              GrowthRate={item.monthlyUserSales}
             />
           ))}
         </Box>

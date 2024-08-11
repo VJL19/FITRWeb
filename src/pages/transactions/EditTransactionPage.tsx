@@ -36,6 +36,7 @@ const EditTransactionPage = () => {
     SubscriptionType,
     SubscriptionUploadedImage,
     SubscriptionEntryDate,
+    SubscriptionMethod,
     SubscriptionStatus,
   } = useSelector((state: RootState) => state.transaction.transactionData);
 
@@ -57,12 +58,15 @@ const EditTransactionPage = () => {
 
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
-      showSuccessToast("Successfully fulfilled this transaction");
-
+      const deplayShowToast = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        showSuccessToast("Successfully fulfilled this transaction");
+      };
       const delayRedirect = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         navigate("/dashboard/transactions", { replace: true });
       };
+      deplayShowToast();
       delayRedirect();
     }
     if (status === "rejected" && isSubmitted) {
@@ -111,45 +115,48 @@ const EditTransactionPage = () => {
           Paid By - {FirstName} {LastName}
         </h4>
         <h4>Type - {SubscriptionType}</h4>
-        <h3>Status</h3>
-        <Stack width={"100%"}>
-          <Controller
-            name="SubscriptionStatus"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Subscription Status
-                </InputLabel>
-                <Select
-                  {...field}
-                  id="demo-simple-select-label"
-                  label="SubscriptionStatus"
-                  placeholder="Subscription Status"
-                  required
-                  error={errors.SubscriptionStatus && true}
-                >
-                  <MenuItem value="Reject">Reject</MenuItem>
-                  <MenuItem value="Fulfill">Fulfill</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
+        <h4>Method - {SubscriptionMethod}</h4>
+        <h3>Status - {SubscriptionStatus}</h3>
+        {SubscriptionStatus !== "Fulfill" && (
+          <Stack width={"100%"}>
+            <Controller
+              name="SubscriptionStatus"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Subscription Status
+                  </InputLabel>
+                  <Select
+                    {...field}
+                    id="demo-simple-select-label"
+                    label="SubscriptionStatus"
+                    placeholder="Subscription Status"
+                    required
+                    error={errors.SubscriptionStatus && true}
+                  >
+                    <MenuItem value="Reject">Reject</MenuItem>
+                    <MenuItem value="Fulfill">Fulfill</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
 
-          <DisplayFormError errors={errors.SubscriptionStatus} />
+            <DisplayFormError errors={errors.SubscriptionStatus} />
 
-          <Button
-            disabled={isSubmitting}
-            endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-            variant="contained"
-            color="success"
-            size="large"
-            onClick={handleSubmit(onSubmit, (err) => console.log(err))}
-            style={{ width: "100%" }}
-          >
-            Submit
-          </Button>
-        </Stack>
+            <Button
+              disabled={isSubmitting}
+              endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+              variant="contained"
+              color="success"
+              size="large"
+              onClick={handleSubmit(onSubmit, (err) => console.log(err))}
+              style={{ width: "100%" }}
+            >
+              Submit
+            </Button>
+          </Stack>
+        )}
         <ToastContainer />
       </Container>
     </div>

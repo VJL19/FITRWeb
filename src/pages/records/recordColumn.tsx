@@ -10,6 +10,8 @@ import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 import IAttendance from "src/utils/types/attendance.types";
+import dayjs from "dayjs";
+import { renderDate } from "src/utils/functions/date_fns";
 const _columns: GridColDef[] = [
   {
     field: "UserID",
@@ -148,14 +150,10 @@ const _columns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row: IAttendance) =>
-      `${new Date(row.DateTapped).toDateString()} ${new Date(
-        row.DateTapped
-      ).toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      })}`,
+    type: "date",
+    renderCell: (params) => renderDate(params.row?.DateTapped),
+    valueFormatter: (params: IAttendance) =>
+      dayjs(params.DateTapped).format("YYYY/MM/DD"),
   },
   {
     field: "SubscriptionExpectedEnd",

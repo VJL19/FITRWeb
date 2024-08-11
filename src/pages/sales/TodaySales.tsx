@@ -58,7 +58,8 @@ const TodaySales = () => {
         sessionUsers
           ?.filter(
             (mUsers) =>
-              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION && mUsers.Hours
+              mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
+              mUsers.Hours === item.Hours
           )
           .map((e) => e.TotalSalesPer4Hr)
       ),
@@ -66,7 +67,8 @@ const TodaySales = () => {
         monthlyUsers
           ?.filter(
             (mUsers) =>
-              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY && mUsers.Hours
+              mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
+              mUsers.Hours === item.Hours
           )
           .map((e) => e.TotalSalesPer4Hr)
       ),

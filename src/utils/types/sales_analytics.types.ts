@@ -15,7 +15,7 @@ export interface ITodaySalesAnalytics {
 export interface IDailySalesData {
   Day: string;
   SubscriptionEntryDate: string;
-  sessionUserSales: string;
+  sessionUserSales: number;
   monthlyUserSales: number;
 }
 export interface ITodaySalesData {

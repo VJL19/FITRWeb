@@ -45,16 +45,29 @@ const WeeklySales = () => {
   const [getWeeklyMonthly, { data: monthlyUserSales }] =
     useGetWeeklyMonthlyUserSalesMutation();
   const monthlyUsers = monthlyUserSales?.result?.map(
-    (item: IWeeklySalesAnalytics) => item
+    (item: IWeeklySalesAnalytics, index) => ({
+      ...item,
+      Weeks: `Week ${index + 1}`,
+      monthlyUserSales: item.TotalSalesPerWeek,
+    })
   );
 
   const sessionUsers = sessionUserSales?.result?.map(
-    (item: IWeeklySalesAnalytics) => item
+    (item: IWeeklySalesAnalytics, index) => ({
+      ...item,
+      Weeks: `Week ${index + 1}`,
+      sessionUserSales: item.TotalSalesPerWeek,
+    })
   );
   const newArr =
     sessionUserSales?.result.length === 0
       ? monthlyUserSales?.result
+      : sessionUserSales?.result?.length! > monthlyUserSales?.result.length!
+      ? sessionUserSales?.result
+      : monthlyUserSales?.result?.length! > sessionUserSales?.result.length!
+      ? monthlyUserSales?.result
       : sessionUserSales?.result;
+
   const data: IWeeklySalesData[] | undefined = newArr?.map(
     (item: IWeeklySalesAnalytics, index: number) => ({
       Week: `Week ${index + 1}`,
@@ -68,6 +81,7 @@ const WeeklySales = () => {
           )
           .map((e) => e.TotalSalesPerWeek)
       ),
+
       monthlyUserSales: Number(
         monthlyUsers
           ?.filter(
@@ -80,7 +94,7 @@ const WeeklySales = () => {
     })
   );
 
-  console.log(data);
+  console.log(newArr?.length);
 
   const totalWeeklySalesBySession = getTotalWeeklySessionSales(data);
   const averageWeeklySalesBySession = getAverageWeeklySessionSales(data);
@@ -165,9 +179,9 @@ const WeeklySales = () => {
         <React.Fragment>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
+              data={data}
               width={500}
               height={300}
-              data={data}
               margin={{
                 top: 5,
                 right: 30,
@@ -176,7 +190,7 @@ const WeeklySales = () => {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="Week" />
+              <XAxis dataKey={"Week"} />
               <YAxis tickFormatter={(value) => formatCurrency(value)} />
               <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend />

@@ -139,6 +139,18 @@ const _columns: GridColDef<ISubscriptions>[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    flex: 1,
+    field: "SubscriptionMethod",
+    headerName: "Subscription Method",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Subscription")[1]}</b>;
+    },
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+  },
+  {
     field: "SubscriptionUploadedImage",
     headerName: "Subscription Uploaded Image",
     renderHeader: (params) => {
@@ -243,7 +255,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
         SubscriptionUploadedImage: currentRowData.SubscriptionUploadedImage,
         SubscriptionEntryDate: currentRowData.SubscriptionEntryDate,
         SubscriptionStatus: currentRowData.SubscriptionStatus,
-        SubscriptionMethod: "",
+        SubscriptionMethod: currentRowData.SubscriptionMethod,
         No_M_SubscriptionID: 0,
         Birthday: "",
         Age: "",

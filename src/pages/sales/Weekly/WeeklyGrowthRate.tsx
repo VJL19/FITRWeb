@@ -27,6 +27,12 @@ const WeeklyGrowthRate = ({ selectedValue }: { selectedValue: string }) => {
   const newArr =
     sessionUsersGrowthRate?.result.length === 0
       ? monthlyUsersGrowthRate?.result
+      : sessionUsersGrowthRate?.result?.length! >
+        monthlyUsersGrowthRate?.result.length!
+      ? sessionUsersGrowthRate?.result
+      : monthlyUsersGrowthRate?.result?.length! >
+        sessionUsersGrowthRate?.result.length!
+      ? monthlyUsersGrowthRate?.result
       : sessionUsersGrowthRate?.result;
   const data: IWeeklyGrowthRateData[] | undefined = newArr?.map(
     (item: IWeeklyGrowthRate, index: number) => ({

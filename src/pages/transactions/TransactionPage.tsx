@@ -35,6 +35,7 @@ const TransactionPage = () => {
     "FullName",
     "SubscriptionAmount",
     "SubscriptionType",
+    "SubscriptionMethod",
     "SubscriptionStatus",
     "SubscriptionEntryDate",
     "Actions",

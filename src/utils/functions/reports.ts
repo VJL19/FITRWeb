@@ -5,7 +5,9 @@ import {
   IDailySalesData,
   IMonthlySalesData,
   ITodaySalesData,
+  IWeeklyMonthlySalesData,
   IWeeklySalesData,
+  IWeeklySessionSalesData,
 } from "../types/sales_analytics.types";
 
 //sales overview (today (24 hrs))

@@ -88,6 +88,21 @@ export const transactionApi = createApi({
       }),
       invalidatesTags: ["transaction"],
     }),
+    createSubscription: builder.mutation<
+      ITransactionApiState,
+      {
+        SubscriptionAmount: string;
+        SubscriptionType: string;
+        SubscriptionMethod: string;
+      }
+    >({
+      query: (arg) => ({
+        url: "/admin/subscription/create_subscription",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["transaction"],
+    }),
     deleteTransaction: builder.mutation<
       ITransactionApiState,
       { SubscriptionID: number | undefined }
@@ -120,6 +135,7 @@ export const {
   useGetAllFulfillTransactionsQuery,
   useGetAllUsersTransactionsByDateMutation,
   useGetAllUserRecentTransactionsQuery,
+  useCreateSubscriptionMutation,
   useDeleteTransactionMutation,
 } = transactionApi;
 
