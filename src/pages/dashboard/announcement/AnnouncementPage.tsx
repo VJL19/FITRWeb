@@ -128,7 +128,7 @@ const AnnouncementPage = () => {
       alignItems={"center"}
     >
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        All Announcements
+        All Announcementss
       </h1>
       <DataGrid
         rows={rows}
