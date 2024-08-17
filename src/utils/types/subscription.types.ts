@@ -1,8 +1,10 @@
 import IUser from "./users.types";
 
 interface ISubscriptions extends IUser {
+  RowID?: number;
   SubscriptionID: number;
   SubscriptionAmount: number;
+  SubscriptionBy: string;
   SubscriptionType: string;
   SubscriptionMethod: string;
   SubscriptionStatus: string;

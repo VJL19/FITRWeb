@@ -1,20 +1,22 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { loadConfig } from "./config";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+const config = loadConfig();
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAluzK1TXt7_p_oTsH94qTgcah4u_tJsEg",
-  authDomain: "fitrstorage.firebaseapp.com",
-  databaseURL: "https://fitrstorage-default-rtdb.firebaseio.com",
-  projectId: "fitrstorage",
-  storageBucket: "fitrstorage.appspot.com",
-  messagingSenderId: "39261814478",
-  appId: "1:39261814478:web:1988427254c869a42cda9f",
-  measurementId: "G-BGVQJ1SCZS",
+  apiKey: config.FIREBASE_APIKEY,
+  authDomain: config.FIREBASE_AUTH_DOMAIN,
+  databaseURL: config.FIREBASE_DATABASE_URL,
+  projectId: config.FIREBASE_PROJECT_ID,
+  storageBucket: config.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: config.FIREBASE_MESSAGING_SENDER_ID,
+  appId: config.FIREBASE_APP_ID,
+  measurementId: config.FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

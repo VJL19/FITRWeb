@@ -11,12 +11,14 @@ import { AppDispatch, RootState } from "src/store/store";
 import _columns from "./transactionColumn";
 import AddIcon from "@mui/icons-material/Add";
 import {
+  transactionApi,
   useDeleteTransactionMutation,
   useGetAllUsersTransactionsQuery,
 } from "src/reducers/transaction";
 import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
+import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -32,6 +34,7 @@ const TransactionPage = () => {
   );
 
   const VISIBLE_FIELDS = [
+    "RowID",
     "FullName",
     "SubscriptionAmount",
     "SubscriptionType",
@@ -60,6 +63,10 @@ const TransactionPage = () => {
     id: user.SubscriptionID,
   }));
 
+  useRefetchOnMessage("refresh_transaction", () => {
+    dispatch(transactionApi.util.invalidateTags(["transaction"]));
+  });
+
   const handleDeleteTransaction = async () => {
     dispatch(handleClose());
     deleteTransaction({ SubscriptionID: SubscriptionID });
@@ -80,7 +87,7 @@ const TransactionPage = () => {
   return (
     <Box
       sx={{
-        height: 800,
+        height: 500,
         width: "100%",
         "& .super-app-theme--header": {
           backgroundColor: "#ff2e00",

@@ -21,8 +21,14 @@ import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
 import RichTextEditor from "src/components/RichTextEditor";
-import { ref, deleteObject } from "firebase/storage";
+import { ref, deleteObject, getMetadata } from "firebase/storage";
 import { storage } from "src/global/firebaseConfig";
+import {
+  FIREBASE_VIDEO_FORMATS,
+  VIDEO_FORMATS,
+} from "src/utils/constants/FILE_EXTENSIONS";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+
 const EditAnnouncementPage = () => {
   const {
     register,
@@ -36,7 +42,7 @@ const EditAnnouncementPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const fileRef = useRef<HTMLInputElement | null | undefined>();
+  const fileRef = useRef<HTMLInputElement | null | undefined>(undefined);
 
   const {
     AnnouncementTitle,
@@ -47,6 +53,8 @@ const EditAnnouncementPage = () => {
 
   const [imagePreview, setImagePreview] = useState<File | undefined>();
   const [isUserChangeImage, setIsUserChangeImage] = useState(false);
+  const [metadata, setMetadata] = useState<string | undefined>("");
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const [editAnnouncement, { data, error, isLoading, status }] =
     useEditAnnouncementMutation();
@@ -56,17 +64,37 @@ const EditAnnouncementPage = () => {
     navigate("/dashboard/announcements", { replace: true });
   };
 
+  useEffect(() => {
+    videoRef?.current?.load();
+  }, [imagePreview]);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files?.[0] == undefined) {
+      setImagePreview(undefined);
+      return;
+    }
     setIsUserChangeImage(true);
     setImagePreview(event?.target?.files?.[0]);
+    setMetadata("");
     console.log(event?.target?.files?.[0].name);
   };
 
+  const mediaRef = ref(storage, AnnouncementImage);
   const toggleImageUpload = () => {
     fileRef.current?.click();
   };
 
   useEffect(() => {
+    if (AnnouncementImage.split(".")[0] === "default_poster") {
+      return;
+    }
+    getMetadata(mediaRef)
+      .then((metaData) => {
+        setMetadata(metaData?.contentType);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
     setImagePreview(AnnouncementImage);
   }, []);
 
@@ -117,10 +145,15 @@ const EditAnnouncementPage = () => {
     } catch (err) {
       console.log("there was an error in deleting an image");
     }
+    let fileType = VIDEO_FORMATS.includes(
+      imagePreview?.name?.split(".")[imagePreview?.name?.split(".").length - 1]!
+    )
+      ? "video"
+      : "image";
     const url = await uploadImage(
       imagePreview,
       "GymAnnouncements/",
-      "image",
+      fileType,
       loading,
       setLoading
     );
@@ -144,6 +177,10 @@ const EditAnnouncementPage = () => {
   console.log("data announce status", status);
   console.log("data announce data", data?.message);
 
+  console.log(
+    imagePreview?.name?.split(".")[imagePreview?.name?.split(".").length - 1]!
+  );
+
   if (loading) {
     return <LoadingIndicator />;
   }
@@ -162,28 +199,62 @@ const EditAnnouncementPage = () => {
         </Button>
         <h1>EDIT ANNOUNCEMENT</h1>
         <br />
-        <img
+
+        {VIDEO_FORMATS.includes(
+          imagePreview?.name?.split(".")[
+            imagePreview?.name?.split(".").length - 1
+          ]!
+        ) ? (
+          <video
+            ref={videoRef}
+            width="100%"
+            height={450}
+            controls
+            poster={thumbnail}
+          >
+            <source src={URL.createObjectURL(imagePreview)} />
+          </video>
+        ) : FIREBASE_VIDEO_FORMATS.includes(metadata) ? (
+          <video width="100%" height={450} controls poster={thumbnail}>
+            <source src={AnnouncementImage} />
+          </video>
+        ) : (
+          <img
+            onClick={toggleImageUpload}
+            src={
+              imagePreview === undefined
+                ? thumbnail
+                : isUserChangeImage
+                ? URL.createObjectURL(imagePreview)
+                : imagePreview
+            }
+            height={400}
+            style={{ cursor: "pointer" }}
+            width={"100%"}
+          />
+        )}
+
+        <br />
+        <Button
+          variant="contained"
+          color="success"
+          size="medium"
+          startIcon={<FileUploadIcon fontSize="large" htmlColor="#f5f5f5" />}
           onClick={toggleImageUpload}
-          src={
-            imagePreview === IMAGE_VALUES.DEFAULT_VALUE
-              ? thumbnail
-              : isUserChangeImage
-              ? URL.createObjectURL(imagePreview)
-              : imagePreview
-          }
-          height={400}
-          style={{ cursor: "pointer" }}
-          width={"100%"}
-        />
+        >
+          <input
+            type="file"
+            accept=".jpeg,.png, .mp4, .mov"
+            hidden
+            ref={fileRef}
+            onChange={handleImageChange}
+          />
+          add image or video
+        </Button>
         <br />
 
-        <input
-          type="file"
-          accept=".jpeg,.png"
-          hidden
-          ref={fileRef}
-          onChange={handleImageChange}
-        />
+        <h2>Title</h2>
+
         <TextField
           {...register("AnnouncementTitle")}
           inputMode="text"

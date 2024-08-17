@@ -3,7 +3,6 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { navLinkTextStyle } from "src/components/SideBar";
-import { setAnnouncementData } from "src/reducers/announcement";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
@@ -11,7 +10,6 @@ import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 import ISubscriptions from "src/utils/types/subscription.types";
 import { setTransactionData } from "src/reducers/transaction";
-import { format } from "date-fns";
 import dayjs from "dayjs";
 import { renderDate } from "src/utils/functions/date_fns";
 
@@ -27,6 +25,21 @@ const _columns: GridColDef<ISubscriptions>[] = [
     width: 100,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+  },
+  {
+    field: "RowID",
+    headerName: "Row ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    sortable: true,
+    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    filterable: false,
   },
   {
     field: "ProfilePic",
@@ -109,8 +122,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      `${row.FirstName} ${row.MiddleName}. ${row.LastName}`,
+    valueGetter: (params, row) => `${row.SubscriptionBy}`,
   },
 
   {
@@ -121,6 +133,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
       return <b>{params.field.split("Subscription")[1]}</b>;
     },
     width: 120,
+    // type: "number",
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -256,6 +269,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
         SubscriptionEntryDate: currentRowData.SubscriptionEntryDate,
         SubscriptionStatus: currentRowData.SubscriptionStatus,
         SubscriptionMethod: currentRowData.SubscriptionMethod,
+        SubscriptionBy: currentRowData.SubscriptionBy,
         No_M_SubscriptionID: 0,
         Birthday: "",
         Age: "",

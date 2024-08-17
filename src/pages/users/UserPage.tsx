@@ -37,11 +37,10 @@ const UserPage = () => {
   });
 
   const VISIBLE_FIELDS = [
+    "RowID",
     "ProfilePic",
     "FullName",
     "ContactNumber",
-    "Height",
-    "Weight",
     "SubscriptionType",
     "Activation",
     "Actions",

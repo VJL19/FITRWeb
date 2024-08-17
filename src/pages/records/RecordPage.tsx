@@ -48,6 +48,7 @@ const RecordPage = () => {
     useUploadFileRecordMutation();
 
   const VISIBLE_FIELDS = [
+    "RowID",
     "ProfilePic",
     "FullName",
     "TimeIn",
@@ -57,6 +58,7 @@ const RecordPage = () => {
     "IsPaid",
   ];
   const VISIBLE_FILES_FIELDS = [
+    "RowID",
     "RecordName",
     "RecordDownloadLink",
     "RecordEntryDate",

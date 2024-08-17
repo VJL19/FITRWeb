@@ -27,6 +27,21 @@ const _columns: GridColDef<IAttendance>[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    field: "RowID",
+    headerName: "Row ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    sortable: true,
+    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    filterable: false,
+  },
+  {
     field: "Username",
     headerName: "User Name",
 

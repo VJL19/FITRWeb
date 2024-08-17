@@ -12,6 +12,21 @@ import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
 const _columns: GridColDef[] = [
   {
+    field: "RowID",
+    headerName: "Row ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    sortable: true,
+    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    filterable: false,
+  },
+  {
     flex: 1,
     field: "AnnouncementTitle",
     headerName: "Announcement Title",
@@ -69,6 +84,7 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field.split("Announcement")[1]}</b>;
     },
+    type: "date",
     width: 180,
     align: "center",
     headerAlign: "center",
@@ -86,6 +102,7 @@ const _columns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+
     valueGetter: (value, row: IAnnouncements) =>
       `${new Date(row.AnnouncementDate).toLocaleString("en-US", {
         hour: "numeric",

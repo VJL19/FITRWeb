@@ -33,6 +33,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "src/store/store";
 import PreviewModal from "src/components/PreviewModal";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { VIDEO_FORMATS } from "src/utils/constants/FILE_EXTENSIONS";
 
 const CreateAnnouncementPage = () => {
   const {
@@ -45,11 +47,10 @@ const CreateAnnouncementPage = () => {
     resolver: zodResolver(announcementSchema),
   });
 
-  const [imagePreview, setImagePreview] = useState<File | undefined | string>(
-    IMAGE_VALUES.DEFAULT_VALUE
-  );
+  const [imagePreview, setImagePreview] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const { previewModalOpen } = useSelector((state: RootState) => state.modal);
 
@@ -63,6 +64,10 @@ const CreateAnnouncementPage = () => {
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files?.[0] == undefined) {
+      setImagePreview(undefined);
+      return;
+    }
     setImagePreview(event?.target?.files?.[0]);
     console.log(event?.target?.files?.[0].name);
   };
@@ -72,12 +77,15 @@ const CreateAnnouncementPage = () => {
   };
 
   useEffect(() => {
+    videoRef?.current?.load();
+  }, [imagePreview]);
+  useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       showSuccessToast(data?.message);
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/announcements", { replace: true });
-        setImagePreview(IMAGE_VALUES.DEFAULT_VALUE);
+        setImagePreview(undefined);
 
         reset();
       };
@@ -92,10 +100,15 @@ const CreateAnnouncementPage = () => {
     console.log("your md data", data);
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
+    let fileType = VIDEO_FORMATS.includes(
+      imagePreview?.name?.split(".")[imagePreview?.name?.split(".").length - 1]!
+    )
+      ? "video"
+      : "image";
     const url = await uploadImage(
       imagePreview,
       "GymAnnouncements/",
-      "image",
+      fileType,
       loading,
       setLoading
     );
@@ -121,6 +134,7 @@ const CreateAnnouncementPage = () => {
   if (loading) {
     return <LoadingIndicator />;
   }
+
   return (
     <div>
       <Container maxWidth="md">
@@ -136,26 +150,51 @@ const CreateAnnouncementPage = () => {
         </Button>
         <h1>CREATE ANNOUNCEMENT</h1>
         <br />
-        <img
-          onClick={toggleImageUpload}
-          src={
-            imagePreview === IMAGE_VALUES.DEFAULT_VALUE
-              ? thumbnail
-              : URL.createObjectURL(imagePreview)
-          }
-          height={450}
-          width={"100%"}
-          style={{ cursor: "pointer" }}
-        />
+        {VIDEO_FORMATS.includes(
+          imagePreview?.name?.split(".")[
+            imagePreview?.name?.split(".").length - 1
+          ]!
+        ) ? (
+          <video
+            ref={videoRef}
+            width="100%"
+            height={450}
+            controls
+            poster={thumbnail}
+          >
+            <source src={URL.createObjectURL(imagePreview)} />
+          </video>
+        ) : (
+          <img
+            defaultValue={IMAGE_VALUES.DEFAULT_VALUE}
+            src={
+              imagePreview === undefined
+                ? thumbnail
+                : URL.createObjectURL(imagePreview)
+            }
+            height={450}
+            width={"100%"}
+            style={{ cursor: "pointer" }}
+          />
+        )}
         <br />
 
-        <input
-          type="file"
-          accept=".jpeg,.png"
-          hidden
-          ref={fileRef}
-          onChange={handleImageChange}
-        />
+        <Button
+          variant="contained"
+          color="success"
+          size="medium"
+          startIcon={<FileUploadIcon fontSize="large" htmlColor="#f5f5f5" />}
+          onClick={toggleImageUpload}
+        >
+          <input
+            type="file"
+            accept=".jpeg,.png, .mp4, .mov"
+            hidden
+            ref={fileRef}
+            onChange={handleImageChange}
+          />
+          add image or video
+        </Button>
 
         <h2>Title</h2>
         <TextField

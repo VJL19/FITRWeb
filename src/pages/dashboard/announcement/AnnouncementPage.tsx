@@ -27,8 +27,8 @@ const AnnouncementPage = () => {
   const { open } = useSelector((state: RootState) => state.modal);
 
   const VISIBLE_FIELDS = [
+    "RowID",
     "AnnouncementID",
-    "AnnouncementImage",
     "AnnouncementTitle",
     "AnnouncementDate",
     "AnnouncementTime",

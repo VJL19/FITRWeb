@@ -7,12 +7,13 @@ export const subscriptionSchema = z.object({
 });
 
 export const createSubscriptionSchema = z.object({
+  SubscriptionBy: z.string().min(1, { message: "Subscription by is required" }),
   SubscriptionType: z
     .string()
     .min(1, { message: "Subscription type is required" }),
   SubscriptionAmount: z
     .string()
-    .min(1, { message: "Subscription amountt is required" }),
+    .min(1, { message: "Subscription amount is required" }),
   SubscriptionMethod: z
     .string()
     .min(1, { message: "Subscription method is required" }),

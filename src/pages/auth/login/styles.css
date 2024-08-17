@@ -7,7 +7,7 @@ body {
   width: 100%;
 }
 .bg-background {
-  background-image: url("../../../../public/images/bg_1.jpeg");
+  background-image: url("../../../../images/bg_1.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

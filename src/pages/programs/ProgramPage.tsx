@@ -28,6 +28,7 @@ const ProgramPage = () => {
   const { open } = useSelector((state: RootState) => state.modal);
 
   const VISIBLE_FIELDS = [
+    "RowID",
     "SuggestedProgramTitle",
     "SuggestedProgramEntryDate",
     "SuggestedProgramEntryTime",

@@ -79,9 +79,15 @@ const CreateTransactionPage = () => {
   const onSubmit = async (data: TCreateSubscriptionSchema) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    const { SubscriptionMethod, SubscriptionAmount, SubscriptionType } = data;
+    const {
+      SubscriptionMethod,
+      SubscriptionBy,
+      SubscriptionAmount,
+      SubscriptionType,
+    } = data;
     const arg = {
       SubscriptionType,
+      SubscriptionBy,
       SubscriptionAmount,
       SubscriptionMethod,
     };
@@ -114,6 +120,18 @@ const CreateTransactionPage = () => {
           <h1>CREATE TRANSACTION</h1>
 
           <Stack width={"100%"}>
+            <Stack width={"100%"}>
+              <TextField
+                {...register("SubscriptionBy")}
+                inputMode="text"
+                required
+                placeholder="Enter the name who pay the subscription"
+                error={errors.SubscriptionBy ? true : false}
+                sx={{ width: "100%" }}
+              />
+              <DisplayFormError errors={errors.SubscriptionBy} />
+            </Stack>
+            <br />
             <Controller
               name="SubscriptionType"
               control={control}

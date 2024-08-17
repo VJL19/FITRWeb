@@ -15,7 +15,7 @@ export const uploadImage = async (
   setLoading: (arg: boolean) => void
 ) => {
   try {
-    if (uri === IMAGE_VALUES.DEFAULT_VALUE) return IMAGE_VALUES.DEFAULT_VALUE;
+    if (uri === undefined) return IMAGE_VALUES.DEFAULT_VALUE;
     const response = await fetch(uri);
     const blob = await response.blob();
     setLoading(true);

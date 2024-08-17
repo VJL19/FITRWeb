@@ -12,6 +12,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import { RootState } from "src/store/store";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {
+  FIREBASE_VIDEO_FORMATS,
+  VIDEO_FORMATS,
+} from "src/utils/constants/FILE_EXTENSIONS";
+import { ref, getMetadata } from "firebase/storage";
+import { storage } from "src/global/firebaseConfig";
 const ViewAnnouncementPage = () => {
   const {
     AnnouncementTitle,
@@ -30,9 +36,23 @@ const ViewAnnouncementPage = () => {
     resolver: zodResolver(announcementSchema),
   });
 
+  const [metadata, setMetadata] = useState<string | undefined>("");
+
+  const mediaRef = ref(storage, AnnouncementImage);
+
   useEffect(() => {
+    if (AnnouncementImage.split(".")[0] === "default_poster") {
+      return;
+    }
     setValue("AnnouncementTitle", AnnouncementTitle);
     setValue("AnnouncementDescription", AnnouncementDescription);
+    getMetadata(mediaRef)
+      .then((metaData) => {
+        setMetadata(metaData?.contentType);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, []);
 
   const navigate = useNavigate();
@@ -55,17 +75,23 @@ const ViewAnnouncementPage = () => {
         </Button>
         <h1>VIEW ANNOUNCEMENT</h1>
         <br />
-        <a target="_blank" href={AnnouncementImage}>
-          <img
-            src={
-              AnnouncementImage === "default_poster.png"
-                ? thumbnail
-                : AnnouncementImage
-            }
-            height={400}
-            style={{ cursor: "pointer" }}
-          />
-        </a>
+        {FIREBASE_VIDEO_FORMATS.includes(metadata) ? (
+          <video width="100%" height={450} controls poster={thumbnail}>
+            <source src={AnnouncementImage} />
+          </video>
+        ) : (
+          <a target="_blank" href={AnnouncementImage}>
+            <img
+              src={
+                AnnouncementImage === "default_poster.png"
+                  ? thumbnail
+                  : AnnouncementImage
+              }
+              height={400}
+              style={{ cursor: "pointer" }}
+            />
+          </a>
+        )}
 
         <h2>{AnnouncementTitle}</h2>
         <div dangerouslySetInnerHTML={{ __html: AnnouncementDescription }} />

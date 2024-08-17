@@ -13,6 +13,7 @@ const ViewTransactionPage = () => {
     MiddleName,
     SubscriptionAmount,
     SubscriptionType,
+    SubscriptionBy,
     SubscriptionUploadedImage,
     SubscriptionEntryDate,
     SubscriptionMethod,
@@ -45,9 +46,7 @@ const ViewTransactionPage = () => {
           <img src={SubscriptionUploadedImage} height={"100%"} />
         </a>
         <h4>Amount - {SubscriptionAmount} PHP </h4>
-        <h4>
-          Paid By - {FirstName} {LastName}
-        </h4>
+        <h4>Paid By - {SubscriptionBy}</h4>
         <h4>Type - {SubscriptionType}</h4>
         <h4>Method - {SubscriptionMethod}</h4>
         <h3>Status - {SubscriptionStatus}</h3>

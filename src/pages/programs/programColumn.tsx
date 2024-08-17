@@ -13,6 +13,21 @@ import IProgramSuggested from "src/utils/types/program_suggested.types";
 import { setSuggestedProgramData } from "src/reducers/program";
 const _columns: GridColDef[] = [
   {
+    field: "RowID",
+    headerName: "Row ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    sortable: true,
+    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    filterable: false,
+  },
+  {
     flex: 1,
     field: "SuggestedProgramTitle",
     headerName: "Suggested Program Title",
@@ -52,6 +67,7 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>Date Added</b>;
     },
+    type: "date",
     flex: 1,
     width: 180,
     align: "center",

@@ -24,6 +24,21 @@ const _record_files_columns: GridColDef[] = [
     headerClassName: "super-app-theme--header",
   },
   {
+    field: "RowID",
+    headerName: "Row ID",
+
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    align: "center",
+    width: 100,
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    sortable: true,
+    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    filterable: false,
+  },
+  {
     field: "RecordName",
     headerName: "Record Name",
     renderHeader: (params) => {
@@ -39,7 +54,7 @@ const _record_files_columns: GridColDef[] = [
     flex: 1,
     align: "center",
     field: "RecordDownloadLink",
-    headerName: "First Name",
+    headerName: "Record Download Link",
     renderHeader: (params) => {
       return <b>{params.field.split("Record")[1]}</b>;
     },
@@ -66,13 +81,14 @@ const _record_files_columns: GridColDef[] = [
   },
   {
     field: "RecordEntryDate",
-    headerName: "Last Name",
+    headerName: "Record Entry Date",
     renderHeader: (params) => {
       return <b>{params.field.split("Record")[1]}</b>;
     },
     width: 150,
     flex: 1,
     align: "center",
+    type: "date",
 
     headerAlign: "center",
     headerClassName: "super-app-theme--header",

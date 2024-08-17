@@ -92,6 +92,7 @@ export const transactionApi = createApi({
       ITransactionApiState,
       {
         SubscriptionAmount: string;
+        SubscriptionBy: string;
         SubscriptionType: string;
         SubscriptionMethod: string;
       }
