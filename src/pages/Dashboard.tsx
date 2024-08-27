@@ -1,5 +1,5 @@
 import "../styles/Dashboard.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import AnnouncementPage from "./dashboard/announcement/AnnouncementPage";
 import Home from "./Home";
 import ProtectedRoute from "./ProtectedRoute";
@@ -24,9 +24,12 @@ import CreateProgramPage from "./programs/CreateProgramPage";
 import ViewProgramPage from "./programs/ViewProgramPage";
 import EditProgramPage from "./programs/EditProgramPage";
 import TopBar from "src/components/TopBar";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EditRecordPage from "./records/EditRecordPage";
 import ViewRecordPage from "./records/ViewRecordPage";
+import useRFIDListen from "src/hooks/useRFIDListen";
+import InputReader from "src/components/InputReader";
+import AttendancePage from "./attendance/AttendancePage";
 const Dashboard = () => {
   return (
     <React.Fragment>
@@ -70,6 +73,7 @@ const Dashboard = () => {
               path={"/dashboard/suggested_programs/edit_program/:id"}
             />
             <Route element={<RecordPage />} path="/dashboard/records" />
+            <Route element={<AttendancePage />} path="/dashboard/attendance" />
             <Route
               element={<EditRecordPage />}
               path="/dashboard/records/edit_record/:id"

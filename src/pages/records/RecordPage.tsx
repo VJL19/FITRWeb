@@ -7,7 +7,6 @@ import CustomModal from "src/components/CustomModal";
 import { setRoute } from "src/reducers/route";
 import { AppDispatch, RootState } from "src/store/store";
 import _columns from "./recordColumn";
-import { useGetUsersAttendanceQuery } from "src/reducers/attendance";
 import {
   useDeleteFileRecordMutation,
   useGetAllFileRecordsQuery,
@@ -27,6 +26,7 @@ import getCurrentDate from "src/utils/functions/date_fns";
 import { ref, deleteObject } from "firebase/storage";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { storage } from "src/global/firebaseConfig";
+import RenderRfidInput from "src/components/RenderRfidInput";
 const RecordPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -34,10 +34,6 @@ const RecordPage = () => {
   const [file, setFile] = useState<File | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { data, isFetching, isUninitialized } = useGetUsersAttendanceQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
   const {
     data: records,
     isFetching: recordFetching,
@@ -47,16 +43,6 @@ const RecordPage = () => {
   const [uploadRecordFile, { data: uploadFileData, error }] =
     useUploadFileRecordMutation();
 
-  const VISIBLE_FIELDS = [
-    "RowID",
-    "ProfilePic",
-    "FullName",
-    "TimeIn",
-    "TimeOut",
-    "DateTapped",
-    "SubscriptionType",
-    "IsPaid",
-  ];
   const VISIBLE_FILES_FIELDS = [
     "RowID",
     "RecordName",
@@ -86,11 +72,6 @@ const RecordPage = () => {
     }
   }, [deleteStatus]);
 
-  const columns = React.useMemo(
-    () => _columns.filter((column) => VISIBLE_FIELDS.includes(column.field)),
-    [_columns]
-  );
-
   const files_columns = React.useMemo(
     () =>
       _record_files_columns.filter((column) =>
@@ -99,7 +80,6 @@ const RecordPage = () => {
     [_columns]
   );
 
-  const rows = data?.result.map((user) => ({ ...user, id: user.AttendanceID }));
   const file_rows = records?.result.map((record) => ({
     ...record,
     id: record.RecordID,
@@ -165,37 +145,9 @@ const RecordPage = () => {
       }}
       alignItems={"center"}
     >
+      <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        Attendance
-      </h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isFetching || isUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
-      />
-      <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        Records
+        FILE RECORDS
       </h1>
       <DataGrid
         rows={file_rows}
@@ -234,8 +186,8 @@ const RecordPage = () => {
         <input
           type="file"
           accept=".pdf,.xlsx"
-          hidden
           ref={fileRef}
+          hidden
           onChange={handleFileChange}
         />
         upload

@@ -19,6 +19,7 @@ import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
+import RenderRfidInput from "src/components/RenderRfidInput";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -97,6 +98,7 @@ const TransactionPage = () => {
       }}
       alignItems={"center"}
     >
+      <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         TRANSACTIONS
       </h1>

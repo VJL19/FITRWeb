@@ -26,6 +26,7 @@ import TotalFulfilledTransactionPage from "./transactions/TotalFulfilledTransact
 import TotalPendingTransactionPage from "./transactions/TotalPendingTransactionPage";
 import TotalAnnouncementCreatedPage from "./dashboard/announcement/TotalAnnouncementCreatedPage";
 import TodaySales from "./sales/TodaySales";
+import RenderRfidInput from "src/components/RenderRfidInput";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -36,6 +37,7 @@ const Home = () => {
 
   return (
     <Container sx={{ height: 450 }}>
+      <RenderRfidInput />
       <h1>DASHBOARD</h1>
 
       <Container

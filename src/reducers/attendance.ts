@@ -2,12 +2,14 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { loadConfig } from "src/global/config";
 import IAttendance from "src/utils/types/attendance.types";
+import IUser from "src/utils/types/users.types";
 
 export interface IAttendanceState {
   message: string;
   error: string;
   result: IAttendance[];
   status: number;
+  user: IUser;
 }
 
 export interface IAttendanceSliceState {
@@ -45,6 +47,55 @@ export const attendanceApi = createApi({
       }),
       invalidatesTags: ["attendance"],
     }),
+    getTestConnection: builder.mutation<IAttendanceState, void>({
+      query: () => ({
+        url: "/user/sample_health",
+        method: "GET",
+      }),
+      invalidatesTags: ["attendance"],
+    }),
+    checkUserRFIDNumber: builder.mutation<
+      IAttendanceState,
+      { RFIDNumber: string }
+    >({
+      query: ({ RFIDNumber }) => ({
+        url: `/admin/attendance/checkUserRFID/:${RFIDNumber}`,
+        method: "GET",
+      }),
+      invalidatesTags: ["attendance"],
+    }),
+    checkUserTapRFID: builder.mutation<
+      IAttendanceState,
+      { UserID: number | undefined }
+    >({
+      query: ({ UserID }) => ({
+        url: `/admin/attendance/checkUserTapRFID/:${UserID}`,
+        method: "GET",
+      }),
+      invalidatesTags: ["attendance"],
+    }),
+    tapRFIDCardUser: builder.mutation<
+      IAttendanceState,
+      {
+        UserID: number | undefined;
+        ProfilePic: string;
+        LastName: string;
+        FirstName: string;
+        SubscriptionType: string;
+        DateTapped: string;
+        SubscriptionExpectedEnd: string;
+        IsPaid: string;
+        TimeIn: string;
+        TimeOut: string;
+      }
+    >({
+      query: (arg) => ({
+        url: "/admin/attendance/record_user",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["attendance"],
+    }),
   }),
 });
 
@@ -66,5 +117,9 @@ export const {
   useGetUsersAttendanceQuery,
   useGetAttendanceByDateMutation,
   useGetAllRecentAttendanceQuery,
+  useCheckUserRFIDNumberMutation,
+  useTapRFIDCardUserMutation,
+  useCheckUserTapRFIDMutation,
+  useGetTestConnectionMutation,
 } = attendanceApi;
 export default attendanceSlice.reducer;

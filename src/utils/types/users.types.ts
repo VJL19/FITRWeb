@@ -19,6 +19,7 @@ interface IUser {
   RFIDNumber?: string;
   Activation?: string;
   TotalUser?: number;
+  SubscriptionExpectedEnd?: string;
 }
 
 export interface IOTP {

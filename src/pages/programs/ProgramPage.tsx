@@ -21,6 +21,7 @@ import {
 } from "src/reducers/program";
 import "react-toastify/dist/ReactToastify.css";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
+import RenderRfidInput from "src/components/RenderRfidInput";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -106,6 +107,7 @@ const ProgramPage = () => {
       }}
       alignItems={"center"}
     >
+      <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         SUGGESTED PROGRAMS
       </h1>

@@ -19,6 +19,13 @@ export function renderDate(checkTimeAndDate: any) {
     dateFormattingOptions
   );
 }
+export const formatTime = (time: Date) => {
+  return time.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+};
 
 export function formatDate(date) {
   var dd = date.getDate();

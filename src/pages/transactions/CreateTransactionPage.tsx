@@ -45,16 +45,14 @@ const CreateTransactionPage = () => {
     useCreateSubscriptionMutation();
   const navigate = useNavigate();
 
+  const subscriptionType = watch("SubscriptionType");
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (value.SubscriptionType === "Session") {
-        setValue("SubscriptionAmount", "90");
-      } else {
-        setValue("SubscriptionAmount", "900");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    if (subscriptionType === "Session") {
+      setValue("SubscriptionAmount", "90");
+    } else {
+      setValue("SubscriptionAmount", "900");
+    }
+  }, [subscriptionType]);
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {

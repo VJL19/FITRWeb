@@ -174,7 +174,6 @@ const CreateAnnouncementPage = () => {
             }
             height={450}
             width={"100%"}
-            style={{ cursor: "pointer" }}
           />
         )}
         <br />

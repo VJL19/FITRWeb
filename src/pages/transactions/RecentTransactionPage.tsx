@@ -64,9 +64,7 @@ const RecentTransactionPage = () => {
               gap: 3,
             }}
           >
-            <h5>
-              {recentUser.FirstName} {recentUser.LastName}
-            </h5>
+            <h5>{recentUser.SubscriptionBy}</h5>
 
             <h4>{recentUser.SubscriptionAmount} PHP</h4>
             <h4>{recentUser.SubscriptionStatus}</h4>

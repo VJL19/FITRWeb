@@ -82,7 +82,7 @@ const _columns: GridColDef[] = [
     field: "AnnouncementDate",
     headerName: "Announcement Date",
     renderHeader: (params) => {
-      return <b>{params.field.split("Announcement")[1]}</b>;
+      return <b>{params.field.split("Announcement")[1]} Posted</b>;
     },
     type: "date",
     width: 180,
@@ -96,7 +96,7 @@ const _columns: GridColDef[] = [
     field: "AnnouncementTime",
     headerName: "AnnouncementTime",
     renderHeader: (params) => {
-      return <b>{params.field.split("Announcement")[1]}</b>;
+      return <b>{params.field.split("Announcement")[1]} Posted</b>;
     },
     width: 180,
     align: "center",

@@ -14,6 +14,7 @@ import { AppDispatch } from "src/store/store";
 import DailySales from "./Daily/DailySales";
 import WeeklySales from "./Weekly/WeeklySales";
 import MonthlySales from "./Monthly/MonthlySales";
+import RenderRfidInput from "src/components/RenderRfidInput";
 
 const SalePage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -38,9 +39,10 @@ const SalePage = () => {
 
   return (
     <Box sx={{ height: 450, width: "100%" }}>
+      <RenderRfidInput />
       <h1>SALES OVERVIEW</h1>
       <Stack width={"100%"}>
-        <Box sx={{ width: "25%" }}>
+        <Box sx={{ width: "35%" }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
               Choose between daily, weekly, and monthly

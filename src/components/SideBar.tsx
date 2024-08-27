@@ -10,6 +10,7 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
+import AccessTimeFilledOutlinedIcon from "@mui/icons-material/AccessTimeFilledOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
 import { NavLink } from "react-router-dom";
@@ -48,6 +49,15 @@ const SideBar = () => {
           <div className={dynamicStyles(route, "Programs")}>
             <FitnessCenterIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Programs</h5>
+          </div>
+        </NavLink>
+        <NavLink to="/dashboard/attendance" style={navLinkTextStyle}>
+          <div className={dynamicStyles(route, "Attendance")}>
+            <AccessTimeFilledOutlinedIcon
+              fontSize="large"
+              htmlColor="#f5f5f5"
+            />
+            <h5 style={{ textTransform: "uppercase" }}>Attendance</h5>
           </div>
         </NavLink>
         <NavLink to="/dashboard/records" style={navLinkTextStyle}>

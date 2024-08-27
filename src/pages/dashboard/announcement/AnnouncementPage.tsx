@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
+import RenderRfidInput from "src/components/RenderRfidInput";
 const AnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -127,8 +128,9 @@ const AnnouncementPage = () => {
       }}
       alignItems={"center"}
     >
+      <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        All Announcementss
+        All Announcements
       </h1>
       <DataGrid
         rows={rows}

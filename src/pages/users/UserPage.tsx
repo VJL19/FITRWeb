@@ -20,6 +20,7 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
+import RenderRfidInput from "src/components/RenderRfidInput";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -85,6 +86,7 @@ const UserPage = () => {
         },
       }}
     >
+      <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         GYM MEMBERS
       </h1>

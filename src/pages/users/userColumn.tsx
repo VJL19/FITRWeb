@@ -12,6 +12,8 @@ import { handleOpen } from "src/reducers/modal";
 import IAttendance from "src/utils/types/attendance.types";
 import IUser from "src/utils/types/users.types";
 import { setUserData } from "src/reducers/users";
+import Avatar from "@mui/material/Avatar";
+
 const _columns: GridColDef<IAttendance>[] = [
   {
     field: "UserID",
@@ -70,19 +72,14 @@ const _columns: GridColDef<IAttendance>[] = [
           direction="row"
           sx={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
         >
-          <img
-            style={{
-              borderWidth: 1.5,
-              borderRadius: "50%",
-              borderColor: "green",
-              border: 15,
-            }}
-            height={65}
-            src={
+          <Avatar
+            alt={`${currentRow.ProfilePic}`}
+            src={`${
               currentRow.ProfilePic === "default_poster.png"
                 ? thumbnail
                 : currentRow.ProfilePic
-            }
+            }`}
+            sx={{ width: 56, height: 56 }}
           />
         </Stack>
       );

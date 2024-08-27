@@ -43,6 +43,7 @@ import {
   generateExcelAttendanceReport,
   generateExcelFinancialReport,
 } from "src/utils/functions/generateFile";
+import RenderRfidInput from "src/components/RenderRfidInput";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -134,6 +135,7 @@ const ReportPage = () => {
       }}
       alignItems={"center"}
     >
+      <RenderRfidInput />
       <h1>GENERATE REPORTS</h1>
       <h3>Select Report Type</h3>
 

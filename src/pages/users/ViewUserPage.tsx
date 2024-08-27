@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "src/store/store";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import Avatar from "@mui/material/Avatar";
+import thumbnail from "src/assets/thumbnail_no_img.jpg";
 
 const ViewUserPage = () => {
   const {
@@ -42,12 +44,12 @@ const ViewUserPage = () => {
         Back
       </Button>
       <h1>VIEW USER PAGE</h1>
-      <img
-        src={ProfilePic}
-        height={250}
-        width={"50%"}
-        style={{ borderRadius: "50%", borderWidth: 10, borderColor: "blue" }}
+      <Avatar
+        alt={`${ProfilePic}`}
+        src={`${ProfilePic === "default_poster.png" ? thumbnail : ProfilePic}`}
+        sx={{ width: 250, height: 250, borderWidth: 2, borderColor: "#ff2e00" }}
       />
+
       <h2>Personal Information</h2>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <h3>LastName:</h3>
