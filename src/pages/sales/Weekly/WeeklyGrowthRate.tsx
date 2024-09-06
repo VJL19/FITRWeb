@@ -83,10 +83,12 @@ const WeeklyGrowthRate = ({ selectedValue }: { selectedValue: string }) => {
             <Box>
               <h2>WEEKLY GROWTH RATE FOR SESSION USERS</h2>
               {data?.map((item) => (
-                <WeeklyGrowthRateItems
-                  Weeks={item.Week}
-                  GrowthRate={item.sessionUsersGrowthRate}
-                />
+                <React.Fragment key={item.Week}>
+                  <WeeklyGrowthRateItems
+                    Weeks={item.Week}
+                    GrowthRate={item.sessionUsersGrowthRate}
+                  />
+                </React.Fragment>
               ))}
             </Box>
             <Box>

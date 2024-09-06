@@ -21,6 +21,7 @@ import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import { showFailedToast, showSuccessToast } from "src/components/showToast";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -52,6 +53,14 @@ const UserPage = () => {
     [_columns]
   );
 
+  useEffect(() => {
+    if (deleteStatus === "fulfilled") {
+      showSuccessToast(data?.message, "toast_user");
+    }
+    if (deleteStatus === "rejected") {
+      showFailedToast(data?.message, "toast_user");
+    }
+  }, [deleteStatus, data?.message]);
   const handleDeleteUser = async () => {
     let imageRef = ref(storage, ProfilePic);
 
@@ -145,7 +154,7 @@ const UserPage = () => {
         title="Delete this user?"
         handleDeleteClick={handleDeleteUser}
       />
-      <ToastContainer />
+      <ToastContainer containerId={"toast_user"} />
     </Container>
   );
 };

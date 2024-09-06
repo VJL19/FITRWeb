@@ -85,7 +85,11 @@ export const usersApi = createApi({
     }),
     updateUser: builder.mutation<
       IUserApiState,
-      { UserID: number | undefined; SubscriptionType: string }
+      {
+        UserID: number | undefined;
+        SubscriptionType: string;
+        RFIDNumber: string | undefined;
+      }
     >({
       query: (arg) => ({
         url: "/admin/user/update_subscription",

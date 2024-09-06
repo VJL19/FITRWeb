@@ -74,10 +74,10 @@ const AnnouncementPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_announcement");
     }
     if (deleteStatus === "rejected") {
-      showFailedToast(data?.message);
+      showFailedToast(data?.message, "toast_announcement");
     }
   }, [deleteStatus, data?.message]);
   const rows = announcements?.result?.map((announcement) => ({
@@ -177,7 +177,7 @@ const AnnouncementPage = () => {
         title="Delete this announcement?"
         handleDeleteClick={handleDeleteAnnouncement}
       />
-      <ToastContainer />
+      <ToastContainer containerId={"toast_announcement"} />
     </Box>
   );
 };

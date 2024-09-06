@@ -61,7 +61,10 @@ const EditTransactionPage = () => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showSuccessToast("Successfully fulfilled this transaction");
+        showSuccessToast(
+          "Successfully fulfilled this transaction",
+          "toast_transaction"
+        );
       };
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -71,7 +74,7 @@ const EditTransactionPage = () => {
       delayRedirect();
     }
     if (status === "rejected" && isSubmitted) {
-      showFailedToast("Something went wrong");
+      showFailedToast("Something went wrong", "toast_transaction");
     }
   }, [data?.message, status]);
 
@@ -156,7 +159,7 @@ const EditTransactionPage = () => {
             </Button>
           </Stack>
         )}
-        <ToastContainer />
+        <ToastContainer containerId={"toast_transaction"} />
       </Container>
     </div>
   );

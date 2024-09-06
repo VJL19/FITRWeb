@@ -65,10 +65,10 @@ const RecordPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      showSuccessToast(deleteFileData?.message);
+      showSuccessToast(deleteFileData?.message, "toast_record");
     }
     if (deleteStatus === "rejected") {
-      showFailedToast(deleteFileData?.message);
+      showFailedToast(deleteFileData?.message, "toast_record");
     }
   }, [deleteStatus]);
 
@@ -96,7 +96,6 @@ const RecordPage = () => {
   };
 
   const handleConfirmationUpload = async () => {
-    window.scrollTo(0, 0);
     const url = await uploadFile(file, "Records/", "file", loading, setLoading);
 
     const arg = {
@@ -109,7 +108,6 @@ const RecordPage = () => {
   };
 
   const handleDeleteRecord = async () => {
-    window.scrollTo(0, 0);
     const arg = {
       RecordID: RecordID,
     };
@@ -202,7 +200,7 @@ const RecordPage = () => {
         title="Delete this file?"
         handleDeleteClick={handleDeleteRecord}
       />
-      <ToastContainer />
+      <ToastContainer containerId={"toast_record"} />
     </Box>
   );
 };

@@ -28,11 +28,11 @@ const EditRecordPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (status === "fulfilled") {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_record");
       navigate("/dashboard/records", { replace: true });
     }
     if (status === "rejected") {
-      showFailedToast(data?.message);
+      showFailedToast(data?.message, "toast_record");
     }
   }, [status]);
   const handleFileEdit = async () => {
@@ -139,7 +139,7 @@ const EditRecordPage = () => {
             upload
           </Button>
         )}
-        <ToastContainer />
+        <ToastContainer containerId={"toast_record"} />
       </Container>
     </div>
   );

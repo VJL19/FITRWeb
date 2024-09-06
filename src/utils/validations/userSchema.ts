@@ -36,6 +36,10 @@ export const userSchema = z
     SubscriptionType: z
       .string()
       .min(1, { message: "Subscription type is required" }),
+    RFIDNumber: z
+      .string()
+      .max(10, { message: "RFID number only max at 10 digits." })
+      .optional(),
   })
   .refine((data) => data.Password === data.ConfirmPassword, {
     message: "Password do not match",

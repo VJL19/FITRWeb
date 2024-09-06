@@ -57,7 +57,7 @@ const CreateTransactionPage = () => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showSuccessToast(data?.message);
+        showSuccessToast(data?.message, "toast_transaction");
       };
       const deplayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -69,7 +69,10 @@ const CreateTransactionPage = () => {
     if (status === "rejected" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showFailedToast(error?.data?.message || error?.data?.error);
+        showFailedToast(
+          error?.data?.message || error?.data?.error,
+          "toast_transaction"
+        );
       };
       deplayShowToast();
     }
@@ -217,7 +220,7 @@ const CreateTransactionPage = () => {
             Submit
           </Button>
         </Container>
-        <ToastContainer />
+        <ToastContainer containerId={"toast_transaction"} />
       </React.Fragment>
     </div>
   );

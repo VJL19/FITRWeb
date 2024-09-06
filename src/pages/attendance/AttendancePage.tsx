@@ -50,10 +50,10 @@ const AttendancePage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      showSuccessToast(deleteFileData?.message);
+      showSuccessToast(deleteFileData?.message, "toast_attendance");
     }
     if (deleteStatus === "rejected") {
-      showFailedToast(deleteFileData?.message);
+      showFailedToast(deleteFileData?.message, "toast_attendance");
     }
   }, [deleteStatus]);
 
@@ -113,7 +113,7 @@ const AttendancePage = () => {
         }}
       />
 
-      <ToastContainer />
+      <ToastContainer containerId={"toast_attendance"} />
     </Box>
   );
 };

@@ -57,6 +57,7 @@ const EditUserPage = () => {
     Username,
     Height,
     Weight,
+    RFIDNumber,
   } = useSelector((state: RootState) => state.user.userData);
 
   const [updateUser, { data, status, isLoading, error }] =
@@ -82,13 +83,14 @@ const EditUserPage = () => {
     setValue("Password", Password);
     setValue("ConfirmPassword", ConfirmPassword);
     setValue("SubscriptionType", SubscriptionType);
+    setValue("RFIDNumber", RFIDNumber);
   }, []);
 
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showSuccessToast(data?.message);
+        showSuccessToast(data?.message, "toast_user");
         navigate("/dashboard/users", { replace: true });
       };
       deplayShowToast();
@@ -96,7 +98,10 @@ const EditUserPage = () => {
     if (status === "rejected" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showFailedToast(error?.data?.message || error?.data?.error);
+        showFailedToast(
+          error?.data?.message || error?.data?.error,
+          "toast_user"
+        );
       };
       deplayShowToast();
     }
@@ -108,6 +113,7 @@ const EditUserPage = () => {
     const arg = {
       UserID: UserID,
       SubscriptionType: data.SubscriptionType,
+      RFIDNumber: data.RFIDNumber,
     };
     updateUser(arg);
   };
@@ -269,7 +275,17 @@ const EditUserPage = () => {
             />
             <DisplayFormError errors={errors.Weight} />
           </Stack>
-          <Stack width={"100%"}></Stack>
+          <Stack width={"100%"}>
+            <TextField
+              {...register("RFIDNumber")}
+              inputMode="text"
+              defaultValue={RFIDNumber}
+              error={errors.RFIDNumber ? true : false}
+              label="Enter RFID number"
+              sx={{ width: "100%" }}
+            />
+            <DisplayFormError errors={errors.RFIDNumber} />
+          </Stack>
         </Stack>
         <h3>Contact Information</h3>
         <Stack direction={"row"}>
@@ -438,7 +454,7 @@ const EditUserPage = () => {
           Submit
         </Button>
       </Container>
-      <ToastContainer />
+      <ToastContainer containerId={"toast_user"} />
     </div>
   );
 };

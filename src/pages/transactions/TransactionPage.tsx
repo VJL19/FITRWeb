@@ -75,10 +75,10 @@ const TransactionPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_transaction");
     }
     if (deleteStatus === "rejected") {
-      showFailedToast(data?.message);
+      showFailedToast(data?.message, "toast_transaction");
     }
   }, [deleteStatus, data?.message]);
 
@@ -147,7 +147,7 @@ const TransactionPage = () => {
         handleDeleteClick={handleDeleteTransaction}
         title="Delete this transaction?"
       />
-      <ToastContainer />
+      <ToastContainer containerId={"toast_transaction"} />
     </Box>
   );
 };

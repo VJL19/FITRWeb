@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { showSuccessToast } from "src/components/showToast";
+import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { useEditProgramControllerMutation } from "src/reducers/program";
 import {
   TProgramSchema,
@@ -50,7 +50,7 @@ const EditProgramPage = () => {
 
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_program");
 
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -60,7 +60,7 @@ const EditProgramPage = () => {
       delayRedirect();
     }
     if (status === "rejected" && isSubmitted) {
-      showSuccessToast(data?.message);
+      showFailedToast(data?.message, "toast_program");
     }
   }, [status, data?.message]);
 
@@ -158,7 +158,7 @@ const EditProgramPage = () => {
         </Button>
       </Container>
 
-      <ToastContainer />
+      <ToastContainer containerId={"toast_program"} />
     </div>
   );
 };

@@ -28,6 +28,7 @@ import {
   VIDEO_FORMATS,
 } from "src/utils/constants/FILE_EXTENSIONS";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { showFailedToast, showSuccessToast } from "src/components/showToast";
 
 const EditAnnouncementPage = () => {
   const {
@@ -100,17 +101,8 @@ const EditAnnouncementPage = () => {
 
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
-      toast.success(data?.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showSuccessToast(data?.message, "toast_announcement");
+
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/announcements", { replace: true });
@@ -120,17 +112,7 @@ const EditAnnouncementPage = () => {
       delayRedirect();
     }
     if (status === "rejected" && isSubmitted) {
-      toast.error("Something went wrong!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showFailedToast("Something went wrong!", "toast_announcement");
     }
   }, [status, data?.message]);
 
@@ -310,7 +292,7 @@ const EditAnnouncementPage = () => {
           Submit
         </Button>
       </Container>
-      <ToastContainer />
+      <ToastContainer containerId={"toast_announcement"} />
     </div>
   );
 };

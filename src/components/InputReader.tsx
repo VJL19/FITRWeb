@@ -6,6 +6,8 @@ type InputReaderProps = {
   toggleFocus: () => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleInput: () => void;
+  onBlur: () => void;
+  onFocus: () => void;
 };
 
 const InputReader = ({
@@ -14,19 +16,21 @@ const InputReader = ({
   rfidNumber,
   toggleFocus,
   handleInput,
+  onBlur,
+  onFocus,
 }: InputReaderProps) => {
   return (
     <React.Fragment>
       <label />
       <input
+        ref={inputRef}
         value={rfidNumber}
         type="text"
         id="rfidInput"
-        ref={inputRef}
-        onFocus={toggleFocus}
+        onFocus={onFocus}
         onChange={handleChange}
         onInput={handleInput}
-        onBlur={toggleFocus}
+        onBlur={onBlur}
         autoComplete="off"
       />
     </React.Fragment>

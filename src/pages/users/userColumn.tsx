@@ -299,6 +299,7 @@ const _columns: GridColDef<IAttendance>[] = [
         Weight: currentRowData.Weight,
         ProfilePic: currentRowData.ProfilePic,
         Username: currentRowData.Username,
+        RFIDNumber: currentRowData.RFIDNumber,
       };
       const onClick = () => {
         dispatch(setUserData(arg));

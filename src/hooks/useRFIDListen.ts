@@ -1,15 +1,25 @@
 import { useRef, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
+  IRfidError,
+  setCheckRfidMessage,
   useCheckUserRFIDNumberMutation,
   useCheckUserTapRFIDMutation,
   useTapRFIDCardUserMutation,
 } from "src/reducers/attendance";
+import { AppDispatch } from "src/store/store";
+import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
 import getCurrentDate, { formatTime } from "src/utils/functions/date_fns";
 import { advanceMonthlyEnd } from "src/utils/functions/subscription_fns";
 
 const useRFIDListen = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [rfidNumber, setRfidNumber] = useState("");
+  const [isTapRfid, setIsTapRfid] = useState(false);
+  const [focusable, setFocusable] = useState(false);
+  const [rfidData, setRfidData] = useState<IRfidError>({
+    data: { message: "", status: "" },
+  });
   const rfidInput = document.getElementById("rfidInput");
   const mainDiv = document.querySelector(".main--container");
   const [tapRFID, { data: tapData, status: tapStatus, error: tapError }] =
@@ -22,6 +32,8 @@ const useRFIDListen = () => {
     checkTapRFID,
     { data: checkData, status: checkStatus, error: checkErr },
   ] = useCheckUserTapRFIDMutation();
+
+  const dispatch: AppDispatch = useDispatch();
   function onMousemove() {
     toggleFocus();
   }
@@ -42,15 +54,62 @@ const useRFIDListen = () => {
 
   useEffect(() => {
     toggleFocus();
-    console.log("use effect run for the first render.");
   }, []);
+
+  const onBlur = () => setFocusable(false);
+  const onFocus = () => setFocusable(true);
+
+  useEffect(() => {
+    if (!focusable) {
+      inputRef?.current?.focus({ preventScroll: true });
+    } else {
+      inputRef?.current?.focus({ preventScroll: true });
+    }
+  }, [focusable]);
+
+  console.log("input focus", focusable);
 
   useEffect(() => {
     if (status === "fulfilled") {
       //fetch to check whether the user is first time tap into the reader.
       checkTapRFID({ UserID: user?.UserID });
+      setIsTapRfid((prev) => !prev);
+    }
+    if (status === "rejected") {
+      setRfidData({
+        data: { message: error?.data?.message, status: status },
+      });
+      dispatch(
+        setCheckRfidMessage({
+          data: { message: error?.data?.message, status: status },
+        })
+      );
+      setIsTapRfid((prev) => !prev);
     }
   }, [status, data?.message]);
+
+  useEffect(() => {
+    if (tapStatus === "fulfilled") {
+      setRfidData({
+        data: {
+          message: `User ${data?.user?.FirstName} ${
+            data?.user?.LastName
+          } ${tapData?.message!}`,
+          status: tapStatus,
+        },
+      });
+      dispatch(
+        setCheckRfidMessage({
+          data: {
+            message: `User ${data?.user?.FirstName} ${
+              data?.user?.LastName
+            } ${tapData?.message!}`,
+            status: tapStatus,
+          },
+        })
+      );
+    }
+  }, [tapStatus, tapData?.message]);
 
   useEffect(() => {
     if (checkStatus === "fulfilled") {
@@ -77,7 +136,10 @@ const useRFIDListen = () => {
         FirstName: user?.FirstName,
         SubscriptionType: user?.SubscriptionType,
         DateTapped: getCurrentDate(),
-        SubscriptionExpectedEnd: advanceMonthlyEnd(),
+        SubscriptionExpectedEnd:
+          user?.SubscriptionType === SUBSCRIPTIONS.SESSION
+            ? "Expired when timeout"
+            : advanceMonthlyEnd(),
         IsPaid: "false",
         TimeIn: formatTime(new Date()),
         TimeOut: "NULL",
@@ -98,12 +160,12 @@ const useRFIDListen = () => {
       }
     }, 1500);
   }, [rfidNumber]);
-  const toggleFocus = () => {
-    inputRef?.current?.focus();
-  };
+  function toggleFocus() {
+    inputRef?.current?.focus({ preventScroll: true });
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
+    // event.preventDefault();
     setRfidNumber(event?.target?.value);
   };
 
@@ -118,6 +180,12 @@ const useRFIDListen = () => {
     inputRef,
     toggleFocus,
     tapStatus,
+    isTapRfid,
+    rfidData,
+    setRfidData,
+    setFocusable,
+    onBlur,
+    onFocus,
   };
 };
 export default useRFIDListen;

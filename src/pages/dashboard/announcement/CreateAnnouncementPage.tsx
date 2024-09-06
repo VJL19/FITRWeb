@@ -26,7 +26,7 @@ import { IMAGE_VALUES } from "src/utils/enums/IMAGE_VALUES";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { showSuccessToast } from "src/components/showToast";
+import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import RichTextEditor from "src/components/RichTextEditor";
 import React from "react";
@@ -81,7 +81,7 @@ const CreateAnnouncementPage = () => {
   }, [imagePreview]);
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_announcement");
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/announcements", { replace: true });
@@ -92,7 +92,7 @@ const CreateAnnouncementPage = () => {
       delayRedirect();
     }
     if (status === "rejected" && isSubmitted) {
-      showSuccessToast(data?.message);
+      showFailedToast(data?.message, "toast_announcement");
     }
   }, [status, data?.message]);
 
@@ -268,7 +268,7 @@ const CreateAnnouncementPage = () => {
 
       <PreviewModal open={previewModalOpen} title="Preview announcement" />
 
-      <ToastContainer />
+      <ToastContainer containerId={"toast_announcement"} />
     </div>
   );
 };

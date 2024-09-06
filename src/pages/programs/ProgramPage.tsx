@@ -61,10 +61,10 @@ const ProgramPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      showSuccessToast(data?.message);
+      showSuccessToast(data?.message, "toast_program");
     }
     if (deleteStatus === "rejected") {
-      showFailedToast(data?.message);
+      showFailedToast(data?.message, "toast_program");
     }
   }, [deleteStatus, data?.message]);
   const rows = suggested_programs?.result?.map((suggested_program) => ({
@@ -156,7 +156,7 @@ const ProgramPage = () => {
         title="Delete this program?"
         handleDeleteClick={handleDeleteAnnouncement}
       />
-      <ToastContainer />
+      <ToastContainer containerId={"toast_program"} />
     </Box>
   );
 };

@@ -58,7 +58,7 @@ const CreateUserPage = () => {
     if (status === "fulfilled" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showSuccessToast(data?.message);
+        showSuccessToast(data?.message, "toast_user");
       };
       sendOTPEmail({ Email: getValues("Email") });
       deplayShowToast();
@@ -66,7 +66,10 @@ const CreateUserPage = () => {
     if (status === "rejected" && isSubmitted) {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        showFailedToast(error?.data?.message || error?.data?.error);
+        showFailedToast(
+          error?.data?.message || error?.data?.error,
+          "toast_user"
+        );
       };
       deplayShowToast();
     }
@@ -230,7 +233,16 @@ const CreateUserPage = () => {
             />
             <DisplayFormError errors={errors.Weight} />
           </Stack>
-          <Stack width={"100%"}></Stack>
+          <Stack width={"100%"}>
+            <TextField
+              {...register("RFIDNumber")}
+              inputMode="text"
+              error={errors.RFIDNumber ? true : false}
+              label="Enter RFID number"
+              sx={{ width: "100%" }}
+            />
+            <DisplayFormError errors={errors.RFIDNumber} />
+          </Stack>
         </Stack>
         <h3>Contact Information</h3>
         <Stack direction={"row"}>
@@ -386,7 +398,7 @@ const CreateUserPage = () => {
           Submit
         </Button>
       </Container>
-      <ToastContainer />
+      <ToastContainer containerId={"toast_user"} />
     </div>
   );
 };

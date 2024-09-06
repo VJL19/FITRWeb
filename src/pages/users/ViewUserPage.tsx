@@ -23,6 +23,7 @@ const ViewUserPage = () => {
     Address,
     Username,
     SubscriptionType,
+    RFIDNumber,
     Activation,
   } = useSelector((state: RootState) => state.user.userData);
 
@@ -98,6 +99,8 @@ const ViewUserPage = () => {
       >
         <h3>Username:</h3>
         <p>{Username}</p>
+        <h3>RFID Number:</h3>
+        <p>{RFIDNumber}</p>
         <h3>Subscription Type:</h3>
         <p>{SubscriptionType}</p>
       </div>

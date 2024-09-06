@@ -12,12 +12,21 @@ export interface IAttendanceState {
   user: IUser;
 }
 
+export interface IRfidError {
+  data: {
+    message: string;
+    status: string;
+  };
+}
+
 export interface IAttendanceSliceState {
   attendanceData: IAttendance[] | undefined;
+  checkRfidStatus: IRfidError;
 }
 
 const initialState: IAttendanceSliceState = {
   attendanceData: [],
+  checkRfidStatus: { data: { message: "", status: "" } },
 };
 const config = loadConfig();
 
@@ -109,10 +118,14 @@ export const attendanceSlice = createSlice({
     ) => {
       state.attendanceData = action.payload;
     },
+    setCheckRfidMessage: (state, action: PayloadAction<IRfidError>) => {
+      state.checkRfidStatus = action.payload;
+    },
   },
 });
 
-export const { setAttendanceData } = attendanceSlice.actions;
+export const { setAttendanceData, setCheckRfidMessage } =
+  attendanceSlice.actions;
 export const {
   useGetUsersAttendanceQuery,
   useGetAttendanceByDateMutation,

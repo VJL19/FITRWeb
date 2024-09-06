@@ -3,19 +3,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setRoute } from "../reducers/route";
 import { Box, Container } from "@mui/material";
-import {
-  ResponsiveContainer,
-  Tooltip,
-  LineChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Legend,
-  Line,
-} from "recharts";
-import GroupIcon from "@mui/icons-material/Group";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import { useGetAllRecentAttendanceQuery } from "src/reducers/attendance";
 import RecentAttendeesPage from "./users/RecentAttendeesPage";
 import RecentTransactionPage from "./transactions/RecentTransactionPage";
 import TotalProgramCreatedPage from "./programs/TotalProgramCreatedPage";

@@ -67,7 +67,10 @@ const CreateUserConfirmationPage = () => {
 
   useEffect(() => {
     if (activateStatus === "fulfilled") {
-      showSuccessToast("Successfully activated this registration!");
+      showSuccessToast(
+        "Successfully activated this registration!",
+        "toast_user"
+      );
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/users", { replace: true });
@@ -78,12 +81,15 @@ const CreateUserConfirmationPage = () => {
 
   const onSubmit = async (data: TOtpSchema) => {
     if (!valid) {
-      showFailedToast("Your OTP is expired, please generate again!");
+      showFailedToast(
+        "Your OTP is expired, please generate again!",
+        "toast_user"
+      );
 
       return;
     }
     if (OTPToken === Number(data.OTPCode)) {
-      showSuccessToast("Successfully complete the registration!");
+      showSuccessToast("Successfully complete the registration!", "toast_user");
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         activateAccount({ Email: Email });
@@ -92,7 +98,7 @@ const CreateUserConfirmationPage = () => {
 
       reset();
     } else {
-      showFailedToast("Entered code does not match!");
+      showFailedToast("Entered code does not match!", "toast_user");
     }
   };
   const handleResend = () => {
@@ -141,7 +147,7 @@ const CreateUserConfirmationPage = () => {
           Resend OTP
         </Button>
       )}
-      <ToastContainer />
+      <ToastContainer containerId={"toast_user"} />
     </div>
   );
 };
