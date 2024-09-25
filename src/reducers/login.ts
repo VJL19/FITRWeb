@@ -47,6 +47,13 @@ export const loginApi = createApi({
       }),
       invalidatesTags: ["authenticate"],
     }),
+    loginAsGuest: builder.mutation<IAccessWebToken, void>({
+      query: () => ({
+        url: "/admin/user/login_as_guest",
+        method: "GET",
+      }),
+      invalidatesTags: ["authenticate"],
+    }),
   }),
 });
 
@@ -54,6 +61,7 @@ export const {
   useLoginUserMutation,
   useGetAccessWebTokenQuery,
   useLogoutUserWebMutation,
+  useLoginAsGuestMutation,
 } = loginApi;
 
 export default loginApi.reducer;

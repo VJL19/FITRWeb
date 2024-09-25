@@ -9,7 +9,7 @@
 
 .overlay {
   height: 100%;
-  width: 100%;
+  width: auto;
   display: flex;
   justify-content: flex-start; /* Align content to the left */
   align-items: flex-end; /* Align content to the bottom */
@@ -34,6 +34,7 @@
 .text-container p {
   margin: 20px 0;
   font-size: 1.2rem;
+  color: white;
 }
 
 .cta-button {

@@ -22,7 +22,6 @@ const Header = () => {
   if (status === "pending") {
     return <LoadingIndicator />;
   }
-  console.log(data?.user?.Role);
   return (
     <header>
       <nav>

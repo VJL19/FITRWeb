@@ -18,7 +18,10 @@ import {
 import DisplayFormError from "src/components/DisplayFormError";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useLoginUserMutation } from "src/reducers/login";
+import {
+  useLoginAsGuestMutation,
+  useLoginUserMutation,
+} from "src/reducers/login";
 import CircularProgress from "@mui/material/CircularProgress";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { ToastContainer, toast, Bounce } from "react-toastify";
@@ -40,6 +43,11 @@ const LoginPage = () => {
 
   const [loginUserr, { data, status, isLoading, error }] =
     useLoginUserMutation();
+
+  const [
+    guestLogin,
+    { status: guestStatus, data: guestData, error: guestError },
+  ] = useLoginAsGuestMutation();
   useEffect(() => {
     if (accessTokenData?.isAuthenticated) {
       navigate("/homepage", { replace: true });
@@ -65,6 +73,26 @@ const LoginPage = () => {
       deplayShowToast();
     }
   }, [status]);
+  useEffect(() => {
+    if (guestStatus === "fulfilled") {
+      const deplayShowToast = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        showSuccessToast(guestData?.details, "toast_login");
+        navigate("/homepage", { replace: true });
+      };
+      deplayShowToast();
+    }
+    if (guestStatus === "rejected") {
+      const deplayShowToast = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        showFailedToast(
+          guestError?.data?.details || guestError?.data?.error,
+          "toast_login"
+        );
+      };
+      deplayShowToast();
+    }
+  }, [guestStatus]);
 
   const handleLogin = async (data: TLoginSchema) => {
     // dispatch(loginUser());
@@ -73,7 +101,7 @@ const LoginPage = () => {
     console.log(data);
   };
   const handleLoginGuest = async () => {
-    navigate("/homepage");
+    guestLogin();
   };
 
   console.log("login data", data);
@@ -163,7 +191,7 @@ const LoginPage = () => {
               <Button
                 disabled={isSubmitting}
                 variant="outlined"
-                color="info"
+                color="error"
                 size="large"
                 onClick={handleLoginGuest}
                 style={{ width: "100%" }}

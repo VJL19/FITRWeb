@@ -27,6 +27,13 @@ section p {
   justify-content: center;
 }
 
+.about-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1350px;
+}
 .container1 {
   display: flex;
   justify-content: space-between;

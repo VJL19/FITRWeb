@@ -5,7 +5,7 @@ const About = () => {
   return (
     /*  About Section */
     <section id="about" className="about-section">
-      <div className="container1">
+      <div className="about-container">
         <div className="image-section">
           <img src={banner} alt="Gym with boxing area" />
         </div>
