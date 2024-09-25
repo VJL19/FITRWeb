@@ -1,0 +1,105 @@
+/* Footer */
+footer {
+  background-color: #333;
+  color: white;
+  padding: 30px 0;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.footer-left {
+  width: 55%; /* Adjusted to give more space to the right side */
+}
+
+.footer-left h1 {
+  color: #ff2e00;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.footer-left p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.footer-left a {
+  color: #ff2e00;
+  text-decoration: none;
+}
+
+.footer-left a:hover {
+  color: #fff;
+}
+
+.social-icons a {
+  margin-right: 10px;
+  font-size: 18px;
+  color: white;
+}
+
+.right-section {
+  text-align: right;
+  max-width: 400px;
+  width: 100%;
+}
+
+.right-section h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input,
+form textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2f2f2f;
+  color: white;
+}
+
+form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fdd835;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #ffeb3b;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #444;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.footer-bottom a {
+  color: #ff2e00;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  color: white;
+}

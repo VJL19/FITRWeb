@@ -1,0 +1,68 @@
+/* App Section Layout */
+.app-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 60px 20px;
+}
+
+.content-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.text-content {
+  flex: 1;
+  text-align: left;
+  max-width: 450px;
+}
+
+.text-content h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ff2e00;
+}
+
+/* .text-content p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+} */
+
+.buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.app-button img {
+  width: 150px;
+}
+
+.app-images {
+  display: flex;
+  position: relative;
+  flex: 1;
+  justify-content: center;
+  gap: 15px;
+}
+
+.phone {
+  max-width: 200px; /*phone sizee*/
+  position: relative;
+}
+
+.phone-center {
+  z-index: 10;
+}
+
+.phone-left {
+  transform: rotate(-10deg);
+}
+
+.phone-right {
+  transform: rotate(10deg);
+}

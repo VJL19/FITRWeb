@@ -1,5 +1,5 @@
 import "../styles/Dashboard.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AnnouncementPage from "./dashboard/announcement/AnnouncementPage";
 import Home from "./Home";
 import ProtectedRoute from "./ProtectedRoute";
@@ -30,7 +30,40 @@ import ViewRecordPage from "./records/ViewRecordPage";
 import useRFIDListen from "src/hooks/useRFIDListen";
 import InputReader from "src/components/InputReader";
 import AttendancePage from "./attendance/AttendancePage";
+import { useGetAccessWebTokenQuery } from "src/reducers/login";
+import { UserRole } from "src/utils/enums/ROLE";
+import LandingPage from "./promotional/LandingPage";
 const Dashboard = () => {
+  const { data, status, error } = useGetAccessWebTokenQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(data?.user?.Role);
+  useEffect(() => {
+    if (!data?.isAuthenticated) {
+      navigate("/login", { replace: true });
+    } else {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [data?.isAuthenticated]);
+
+  useEffect(() => {
+    if (data?.isAuthenticated && location.pathname.includes("/login")) {
+      navigate("/dashboard", { replace: true });
+    }
+    if (!data?.isAuthenticated && location.pathname.includes("/dashboard")) {
+      navigate("/login", { replace: true });
+    }
+  }, [data?.isAuthenticated, location.pathname]);
+
+  if (data?.user?.Role?.toUpperCase() === UserRole.USER) {
+    return <LandingPage />;
+  }
+  if (!data?.isAuthenticated) {
+    return <h1>You are not authenticated! Please login again</h1>;
+  }
   return (
     <React.Fragment>
       <TopBar />

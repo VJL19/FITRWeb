@@ -1,0 +1,47 @@
+.services-section {
+  background-color: #fff;
+}
+
+/* Services Section */
+.services-section {
+  background-color: #444;
+  padding: 80px 0; /* Adequate padding above and below */
+}
+
+.services-title {
+  color: #ff2e00; /* Title color */
+  margin: 0 0 30px; /* Remove top margin, add bottom margin */
+  text-align: center; /* Center the title */
+  font-size: 2.5rem; /* Title size */
+}
+
+.service-items {
+  display: flex;
+  justify-content: center; /* Center the service items */
+  gap: 30px; /* Space between service items */
+  margin-top: 100px; /* Space above service items */
+}
+
+.service-item {
+  flex: 1;
+  max-width: 300px; /* Max width for each service item */
+  background-color: #fff;
+  padding: 20px; /* Padding within service item */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  text-align: center; /* Center text within service items */
+  margin: 0; /* Ensure no extra margins */
+}
+
+.service-item:hover {
+  transform: translateY(-20px); /* Subtle hover effect */
+  background-color: #ff8b72;
+  cursor: pointer;
+}
+
+.service-item h3 {
+  color: #000;
+  font-size: 1.5rem; /* Service item title size */
+  margin-bottom: 10px; /* Space below title */
+}

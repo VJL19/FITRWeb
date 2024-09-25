@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,7 @@ import { ref, deleteObject } from "firebase/storage";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { storage } from "src/global/firebaseConfig";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import RFIDRemover from "src/components/RFIDRemover";
 const RecordPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -57,6 +58,7 @@ const RecordPage = () => {
   const { RecordID, RecordDownloadLink } = useSelector(
     (state: RootState) => state.record.recordData
   );
+
   const [deleteFile, { status: deleteStatus, data: deleteFileData }] =
     useDeleteFileRecordMutation();
   useEffect(() => {
@@ -147,31 +149,36 @@ const RecordPage = () => {
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         FILE RECORDS
       </h1>
-      <DataGrid
-        rows={file_rows}
-        columns={files_columns}
-        loading={recordFetching || recordIsUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
+
+      <RFIDRemover
+        children={
+          <DataGrid
+            rows={file_rows}
+            columns={files_columns}
+            loading={recordFetching || recordIsUninitialized}
+            pageSizeOptions={[5, 10, 15, 20, 25]}
+            disableRowSelectionOnClick
+            slotProps={{
+              loadingOverlay: {
+                variant: "skeleton",
+                noRowsVariant: "skeleton",
+              },
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: GridToolbar,
+            }}
+          />
+        }
       />
 
       <Button

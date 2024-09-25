@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "../reducers/counter";
-import auth from "../reducers/auth";
+import auth, { authApi } from "../reducers/auth";
 import route from "../reducers/route";
 import { announcementApi } from "../reducers/announcement";
 import announcementSlice from "../reducers/announcement";
@@ -12,6 +12,7 @@ import { transactionApi, transactionSlice } from "src/reducers/transaction";
 import { programApi, programSlice } from "src/reducers/program";
 import { salesAnalyticsApi } from "src/reducers/sales_analytics";
 import { recordApi, recordSlice } from "src/reducers/records";
+import { loginApi } from "src/reducers/login";
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     transaction: transactionSlice.reducer,
     attendance: attendanceSlice.reducer,
     record: recordSlice.reducer,
+    [authApi.reducerPath]: authApi.reducer,
     [announcementApi.reducerPath]: announcementApi.reducer,
     [attendanceApi.reducerPath]: attendanceApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
@@ -32,9 +34,11 @@ export const store = configureStore({
     [programApi.reducerPath]: programApi.reducer,
     [salesAnalyticsApi.reducerPath]: salesAnalyticsApi.reducer,
     [recordApi.reducerPath]: recordApi.reducer,
+    [loginApi.reducerPath]: loginApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
+      authApi.middleware,
       announcementApi.middleware,
       attendanceApi.middleware,
       usersApi.middleware,
@@ -42,6 +46,7 @@ export const store = configureStore({
       programApi.middleware,
       salesAnalyticsApi.middleware,
       recordApi.middleware,
+      loginApi.middleware,
     ]),
 });
 setupListeners(store.dispatch);

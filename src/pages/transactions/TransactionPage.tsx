@@ -20,6 +20,9 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import { storage } from "src/global/firebaseConfig";
+import { ref, deleteObject } from "firebase/storage";
+import RFIDRemover from "src/components/RFIDRemover";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,7 +48,7 @@ const TransactionPage = () => {
     "Actions",
   ];
 
-  const { SubscriptionID } = useSelector(
+  const { SubscriptionID, SubscriptionUploadedImage } = useSelector(
     (state: RootState) => state.transaction.transactionData
   );
 
@@ -69,6 +72,14 @@ const TransactionPage = () => {
   });
 
   const handleDeleteTransaction = async () => {
+    let imageRef = ref(storage, SubscriptionUploadedImage);
+
+    try {
+      await deleteObject(imageRef);
+      console.log("success");
+    } catch (err) {
+      console.log("there was an error in deleting an image");
+    }
     dispatch(handleClose());
     deleteTransaction({ SubscriptionID: SubscriptionID });
   };
@@ -102,31 +113,35 @@ const TransactionPage = () => {
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         TRANSACTIONS
       </h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isFetching || isUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
+      <RFIDRemover
+        children={
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            loading={isFetching || isUninitialized}
+            pageSizeOptions={[5, 10, 15, 20, 25]}
+            disableRowSelectionOnClick
+            slotProps={{
+              loadingOverlay: {
+                variant: "skeleton",
+                noRowsVariant: "skeleton",
+              },
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: GridToolbar,
+            }}
+          />
+        }
       />
 
       <Button

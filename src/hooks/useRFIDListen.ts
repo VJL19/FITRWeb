@@ -186,6 +186,7 @@ const useRFIDListen = () => {
     setFocusable,
     onBlur,
     onFocus,
+    mainDiv,
   };
 };
 export default useRFIDListen;

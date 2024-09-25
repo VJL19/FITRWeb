@@ -169,8 +169,8 @@ const _columns: GridColDef[] = [
       dayjs(params.DateTapped).format("YYYY/MM/DD"),
   },
   {
-    field: "SubscriptionExpectedEnd",
-    headerName: "Subscription Expected End",
+    field: "Expiration",
+    headerName: "Expiration",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
@@ -180,7 +180,9 @@ const _columns: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     valueGetter: (params, row) =>
-      new Date(row.SubscriptionExpectedEnd).toDateString(),
+      row.SubscriptionExpectedEnd !== "Expired when timeout"
+        ? new Date(row.SubscriptionExpectedEnd).toDateString()
+        : row.SubscriptionExpectedEnd,
   },
   {
     field: "IsPaid",

@@ -14,7 +14,7 @@ interface IConfig {
 export function loadConfig(): IConfig {
   return {
     BASE_URL: import.meta.env.VITE_PUBLIC_BASE_SERVER_URL,
-    SOCKET_URL: import.meta.env.VITE_PUBLIC_SOCKET_URL,
+    SOCKET_URL: import.meta.env.VITE_PUBLIC_BASE_SOCKET_URL,
     FIREBASE_APIKEY: import.meta.env.VITE_PUBLIC_BASE_apiKey,
     FIREBASE_AUTH_DOMAIN: import.meta.env.VITE_PUBLIC_BASE_authDomain,
     FIREBASE_DATABASE_URL: import.meta.env.VITE_PUBLIC_BASE_databaseURL,

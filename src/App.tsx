@@ -1,26 +1,59 @@
 import LoginPage from "./pages/auth/login/LoginPage";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
+import { useGetAccessWebTokenQuery } from "./reducers/login";
+import { bottomNavigationActionClasses } from "@mui/material";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ForgotPasswordConfirmationPage from "./pages/auth/ForgotPasswordConfirmationPage";
+import ChangePasswordPage from "./pages/auth/ChangePasswordPage";
+import LandingPage from "./pages/promotional/LandingPage";
 function App() {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-
+  const { data, status, error } = useGetAccessWebTokenQuery();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!data?.isAuthenticated) {
       navigate("/login", { replace: true });
     }
-  }, [navigate, isAuthenticated]);
+    if (!error?.data?.isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
+    if (data?.isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [data?.isAuthenticated, status]);
 
+  useEffect(() => {
+    if (!data?.isAuthenticated && location.pathname.includes("/dashboard")) {
+      navigate("/login", { replace: true });
+    }
+  }, [data?.isAuthenticated, location.pathname]);
+
+  if (data?.isAuthenticated) {
+    return <Dashboard />;
+  }
   return (
     <div>
-      {isAuthenticated && <Dashboard />}
       <Routes>
-        {!isAuthenticated && <Route path="/login" element={<LoginPage />} />}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/homepage" element={<LandingPage />} />
+        <Route path="/reset_password" element={<ForgotPasswordPage />} />
+        <Route
+          path="/change_password_confirmation"
+          element={<ForgotPasswordConfirmationPage />}
+        />
+        <Route path="/change_password" element={<ChangePasswordPage />} />
       </Routes>
 
       {/* <div>

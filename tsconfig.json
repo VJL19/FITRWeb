@@ -22,7 +22,8 @@
       "store/*": ["src/store/*"],
       "styles/*": ["src/styles/*"],
       "utils/*": ["src/utils/*"],
-      "assets/*": ["src/assets/*"]
+      "assets/*": ["src/assets/*"],
+      "promotional/styles/*": ["src/pages/promotional/*"]
     },
 
     /* Linting */

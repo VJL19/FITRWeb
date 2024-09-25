@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/SideBar.css";
 import logo from "src/assets/logo_1.png";
 import CampaignIcon from "@mui/icons-material/Campaign";
@@ -13,9 +13,10 @@ import GroupIcon from "@mui/icons-material/Group";
 import AccessTimeFilledOutlinedIcon from "@mui/icons-material/AccessTimeFilledOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import dynamicStyles from "src/utils/functions/dynamicStyles";
-import { logutUser } from "../reducers/auth";
+import { useLogoutUserWebMutation } from "../reducers/login";
+import LoadingIndicator from "./LoadingIndicator";
 
 export const navLinkTextStyle = {
   textDecoration: "none",
@@ -25,8 +26,20 @@ export const navLinkTextStyle = {
 const SideBar = () => {
   const { route } = useSelector((state: RootState) => state.route);
 
+  const [logoutUser, { status, data }] = useLogoutUserWebMutation();
+  const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
 
+  console.log("logout data", data);
+  console.log("logout status", status);
+  useEffect(() => {
+    if (status === "fulfilled") {
+      window.location.reload();
+    }
+  }, [status, data?.message]);
+  if (status === "pending") {
+    return <LoadingIndicator />;
+  }
   return (
     <main className="main--container">
       <aside className="sideNav">
@@ -96,7 +109,7 @@ const SideBar = () => {
           to="/login"
           style={navLinkTextStyle}
           onClick={() => {
-            dispatch(logutUser());
+            logoutUser();
           }}
         >
           <div className="icon--block">

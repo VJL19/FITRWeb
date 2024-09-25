@@ -1,0 +1,51 @@
+/* Hero Section */
+.hero {
+  height: 100vh;
+  background-image: url("../../../assets/your-image-path.jpg"); /* Add the appropriate background image */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* Align content to the left */
+  align-items: flex-end; /* Align content to the bottom */
+  padding: 50px; /* Adds space around the content */
+  background: rgba(0, 0, 0, 0.4); /* Optional dark overlay */
+}
+
+.text-container {
+  max-width: 600px; /* Limits the text width */
+  color: white;
+  text-align: left;
+  z-index: 2;
+}
+
+.text-container h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0 0 20px 0;
+}
+
+.text-container p {
+  margin: 20px 0;
+  font-size: 1.2rem;
+}
+
+.cta-button {
+  background-color: #ff2e00;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e02600;
+}

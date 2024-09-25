@@ -16,6 +16,7 @@ import {
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import RFIDRemover from "src/components/RFIDRemover";
 const AttendancePage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -39,7 +40,7 @@ const AttendancePage = () => {
     "TimeOut",
     "DateTapped",
     "SubscriptionType",
-    "IsPaid",
+    "Expiration",
   ];
 
   const [deleteFile, { status: deleteStatus, data: deleteFileData }] =
@@ -86,31 +87,35 @@ const AttendancePage = () => {
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         Attendance
       </h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isFetching || isUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
+      <RFIDRemover
+        children={
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            loading={isFetching || isUninitialized}
+            pageSizeOptions={[5, 10, 15, 20, 25]}
+            disableRowSelectionOnClick
+            slotProps={{
+              loadingOverlay: {
+                variant: "skeleton",
+                noRowsVariant: "skeleton",
+              },
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: GridToolbar,
+            }}
+          />
+        }
       />
 
       <ToastContainer containerId={"toast_attendance"} />

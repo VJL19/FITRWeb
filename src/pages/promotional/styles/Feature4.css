@@ -1,0 +1,19 @@
+.yellow-section4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #444; /* Yellow background */
+  text-align: center;
+}
+
+.yellow-section4 h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #ff2e00; /* Dark text color for contrast */
+}
+
+.yellow-section4 p {
+  font-size: 1.2rem;
+  color: #ffffff; /* Slightly lighter text for readability */
+  text-align: justify;
+}

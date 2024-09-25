@@ -20,6 +20,7 @@ interface IUser {
   Activation?: string;
   TotalUser?: number;
   SubscriptionExpectedEnd?: string;
+  Role?: string;
 }
 
 export interface IOTP {

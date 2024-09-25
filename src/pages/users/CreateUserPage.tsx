@@ -236,7 +236,7 @@ const CreateUserPage = () => {
           <Stack width={"100%"}>
             <TextField
               {...register("RFIDNumber")}
-              inputMode="text"
+              inputProps={{ type: "number" }}
               error={errors.RFIDNumber ? true : false}
               label="Enter RFID number"
               sx={{ width: "100%" }}

@@ -1,0 +1,82 @@
+/* Section Styles */
+section {
+  padding: 100px 0;
+  text-align: center;
+}
+
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+section p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+  color: #555;
+}
+
+.about-section {
+  display: flex;
+  padding: 50px;
+  background-color: #fff;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+}
+
+.container1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 850px;
+}
+
+.image-section {
+  flex: 1;
+  margin-right: 40px;
+}
+
+.image-section img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.text-section {
+  flex: 1;
+  position: relative;
+  padding-left: 40px; /* Adds space for the vertical line */
+}
+
+.text-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #ff8b72; /* Vertical line color */
+}
+
+.heading {
+  color: #ff2e00;
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+.subheading {
+  color: #000;
+  font-size: 1.8em;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.description {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}

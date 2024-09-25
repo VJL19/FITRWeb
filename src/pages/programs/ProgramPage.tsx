@@ -22,6 +22,7 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import RFIDRemover from "src/components/RFIDRemover";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -111,31 +112,35 @@ const ProgramPage = () => {
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         SUGGESTED PROGRAMS
       </h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isFetching || isUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
+      <RFIDRemover
+        children={
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            loading={isFetching || isUninitialized}
+            pageSizeOptions={[5, 10, 15, 20, 25]}
+            disableRowSelectionOnClick
+            slotProps={{
+              loadingOverlay: {
+                variant: "skeleton",
+                noRowsVariant: "skeleton",
+              },
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: GridToolbar,
+            }}
+          />
+        }
       />
 
       <Button

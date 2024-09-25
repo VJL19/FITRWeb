@@ -22,6 +22,7 @@ import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
+import RFIDRemover from "src/components/RFIDRemover";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -99,44 +100,48 @@ const UserPage = () => {
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
         GYM MEMBERS
       </h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isFetching || isUninitialized}
-        pageSizeOptions={[5, 10, 15, 20, 25]}
-        disableRowSelectionOnClick
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        slots={{
-          toolbar: GridToolbar,
-          noResultsOverlay: () => (
-            <Stack
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              flex={1}
-              flexDirection={"row"}
-              gap={1.5}
-            >
-              <PlaylistRemoveIcon fontSize="large" htmlColor="#202020" />
-              No results found
-            </Stack>
-          ),
-        }}
+      <RFIDRemover
+        children={
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            loading={isFetching || isUninitialized}
+            pageSizeOptions={[5, 10, 15, 20, 25]}
+            disableRowSelectionOnClick
+            slotProps={{
+              loadingOverlay: {
+                variant: "skeleton",
+                noRowsVariant: "skeleton",
+              },
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            slots={{
+              toolbar: GridToolbar,
+              noResultsOverlay: () => (
+                <Stack
+                  height="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                  flex={1}
+                  flexDirection={"row"}
+                  gap={1.5}
+                >
+                  <PlaylistRemoveIcon fontSize="large" htmlColor="#202020" />
+                  No results found
+                </Stack>
+              ),
+            }}
+          />
+        }
       />
 
       <Button
