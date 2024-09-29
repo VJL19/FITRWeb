@@ -5,7 +5,7 @@ const Footer = () => {
     <footer id="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <h1>MJeshter Fitness Gym</h1>
+          <h1>MJESHTER FITNESS GYM</h1>
           <p>
             <strong>Location:</strong>
             <br />

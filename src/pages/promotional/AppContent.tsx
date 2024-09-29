@@ -11,18 +11,19 @@ const AppContent = () => {
     <section id="app" className="app-section">
       <div className="content-container">
         <div className="text-content">
-          <h1>DOWNLOAD THE APP</h1>
+          <h1>GET OUR APP</h1>
           <p>
             Experience fitness at your fingertips with the UFC GYM App!
             Fast-track your access to the club, className schedules, membership
             management, and more.
           </p>
           <div className="buttons">
-            <a href="#" className="app-button">
-              <img src={app_store} alt="Download on the App Store" />
-            </a>
-            <a href="#" className="app-button">
-              <img src={google_play} alt="Get it on Google Play" />
+            <a
+              href="https://expo.dev/artifacts/eas/fhJM5LdewzRp7JKkW9nG3p.apk"
+              target="_blank"
+              className="cta-button"
+            >
+              DOWNLOAD
             </a>
           </div>
         </div>
