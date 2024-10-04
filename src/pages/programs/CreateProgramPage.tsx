@@ -18,6 +18,8 @@ import {
 } from "src/utils/validations/programSchema";
 import React from "react";
 import RichTextEditor from "src/components/RichTextEditor";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 const CreateProgramPage = () => {
   const {
     register,
@@ -51,6 +53,13 @@ const CreateProgramPage = () => {
     if (status === "rejected" && isSubmitted) {
       showFailedToast(data?.message, "toast_program");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_program"
+      );
+    }
   }, [status, data?.message]);
 
   const onSubmit = async (data: TProgramSchema) => {
@@ -63,7 +72,6 @@ const CreateProgramPage = () => {
     };
 
     createProgram(arg);
-    reset();
   };
 
   console.log("data program status", status);

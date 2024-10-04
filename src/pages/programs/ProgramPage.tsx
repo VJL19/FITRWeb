@@ -2,7 +2,6 @@ import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { setRoute } from "src/reducers/route";
 import { AppDispatch, RootState } from "store/store";
 import _columns from "./programColumn";
@@ -23,6 +22,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -67,6 +68,13 @@ const ProgramPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_program");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_program"
+      );
+    }
   }, [deleteStatus, data?.message]);
   const rows = suggested_programs?.result?.map((suggested_program) => ({
     ...suggested_program,
@@ -79,7 +87,7 @@ const ProgramPage = () => {
     [_columns]
   );
 
-  const handleDeleteAnnouncement = async () => {
+  const handleDeleteProgram = async () => {
     const arg = {
       SuggestedProgramID: SuggestedProgramID,
     };
@@ -159,7 +167,7 @@ const ProgramPage = () => {
       <CustomModal
         open={open}
         title="Delete this program?"
-        handleDeleteClick={handleDeleteAnnouncement}
+        handleDeleteClick={handleDeleteProgram}
       />
       <ToastContainer containerId={"toast_program"} />
     </Box>

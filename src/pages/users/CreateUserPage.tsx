@@ -33,6 +33,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/store/store";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 const CreateUserPage = () => {
   const {
     handleSubmit,
@@ -53,6 +56,7 @@ const CreateUserPage = () => {
   ] = useSendEmailMutation();
   const dispatch: AppDispatch = useDispatch();
 
+  const { isOnline } = useUserOnline();
   const navigate = useNavigate();
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
@@ -72,6 +76,20 @@ const CreateUserPage = () => {
         );
       };
       deplayShowToast();
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_user"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_user"
+      );
     }
   }, [status]);
 

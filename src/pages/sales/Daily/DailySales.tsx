@@ -31,13 +31,15 @@ import {
 } from "src/utils/types/sales_analytics.types";
 import DailyGrowthRate from "./DailyGrowthRate";
 import { formatDate } from "src/utils/functions/date_fns";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import NetworkError from "src/components/NetworkError";
 
 const DailySales = () => {
-  const { data: sessionUserSales } = useGetDailySessionUserSalesQuery(
+  const { data: sessionUserSales, error: sessionErr } = useGetDailySessionUserSalesQuery(
     undefined,
     { refetchOnMountOrArgChange: true }
   );
-  const { data: monthlyUserSales } = useGetDailyMonthlyUserSalesQuery(
+  const { data: monthlyUserSales, error: monthlyErr } = useGetDailyMonthlyUserSalesQuery(
     undefined,
     { refetchOnMountOrArgChange: true }
   );
@@ -125,6 +127,10 @@ const DailySales = () => {
     getTotalDailySessionSales(data) + getTotalDailyMonthlySales(data);
   const averageDailySales =
     (getTotalDailySessionSales(data) + getTotalDailyMonthlySales(data)) / 2;
+
+    if(sessionErr?.status === NETWORK_ERROR.FETCH_ERROR || monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR){
+      return <NetworkError/>
+    }
 
   return (
     <Container sx={{ height: 450 }}>

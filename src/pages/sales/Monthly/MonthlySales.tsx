@@ -37,12 +37,14 @@ import {
   IMonthlySalesData,
 } from "src/utils/types/sales_analytics.types";
 import MonthlyGrowthRate from "./MonthlyGrowthRate";
+import NetworkError from "src/components/NetworkError";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
 
 const MonthlySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
-  const [getSessionUsers, { data: sessionUserSales }] =
+  const [getSessionUsers, { data: sessionUserSales, error: sessionErr }] =
     useGetMonthlySessionUserSalesMutation();
-  const [getMonthlyUsers, { data: monthlyUserSales }] =
+  const [getMonthlyUsers, { data: monthlyUserSales, error: monthlyErr }] =
     useGetMonthlyMUserSalesMutation();
 
   const monthlyUsers = monthlyUserSales?.result?.map(
@@ -93,6 +95,13 @@ const MonthlySales = () => {
     getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data);
   const averageMonthlySales =
     (getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data)) / 12;
+
+  if (
+    sessionErr?.status === NETWORK_ERROR.FETCH_ERROR ||
+    monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR
+  ) {
+    return <NetworkError />;
+  }
 
   return (
     <Container sx={{ height: 450 }}>

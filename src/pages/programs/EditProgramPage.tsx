@@ -21,6 +21,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "src/store/store";
 import React from "react";
 import RichTextEditor from "src/components/RichTextEditor";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const EditProgramPage = () => {
   const {
@@ -62,6 +64,13 @@ const EditProgramPage = () => {
     if (status === "rejected" && isSubmitted) {
       showFailedToast(data?.message, "toast_program");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_program"
+      );
+    }
   }, [status, data?.message]);
 
   const onSubmit = async (data: TProgramSchema) => {
@@ -75,7 +84,6 @@ const EditProgramPage = () => {
     };
 
     editProgram(arg);
-    reset();
   };
 
   console.log("data program status", status);

@@ -238,6 +238,8 @@ const _columns: GridColDef<IAttendance>[] = [
     width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["Session", "Monthly"],
   },
   {
     field: "Activation",
@@ -249,6 +251,8 @@ const _columns: GridColDef<IAttendance>[] = [
     width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["activated", "not activated"],
     renderCell: (params) => {
       const currentRow: IUser = params.row;
       return (

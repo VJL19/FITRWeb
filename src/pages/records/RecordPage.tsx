@@ -28,6 +28,8 @@ import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { storage } from "src/global/firebaseConfig";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 const RecordPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -41,8 +43,10 @@ const RecordPage = () => {
     isUninitialized: recordIsUninitialized,
   } = useGetAllFileRecordsQuery(undefined, { refetchOnMountOrArgChange: true });
 
-  const [uploadRecordFile, { data: uploadFileData, error }] =
-    useUploadFileRecordMutation();
+  const [
+    uploadRecordFile,
+    { data: uploadFileData, status: uploadStatus, error: uploadError },
+  ] = useUploadFileRecordMutation();
 
   const VISIBLE_FILES_FIELDS = [
     "RowID",
@@ -59,20 +63,49 @@ const RecordPage = () => {
     (state: RootState) => state.record.recordData
   );
 
-  const [deleteFile, { status: deleteStatus, data: deleteFileData }] =
-    useDeleteFileRecordMutation();
+  const [
+    deleteFile,
+    { status: deleteStatus, data: deleteFileData, error: deleteError },
+  ] = useDeleteFileRecordMutation();
   useEffect(() => {
     dispatch(setRoute("Records"));
   }, []);
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
+      let imageRef = ref(storage, RecordDownloadLink);
+
+      try {
+        const deleteFile = async () => {
+          await deleteObject(imageRef);
+        };
+        deleteFile();
+        console.log("success deleting the file");
+      } catch (err) {
+        console.log("there was an error in deleting an file");
+      }
       showSuccessToast(deleteFileData?.message, "toast_record");
     }
     if (deleteStatus === "rejected") {
       showFailedToast(deleteFileData?.message, "toast_record");
     }
+    if (deleteError?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_record"
+      );
+    }
   }, [deleteStatus]);
+  useEffect(() => {
+    if (uploadError?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_record"
+      );
+    }
+  }, [uploadStatus]);
 
   const files_columns = React.useMemo(
     () =>
@@ -113,14 +146,7 @@ const RecordPage = () => {
     const arg = {
       RecordID: RecordID,
     };
-    let imageRef = ref(storage, RecordDownloadLink);
 
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
-    }
     dispatch(handleClose());
     deleteFile(arg);
   };

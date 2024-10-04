@@ -35,6 +35,8 @@ import { AppDispatch, RootState } from "src/store/store";
 import PreviewModal from "src/components/PreviewModal";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { VIDEO_FORMATS } from "src/utils/constants/FILE_EXTENSIONS";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const CreateAnnouncementPage = () => {
   const {
@@ -94,6 +96,13 @@ const CreateAnnouncementPage = () => {
     if (status === "rejected" && isSubmitted) {
       showFailedToast(data?.message, "toast_announcement");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_announcement"
+      );
+    }
   }, [status, data?.message]);
 
   const onSubmit = async (data: TannouncementSchema) => {
@@ -123,7 +132,6 @@ const CreateAnnouncementPage = () => {
     };
 
     createAnnouncement(arg);
-    reset();
   };
 
   console.log("data announce status", status);

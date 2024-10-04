@@ -133,7 +133,6 @@ const _columns: GridColDef<ISubscriptions>[] = [
       return <b>{params.field.split("Subscription")[1]}</b>;
     },
     width: 120,
-    // type: "number",
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
@@ -150,6 +149,8 @@ const _columns: GridColDef<ISubscriptions>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["Session", "Monthly"],
   },
   {
     flex: 1,
@@ -162,6 +163,8 @@ const _columns: GridColDef<ISubscriptions>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["GCash", "Paymaya", "CreditCard", "Cash"],
   },
   {
     field: "SubscriptionUploadedImage",
@@ -243,6 +246,8 @@ const _columns: GridColDef<ISubscriptions>[] = [
         </Stack>
       );
     },
+    type: "singleSelect",
+    valueOptions: ["pending", "Fulfill", "REJECT"],
   },
   {
     align: "center",

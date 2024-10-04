@@ -43,7 +43,11 @@ import {
   generateExcelAttendanceReport,
   generateExcelFinancialReport,
 } from "src/utils/functions/generateFile";
+import { ToastContainer } from "react-toastify";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
+import NetworkError from "src/components/NetworkError";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -64,13 +68,16 @@ const ReportPage = () => {
   ] = useGetAttendanceByDateMutation();
 
   //generate reports - financial
-  const [filterFinancial, { data: financialRes }] =
+  const [filterFinancial, { data: financialRes, error: financialErr }] =
     useGetAllUsersTransactionsByDateMutation();
 
   useEffect(() => {
     dispatch(setRoute("Reports"));
     dispatch(setAttendanceData(data?.result));
   }, []);
+
+  console.log("filter attendance err", error);
+  console.log("filter financial err", financialErr);
 
   //generate reports - attendance
   const totalUsers = getTotalUsersAttendanceByDate(data);
@@ -126,6 +133,22 @@ const ReportPage = () => {
   const handleExcelFinancial = async () => {
     generateExcelFinancialReport({ data: financialRes });
   };
+
+  useEffect(() => {
+    if (
+      error?.status === NETWORK_ERROR.FETCH_ERROR ||
+      financialErr?.status === NETWORK_ERROR.FETCH_ERROR
+    )
+      delayShowToast("failed", "Network error", "toast_generateReport");
+    {
+    }
+  }, [error?.status, financialErr?.status]);
+  if (
+    error?.status === NETWORK_ERROR.FETCH_ERROR ||
+    financialErr?.status === NETWORK_ERROR.FETCH_ERROR
+  ) {
+    return <NetworkError />;
+  }
 
   return (
     <Box
@@ -198,9 +221,11 @@ const ReportPage = () => {
         <DisplayFormError errors={errors.selectedDate} />
       </Stack>
       {selectedValue === "Attendance Report" &&
-        getValues("selectedDate") !== undefined && (
+        getValues("selectedDate") !== undefined &&
+        error?.status !== NETWORK_ERROR.FETCH_ERROR && (
           <React.Fragment>
             <h2>Preview</h2>
+
             <PDFViewer width="1000" height="550">
               <AttendanceReportPdfFile
                 data={data?.result}
@@ -215,7 +240,7 @@ const ReportPage = () => {
               color="success"
               onClick={handleExcelAttendance}
             >
-              Download Excel File Attendance
+              Download As Excel File
             </Button>
 
             <PDFDownloadLink
@@ -233,14 +258,15 @@ const ReportPage = () => {
                   size="medium"
                   color={loading ? "warning" : "success"}
                 >
-                  {loading ? "Loading..." : "Download"}
+                  {loading ? "Loading..." : "Download As PDF File"}
                 </Button>
               )}
             </PDFDownloadLink>
           </React.Fragment>
         )}
       {selectedValue === "Financial Report" &&
-        getValues("selectedDate") !== undefined && (
+        getValues("selectedDate") !== undefined &&
+        financialErr?.status !== NETWORK_ERROR.FETCH_ERROR && (
           <React.Fragment>
             <h2>Preview</h2>
             <PDFViewer width="1000" height="550">
@@ -274,12 +300,13 @@ const ReportPage = () => {
                   size="medium"
                   color={loading ? "warning" : "success"}
                 >
-                  {loading ? "Loading..." : "Download As Pdf File"}
+                  {loading ? "Loading..." : "Download As PDF File"}
                 </Button>
               )}
             </PDFDownloadLink>
           </React.Fragment>
         )}
+      <ToastContainer containerId={"toast_generateReport"} />
     </Box>
   );
 };

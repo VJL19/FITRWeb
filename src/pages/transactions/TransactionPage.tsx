@@ -23,6 +23,9 @@ import RenderRfidInput from "src/components/RenderRfidInput";
 import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import RFIDRemover from "src/components/RFIDRemover";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -52,7 +55,9 @@ const TransactionPage = () => {
     (state: RootState) => state.transaction.transactionData
   );
 
-  const [deleteTransaction, { status: deleteStatus }] =
+  const { isOnline } = useUserOnline();
+
+  const [deleteTransaction, { status: deleteStatus, error }] =
     useDeleteTransactionMutation();
 
   const { open } = useSelector((state: RootState) => state.modal);
@@ -72,14 +77,6 @@ const TransactionPage = () => {
   });
 
   const handleDeleteTransaction = async () => {
-    let imageRef = ref(storage, SubscriptionUploadedImage);
-
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
-    }
     dispatch(handleClose());
     deleteTransaction({ SubscriptionID: SubscriptionID });
   };
@@ -90,6 +87,36 @@ const TransactionPage = () => {
     }
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_transaction");
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_transaction"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_transaction"
+      );
+    }
+  }, [deleteStatus, data?.message]);
+
+  useEffect(() => {
+    if (deleteStatus === "fulfilled") {
+      let imageRef = ref(storage, SubscriptionUploadedImage);
+
+      try {
+        const deleteImage = async () => {
+          await deleteObject(imageRef);
+          console.log("success at deleting an image");
+        };
+        deleteImage();
+      } catch (err) {
+        console.log("there was an error in deleting an image");
+      }
     }
   }, [deleteStatus, data?.message]);
 

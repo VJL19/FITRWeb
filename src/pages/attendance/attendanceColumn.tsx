@@ -126,6 +126,8 @@ const _columns: GridColDef[] = [
 
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["Session", "Monthly"],
   },
   {
     field: "TimeIn",

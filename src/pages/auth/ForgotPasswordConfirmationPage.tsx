@@ -16,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { handleOpen } from "src/reducers/modal";
 import CustomModal from "src/components/CustomModal";
+import OTPInput from "react-otp-input";
 
 const ForgotPasswordConfirmationPage = () => {
   const [timer, setTimer] = useState(60 * 2);
@@ -32,6 +33,7 @@ const ForgotPasswordConfirmationPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const seconds = String(timer % 60).padStart(2, 0);
   const minutes = String(Math.floor(timer / 60)).padStart(2, 0);
+  const [otp, setOtp] = useState("");
 
   const {
     handleSubmit,
@@ -89,6 +91,16 @@ const ForgotPasswordConfirmationPage = () => {
     }
   };
 
+  useEffect(() => {
+    const timeOutID = setTimeout(() => {
+      if (otp.length === 6) {
+        handlePress({ OTPCode: otp });
+      }
+    }, 2500);
+
+    return () => clearTimeout(timeOutID);
+  }, [otp]);
+
   const handleResend = () => {
     forgotPassword({ Email: Email });
     setTimer(60 * 2);
@@ -113,15 +125,20 @@ const ForgotPasswordConfirmationPage = () => {
       <h2>Please Note:</h2>
       <p>Never share your OTP code to anyone</p>
       <h2>OTP Code</h2>
-      <TextField
-        {...register("OTPCode")}
-        inputProps={{ type: "number" }}
-        required
-        error={errors.OTPCode ? true : false}
-        label="Enter OTP code"
-        sx={{ width: "100%" }}
+      <OTPInput
+        value={otp}
+        onChange={setOtp}
+        numInputs={6}
+        inputStyle={{
+          height: 75,
+          fontSize: 27,
+          width: "8%",
+          borderRadius: "10%",
+        }}
+        placeholder="123456"
+        renderSeparator={<span>-</span>}
+        renderInput={(props) => <input {...props} />}
       />
-      <DisplayFormError errors={errors.OTPCode} />
 
       {!valid && (
         <Button
@@ -134,15 +151,7 @@ const ForgotPasswordConfirmationPage = () => {
           Resend Code
         </Button>
       )}
-      <Button
-        startIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-        variant="contained"
-        color="success"
-        size="large"
-        onClick={handleSubmit(handlePress)}
-      >
-        Proceed
-      </Button>
+
       <CustomModal
         open={open}
         title="Confirm go back?"

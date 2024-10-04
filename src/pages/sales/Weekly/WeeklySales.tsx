@@ -37,12 +37,14 @@ import {
   IWeeklySalesData,
 } from "src/utils/types/sales_analytics.types";
 import WeeklyGrowthRate from "./WeeklyGrowthRate";
+import NetworkError from "src/components/NetworkError";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
 
 const WeeklySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
-  const [getWeeklySession, { data: sessionUserSales }] =
+  const [getWeeklySession, { data: sessionUserSales, error: sessionErr }] =
     useGetWeeklySessionUserSalesMutation();
-  const [getWeeklyMonthly, { data: monthlyUserSales }] =
+  const [getWeeklyMonthly, { data: monthlyUserSales, error: monthlyErr }] =
     useGetWeeklyMonthlyUserSalesMutation();
   const monthlyUsers = monthlyUserSales?.result?.map(
     (item: IWeeklySalesAnalytics, index) => ({
@@ -118,6 +120,13 @@ const WeeklySales = () => {
     "November",
     "December",
   ];
+
+  if (
+    sessionErr?.status === NETWORK_ERROR.FETCH_ERROR ||
+    monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR
+  ) {
+    return <NetworkError />;
+  }
   return (
     <Container sx={{ height: 450 }}>
       <FormControl sx={{ width: "10%" }}>

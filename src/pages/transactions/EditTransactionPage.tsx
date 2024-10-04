@@ -24,6 +24,9 @@ import { useFulfillUserTransactionMutation } from "src/reducers/transaction";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { ToastContainer } from "react-toastify";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const EditTransactionPage = () => {
   const {
@@ -50,6 +53,8 @@ const EditTransactionPage = () => {
     resolver: zodResolver(subscriptionSchema),
   });
 
+  const { isOnline } = useUserOnline();
+
   const [fulfillTransaction, { data, error, status, isLoading }] =
     useFulfillUserTransactionMutation();
   const navigate = useNavigate();
@@ -75,6 +80,20 @@ const EditTransactionPage = () => {
     }
     if (status === "rejected" && isSubmitted) {
       showFailedToast("Something went wrong", "toast_transaction");
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_transaction"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_transaction"
+      );
     }
   }, [data?.message, status]);
 
@@ -119,46 +138,47 @@ const EditTransactionPage = () => {
         <h4>Type - {SubscriptionType}</h4>
         <h4>Method - {SubscriptionMethod}</h4>
         <h3>Status - {SubscriptionStatus}</h3>
-        {SubscriptionStatus !== "Fulfill" && (
-          <Stack width={"100%"}>
-            <Controller
-              name="SubscriptionStatus"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Subscription Status
-                  </InputLabel>
-                  <Select
-                    {...field}
-                    id="demo-simple-select-label"
-                    label="SubscriptionStatus"
-                    placeholder="Subscription Status"
-                    required
-                    error={errors.SubscriptionStatus && true}
-                  >
-                    <MenuItem value="Reject">Reject</MenuItem>
-                    <MenuItem value="Fulfill">Fulfill</MenuItem>
-                  </Select>
-                </FormControl>
-              )}
-            />
+        {SubscriptionStatus !== "Fulfill" &&
+          SubscriptionStatus !== "Reject" && (
+            <Stack width={"100%"}>
+              <Controller
+                name="SubscriptionStatus"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Subscription Status
+                    </InputLabel>
+                    <Select
+                      {...field}
+                      id="demo-simple-select-label"
+                      label="SubscriptionStatus"
+                      placeholder="Subscription Status"
+                      required
+                      error={errors.SubscriptionStatus && true}
+                    >
+                      <MenuItem value="Reject">Reject</MenuItem>
+                      <MenuItem value="Fulfill">Fulfill</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
 
-            <DisplayFormError errors={errors.SubscriptionStatus} />
+              <DisplayFormError errors={errors.SubscriptionStatus} />
 
-            <Button
-              disabled={isSubmitting}
-              endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-              variant="contained"
-              color="success"
-              size="large"
-              onClick={handleSubmit(onSubmit, (err) => console.log(err))}
-              style={{ width: "100%" }}
-            >
-              Submit
-            </Button>
-          </Stack>
-        )}
+              <Button
+                disabled={isSubmitting}
+                endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+                variant="contained"
+                color="success"
+                size="large"
+                onClick={handleSubmit(onSubmit, (err) => console.log(err))}
+                style={{ width: "100%" }}
+              >
+                Submit
+              </Button>
+            </Stack>
+          )}
         <ToastContainer containerId={"toast_transaction"} />
       </Container>
     </div>

@@ -17,6 +17,8 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 const AttendancePage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -24,10 +26,13 @@ const AttendancePage = () => {
   const [file, setFile] = useState<File | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { data, isFetching, isUninitialized } = useGetUsersAttendanceQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
+  const {
+    data,
+    isFetching,
+    isUninitialized,
+    status,
+    error: attendanceErr,
+  } = useGetUsersAttendanceQuery();
 
   const [uploadRecordFile, { data: uploadFileData, error }] =
     useUploadFileRecordMutation();
@@ -57,6 +62,16 @@ const AttendancePage = () => {
       showFailedToast(deleteFileData?.message, "toast_attendance");
     }
   }, [deleteStatus]);
+
+  useEffect(() => {
+    if (attendanceErr?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_attendance"
+      );
+    }
+  }, [status]);
 
   const columns = React.useMemo(
     () => _columns.filter((column) => VISIBLE_FIELDS.includes(column.field)),

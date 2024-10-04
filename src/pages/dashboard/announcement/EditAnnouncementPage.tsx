@@ -29,6 +29,8 @@ import {
 } from "src/utils/constants/FILE_EXTENSIONS";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const EditAnnouncementPage = () => {
   const {
@@ -111,22 +113,39 @@ const EditAnnouncementPage = () => {
       };
       delayRedirect();
     }
-    if (status === "rejected" && isSubmitted) {
+    if (status === "rejected" && error?.status !== NETWORK_ERROR.FETCH_ERROR) {
       showFailedToast("Something went wrong!", "toast_announcement");
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_announcement"
+      );
+    }
+  }, [status, data?.message]);
+
+  useEffect(() => {
+    if (status === "fulfilled" && isSubmitted) {
+      try {
+        if (!isUserChangeImage) {
+          return;
+        }
+        let imageRef = ref(storage, AnnouncementImage);
+        const deleteImage = async () => {
+          await deleteObject(imageRef);
+          console.log("success deleting an image");
+        };
+        deleteImage();
+      } catch (err) {
+        console.log("there was an error in deleting an image", err);
+      }
     }
   }, [status, data?.message]);
 
   const onSubmit = async (data: TannouncementSchema) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    let imageRef = ref(storage, AnnouncementImage);
-
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
-    }
     let fileType = VIDEO_FORMATS.includes(
       imagePreview?.name?.split(".")[imagePreview?.name?.split(".").length - 1]!
     )
@@ -153,9 +172,9 @@ const EditAnnouncementPage = () => {
     };
 
     editAnnouncement(arg);
-    reset();
   };
 
+  console.log("data announce err", error);
   console.log("data announce status", status);
   console.log("data announce data", data?.message);
 

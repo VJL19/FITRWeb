@@ -23,6 +23,8 @@ import { storage } from "src/global/firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 const AnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -80,6 +82,28 @@ const AnnouncementPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_announcement");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_announcement"
+      );
+    }
+  }, [deleteStatus, data?.message]);
+  useEffect(() => {
+    if (deleteStatus === "fulfilled") {
+      let imageRef = ref(storage, AnnouncementImage);
+
+      try {
+        const deleteImage = async () => {
+          await deleteObject(imageRef);
+          console.log("success");
+        };
+        deleteImage();
+      } catch (err) {
+        console.log("there was an error in deleting an image", err);
+      }
+    }
   }, [deleteStatus, data?.message]);
   const rows = announcements?.result?.map((announcement) => ({
     ...announcement,
@@ -96,14 +120,7 @@ const AnnouncementPage = () => {
     const arg = {
       AnnouncementID: AnnouncementID,
     };
-    let imageRef = ref(storage, AnnouncementImage);
 
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
-    }
     deleteAnnouncement(arg);
     dispatch(handleClose());
   };

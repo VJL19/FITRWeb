@@ -27,6 +27,9 @@ import {
 } from "src/utils/validations/subscriptionSchema";
 import { useCreateSubscriptionMutation } from "src/reducers/transaction";
 import getCurrentDate from "src/utils/functions/date_fns";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
+import { useUserOnline } from "src/hooks/useUserOnline";
 const CreateTransactionPage = () => {
   const {
     handleSubmit,
@@ -44,6 +47,8 @@ const CreateTransactionPage = () => {
   const [createSubscription, { data, isLoading, error, status }] =
     useCreateSubscriptionMutation();
   const navigate = useNavigate();
+
+  const { isOnline } = useUserOnline();
 
   const subscriptionType = watch("SubscriptionType");
   useEffect(() => {
@@ -75,6 +80,20 @@ const CreateTransactionPage = () => {
         );
       };
       deplayShowToast();
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_transaction"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_transaction"
+      );
     }
   }, [status]);
   const onSubmit = async (data: TCreateSubscriptionSchema) => {

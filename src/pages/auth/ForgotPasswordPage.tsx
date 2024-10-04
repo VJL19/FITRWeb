@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import LoadingIndicator from "src/components/LoadingIndicator";
+import delayShowToast from "src/utils/functions/delayToast";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
 
 const ForgotPasswordPage = () => {
   const {
@@ -46,12 +48,10 @@ const ForgotPasswordPage = () => {
     navigate("/login", { replace: true });
   };
 
+  console.log(status);
   useEffect(() => {
-    if (status === "rejected" && isSubmitted) {
-      showFailedToast(error?.data?.message, "forgot_password");
-    }
     if (status === "fulfilled" && isSubmitted) {
-      showSuccessToast(data?.message, "forgot_password");
+      delayShowToast("success", data?.message, "forgot_password");
       dispatch(setOTPToken(data?.code));
       dispatch(
         setForgotPasswordFields({
@@ -62,6 +62,16 @@ const ForgotPasswordPage = () => {
 
       navigate("/change_password_confirmation", { replace: true });
       reset();
+    }
+    if (status === "rejected" && isSubmitted) {
+      delayShowToast("failed", error?.data?.message, "forgot_password");
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "forgot_password"
+      );
     }
   }, [status]);
   if (status === "pending") {

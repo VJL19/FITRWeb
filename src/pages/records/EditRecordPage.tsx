@@ -14,6 +14,8 @@ import LoadingIndicator from "src/components/LoadingIndicator";
 import { ToastContainer } from "react-toastify";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { useNavigate } from "react-router-dom";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const EditRecordPage = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -34,16 +36,31 @@ const EditRecordPage = () => {
     if (status === "rejected") {
       showFailedToast(data?.message, "toast_record");
     }
-  }, [status]);
-  const handleFileEdit = async () => {
-    let imageRef = ref(storage, RecordDownloadLink);
-
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_record"
+      );
     }
+  }, [status]);
+
+  useEffect(() => {
+    if (status === "fulfilled") {
+      try {
+        let imageRef = ref(storage, RecordDownloadLink);
+        const deleteFile = async () => {
+          await deleteObject(imageRef);
+          console.log("success deleting an file");
+        };
+        deleteFile();
+        console.log("success");
+      } catch (err) {
+        console.log("there was an error in deleting the file");
+      }
+    }
+  }, [status, data?.message]);
+  const handleFileEdit = async () => {
     const url = await uploadFile(file, "Records/", "file", loading, setLoading);
 
     const arg = {

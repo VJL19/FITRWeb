@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { loginUser, useGetAccessWebTokenQuery } from "src/reducers/auth";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AppDispatch, RootState } from "src/store/store";
 import logo from "src/assets/logo_1.png";
 import "./styles.css";
 import { useForm } from "react-hook-form";
@@ -23,10 +21,12 @@ import {
   useLoginUserMutation,
 } from "src/reducers/login";
 import CircularProgress from "@mui/material/CircularProgress";
-import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import SendIcon from "@mui/icons-material/Send";
 import "react-toastify/dist/ReactToastify.css";
+import delayShowToast from "src/utils/functions/delayToast";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import { useUserOnline } from "src/hooks/useUserOnline";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { data: accessTokenData } = useGetAccessWebTokenQuery(undefined, {
@@ -48,49 +48,58 @@ const LoginPage = () => {
     guestLogin,
     { status: guestStatus, data: guestData, error: guestError },
   ] = useLoginAsGuestMutation();
+  const { isOnline } = useUserOnline();
+
   useEffect(() => {
     if (accessTokenData?.isAuthenticated) {
       navigate("/homepage", { replace: true });
     }
   }, []);
+
   useEffect(() => {
     if (status === "fulfilled") {
-      const deplayShowToast = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        showSuccessToast(data?.details, "toast_login");
-        navigate("/homepage", { replace: true });
-      };
-      deplayShowToast();
+      delayShowToast("success", data?.details, "toast_login");
+      navigate("/homepage", { replace: true });
     }
     if (status === "rejected") {
-      const deplayShowToast = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        showFailedToast(
-          error?.data?.details || error?.data?.error,
-          "toast_login"
-        );
-      };
-      deplayShowToast();
+      delayShowToast(
+        "failed",
+        error?.data?.details || error?.data?.error,
+        "toast_login"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_login"
+      );
     }
   }, [status]);
   useEffect(() => {
     if (guestStatus === "fulfilled") {
-      const deplayShowToast = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        showSuccessToast(guestData?.details, "toast_login");
-        navigate("/homepage", { replace: true });
-      };
-      deplayShowToast();
+      delayShowToast("success", guestData?.details, "toast_login");
     }
     if (guestStatus === "rejected") {
-      const deplayShowToast = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        showFailedToast(
-          guestError?.data?.details || guestError?.data?.error,
-          "toast_login"
-        );
-      };
-      deplayShowToast();
+      delayShowToast(
+        "failed",
+        guestError?.data?.details || guestError?.data?.error,
+        "toast_login"
+      );
+    }
+    if (guestError?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_login"
+      );
+    }
+    if (guestError?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_login"
+      );
     }
   }, [guestStatus]);
 

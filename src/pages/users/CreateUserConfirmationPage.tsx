@@ -14,6 +14,7 @@ import {
 } from "src/reducers/users";
 import { AppDispatch, RootState } from "src/store/store";
 import { TOtpSchema, otpSchema } from "src/utils/validations/userSchema";
+import OtpInput from "react-otp-input";
 
 const CreateUserConfirmationPage = () => {
   const [timer, setTimer] = useState(60 * 2);
@@ -31,6 +32,8 @@ const CreateUserConfirmationPage = () => {
 
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [otp, setOtp] = useState("");
 
   const seconds = String(timer % 60).padStart(2, 0);
   const minutes = String(Math.floor(timer / 60)).padStart(2, 0);
@@ -64,6 +67,15 @@ const CreateUserConfirmationPage = () => {
       dispatch(setOTPToken(emailCode?.code));
     }
   }, [emailStat]);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      if (otp.length === 6) {
+        onSubmit({ OTPCode: otp });
+      }
+    }, 2500);
+    return () => clearTimeout(timeOutId);
+  }, [otp]);
 
   useEffect(() => {
     if (activateStatus === "fulfilled") {
@@ -118,25 +130,21 @@ const CreateUserConfirmationPage = () => {
         it will not be activated
       </p>
 
-      <TextField
-        {...register("OTPCode")}
-        inputProps={{ type: "number" }}
-        required
-        error={errors.OTPCode ? true : false}
-        label="Enter OTP code"
-        sx={{ width: "100%" }}
+      <OtpInput
+        value={otp}
+        onChange={setOtp}
+        numInputs={6}
+        inputStyle={{
+          height: 75,
+          fontSize: 27,
+          width: "8%",
+          borderRadius: "10%",
+        }}
+        placeholder="123456"
+        renderSeparator={<span>-</span>}
+        renderInput={(props) => <input {...props} />}
       />
-      <DisplayFormError errors={errors.OTPCode} />
 
-      <Button
-        disabled={isSubmitting}
-        color="success"
-        variant="contained"
-        size="large"
-        onClick={handleSubmit(onSubmit)}
-      >
-        Submit
-      </Button>
       {!valid && (
         <Button
           color="warning"
