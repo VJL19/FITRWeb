@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,16 +19,22 @@ import { handleClose } from "src/reducers/modal";
 import { ToastContainer } from "react-toastify";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import { storage } from "src/global/firebaseConfig";
-import { ref, deleteObject } from "firebase/storage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import MIUIDataGrid from "src/components/MIUIDataGrid";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+} from "src/utils/functions/firebase";
+import { useUserOnline } from "src/hooks/useUserOnline";
 const AnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const { open } = useSelector((state: RootState) => state.modal);
 
+  const { isOnline } = useUserOnline();
   const VISIBLE_FIELDS = [
     "RowID",
     "AnnouncementID",
@@ -82,21 +87,29 @@ const AnnouncementPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_announcement");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
         "toast_announcement"
       );
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_announcement"
+      );
+    }
   }, [deleteStatus, data?.message]);
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      let imageRef = ref(storage, AnnouncementImage);
+      // let imageRef = ref(storage, AnnouncementImage);
+      let imageRef = firebaseRef(storage, AnnouncementImage);
 
       try {
         const deleteImage = async () => {
-          await deleteObject(imageRef);
+          await deleteFirebaseObject(imageRef);
           console.log("success");
         };
         deleteImage();
@@ -152,31 +165,12 @@ const AnnouncementPage = () => {
       </h1>
       <RFIDRemover
         children={
-          <DataGrid
+          <MIUIDataGrid
             rows={rows}
             columns={columns}
             loading={isFetching || isUninitialized}
-            pageSizeOptions={[5, 10, 15, 20, 25]}
-            disableRowSelectionOnClick
-            slotProps={{
-              loadingOverlay: {
-                variant: "skeleton",
-                noRowsVariant: "skeleton",
-              },
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-            }}
+            variant="skeleton"
+            nowRowsVariant="skeleton"
           />
         }
       />
@@ -188,7 +182,7 @@ const AnnouncementPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/announcements/create_announcement/`}
+          to={`/dashboard/announcements/create_announcement`}
           style={navLinkTextStyle}
         >
           create

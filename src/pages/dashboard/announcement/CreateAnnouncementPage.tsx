@@ -37,6 +37,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { VIDEO_FORMATS } from "src/utils/constants/FILE_EXTENSIONS";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const CreateAnnouncementPage = () => {
   const {
@@ -55,6 +56,7 @@ const CreateAnnouncementPage = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const { previewModalOpen } = useSelector((state: RootState) => state.modal);
+  const { isOnline } = useUserOnline();
 
   const [createAnnouncement, { data, error, isLoading, status }] =
     useCreateAnnouncementMutation();
@@ -96,10 +98,17 @@ const CreateAnnouncementPage = () => {
     if (status === "rejected" && isSubmitted) {
       showFailedToast(data?.message, "toast_announcement");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_announcement"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_announcement"
       );
     }

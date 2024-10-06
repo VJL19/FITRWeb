@@ -1,5 +1,4 @@
 import { Box, Button, Container } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -23,13 +22,18 @@ import {
 import { uploadFile } from "src/utils/functions/uploadFile";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import getCurrentDate from "src/utils/functions/date_fns";
-import { ref, deleteObject } from "firebase/storage";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { storage } from "src/global/firebaseConfig";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import MIUIDataGrid from "src/components/MIUIDataGrid";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+} from "src/utils/functions/firebase";
+import { useUserOnline } from "src/hooks/useUserOnline";
 const RecordPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -47,6 +51,8 @@ const RecordPage = () => {
     uploadRecordFile,
     { data: uploadFileData, status: uploadStatus, error: uploadError },
   ] = useUploadFileRecordMutation();
+
+  const { isOnline } = useUserOnline();
 
   const VISIBLE_FILES_FIELDS = [
     "RowID",
@@ -73,11 +79,11 @@ const RecordPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      let imageRef = ref(storage, RecordDownloadLink);
+      let imageRef = firebaseRef(storage, RecordDownloadLink);
 
       try {
         const deleteFile = async () => {
-          await deleteObject(imageRef);
+          await deleteFirebaseObject(imageRef);
         };
         deleteFile();
         console.log("success deleting the file");
@@ -89,19 +95,33 @@ const RecordPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(deleteFileData?.message, "toast_record");
     }
-    if (deleteError?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (deleteError?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
         "toast_record"
       );
     }
+    if (deleteError?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_record"
+      );
+    }
   }, [deleteStatus]);
   useEffect(() => {
-    if (uploadError?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (uploadError?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_record"
+      );
+    }
+    if (uploadError?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_record"
       );
     }
@@ -178,31 +198,12 @@ const RecordPage = () => {
 
       <RFIDRemover
         children={
-          <DataGrid
+          <MIUIDataGrid
             rows={file_rows}
             columns={files_columns}
             loading={recordFetching || recordIsUninitialized}
-            pageSizeOptions={[5, 10, 15, 20, 25]}
-            disableRowSelectionOnClick
-            slotProps={{
-              loadingOverlay: {
-                variant: "skeleton",
-                noRowsVariant: "skeleton",
-              },
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-            }}
+            variant="skeleton"
+            nowRowsVariant="skeleton"
           />
         }
       />

@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -21,11 +20,15 @@ import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import { storage } from "src/global/firebaseConfig";
-import { ref, deleteObject } from "firebase/storage";
 import RFIDRemover from "src/components/RFIDRemover";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import MIUIDataGrid from "src/components/MIUIDataGrid";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+} from "src/utils/functions/firebase";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -106,11 +109,11 @@ const TransactionPage = () => {
 
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
-      let imageRef = ref(storage, SubscriptionUploadedImage);
+      let imageRef = firebaseRef(storage, SubscriptionUploadedImage);
 
       try {
         const deleteImage = async () => {
-          await deleteObject(imageRef);
+          await deleteFirebaseObject(imageRef);
           console.log("success at deleting an image");
         };
         deleteImage();
@@ -142,31 +145,12 @@ const TransactionPage = () => {
       </h1>
       <RFIDRemover
         children={
-          <DataGrid
+          <MIUIDataGrid
             rows={rows}
             columns={columns}
             loading={isFetching || isUninitialized}
-            pageSizeOptions={[5, 10, 15, 20, 25]}
-            disableRowSelectionOnClick
-            slotProps={{
-              loadingOverlay: {
-                variant: "skeleton",
-                noRowsVariant: "skeleton",
-              },
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-            }}
+            variant="skeleton"
+            nowRowsVariant="skeleton"
           />
         }
       />
@@ -178,7 +162,7 @@ const TransactionPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/transactions/create_subscription/`}
+          to={`/dashboard/transactions/create_subscription`}
           style={navLinkTextStyle}
         >
           create

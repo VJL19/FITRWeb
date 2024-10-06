@@ -9,6 +9,7 @@ const TotalSessionUsersPage = () => {
     data: totalUsers,
     isFetching,
     isUninitialized,
+    error,
   } = useGetAllTotalSessionUsersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -17,6 +18,7 @@ const TotalSessionUsersPage = () => {
     return <LoadingIndicator />;
   }
 
+  console.log("error in total session user page", error)
   return (
     <Box
       sx={{

@@ -1,18 +1,9 @@
 import LoginPage from "./pages/auth/login/LoginPage";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useParams,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
-import { useSelector } from "react-redux";
-import { RootState } from "./store/store";
 import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
 import { useGetAccessWebTokenQuery } from "./reducers/login";
-import { bottomNavigationActionClasses } from "@mui/material";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ForgotPasswordConfirmationPage from "./pages/auth/ForgotPasswordConfirmationPage";
 import ChangePasswordPage from "./pages/auth/ChangePasswordPage";

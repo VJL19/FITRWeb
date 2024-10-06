@@ -33,16 +33,18 @@ import DailyGrowthRate from "./DailyGrowthRate";
 import { formatDate } from "src/utils/functions/date_fns";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import NetworkError from "src/components/NetworkError";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import ServerError from "src/components/ServerError";
 
 const DailySales = () => {
-  const { data: sessionUserSales, error: sessionErr } = useGetDailySessionUserSalesQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
-  const { data: monthlyUserSales, error: monthlyErr } = useGetDailyMonthlyUserSalesQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
+  const { data: sessionUserSales, error: sessionErr } =
+    useGetDailySessionUserSalesQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
+  const { data: monthlyUserSales, error: monthlyErr } =
+    useGetDailyMonthlyUserSalesQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
   const monthlyUsers = monthlyUserSales?.result?.map(
     (item: IDailySalesAnalytics) => item
@@ -50,6 +52,7 @@ const DailySales = () => {
   const sessionUsers = sessionUserSales?.result?.map(
     (item: IDailySalesAnalytics) => item
   );
+  const { isOnline } = useUserOnline();
 
   const daily_sales_data: Array<{
     date?: string;
@@ -128,9 +131,18 @@ const DailySales = () => {
   const averageDailySales =
     (getTotalDailySessionSales(data) + getTotalDailyMonthlySales(data)) / 2;
 
-    if(sessionErr?.status === NETWORK_ERROR.FETCH_ERROR || monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR){
-      return <NetworkError/>
-    }
+  if (
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline)
+  ) {
+    return <NetworkError />;
+  }
+  if (
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
+  ) {
+    return <ServerError />;
+  }
 
   return (
     <Container sx={{ height: 450 }}>

@@ -9,13 +9,17 @@ import { uploadFile } from "src/utils/functions/uploadFile";
 import { useSelector } from "react-redux";
 import { RootState } from "src/store/store";
 import { storage } from "src/global/firebaseConfig";
-import { ref, deleteObject } from "firebase/storage";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { ToastContainer } from "react-toastify";
 import { showSuccessToast, showFailedToast } from "src/components/showToast";
 import { useNavigate } from "react-router-dom";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+} from "src/utils/functions/firebase";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const EditRecordPage = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -27,6 +31,7 @@ const EditRecordPage = () => {
     (state: RootState) => state.record.recordData
   );
 
+  const { isOnline } = useUserOnline();
   const navigate = useNavigate();
   useEffect(() => {
     if (status === "fulfilled") {
@@ -36,10 +41,17 @@ const EditRecordPage = () => {
     if (status === "rejected") {
       showFailedToast(data?.message, "toast_record");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_record"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_record"
       );
     }
@@ -48,9 +60,9 @@ const EditRecordPage = () => {
   useEffect(() => {
     if (status === "fulfilled") {
       try {
-        let imageRef = ref(storage, RecordDownloadLink);
+        let imageRef = firebaseRef(storage, RecordDownloadLink);
         const deleteFile = async () => {
-          await deleteObject(imageRef);
+          await deleteFirebaseObject(imageRef);
           console.log("success deleting an file");
         };
         deleteFile();

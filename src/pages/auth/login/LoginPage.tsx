@@ -68,10 +68,17 @@ const LoginPage = () => {
         "toast_login"
       );
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_login"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_login"
       );
     }

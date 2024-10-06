@@ -48,6 +48,8 @@ import RenderRfidInput from "src/components/RenderRfidInput";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import NetworkError from "src/components/NetworkError";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import ServerError from "src/components/ServerError";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -70,6 +72,8 @@ const ReportPage = () => {
   //generate reports - financial
   const [filterFinancial, { data: financialRes, error: financialErr }] =
     useGetAllUsersTransactionsByDateMutation();
+
+  const { isOnline } = useUserOnline();
 
   useEffect(() => {
     dispatch(setRoute("Reports"));
@@ -134,20 +138,17 @@ const ReportPage = () => {
     generateExcelFinancialReport({ data: financialRes });
   };
 
-  useEffect(() => {
-    if (
-      error?.status === NETWORK_ERROR.FETCH_ERROR ||
-      financialErr?.status === NETWORK_ERROR.FETCH_ERROR
-    )
-      delayShowToast("failed", "Network error", "toast_generateReport");
-    {
-    }
-  }, [error?.status, financialErr?.status]);
   if (
-    error?.status === NETWORK_ERROR.FETCH_ERROR ||
-    financialErr?.status === NETWORK_ERROR.FETCH_ERROR
+    (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) ||
+    (financialErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline)
   ) {
     return <NetworkError />;
+  }
+  if (
+    (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) ||
+    (financialErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
+  ) {
+    return <ServerError />;
   }
 
   return (

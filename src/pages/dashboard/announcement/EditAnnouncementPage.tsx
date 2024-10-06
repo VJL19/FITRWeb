@@ -21,7 +21,6 @@ import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React from "react";
 import RichTextEditor from "src/components/RichTextEditor";
-import { ref, deleteObject, getMetadata } from "firebase/storage";
 import { storage } from "src/global/firebaseConfig";
 import {
   FIREBASE_VIDEO_FORMATS,
@@ -31,6 +30,12 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+  getFirebaseMetadata,
+} from "src/utils/functions/firebase";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const EditAnnouncementPage = () => {
   const {
@@ -47,6 +52,7 @@ const EditAnnouncementPage = () => {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null | undefined>(undefined);
 
+  const { isOnline } = useUserOnline();
   const {
     AnnouncementTitle,
     AnnouncementDescription,
@@ -82,7 +88,7 @@ const EditAnnouncementPage = () => {
     console.log(event?.target?.files?.[0].name);
   };
 
-  const mediaRef = ref(storage, AnnouncementImage);
+  const mediaRef = firebaseRef(storage, AnnouncementImage);
   const toggleImageUpload = () => {
     fileRef.current?.click();
   };
@@ -91,7 +97,7 @@ const EditAnnouncementPage = () => {
     if (AnnouncementImage.split(".")[0] === "default_poster") {
       return;
     }
-    getMetadata(mediaRef)
+    getFirebaseMetadata(mediaRef)
       .then((metaData) => {
         setMetadata(metaData?.contentType);
       })
@@ -116,10 +122,17 @@ const EditAnnouncementPage = () => {
     if (status === "rejected" && error?.status !== NETWORK_ERROR.FETCH_ERROR) {
       showFailedToast("Something went wrong!", "toast_announcement");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_announcement"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_announcement"
       );
     }
@@ -131,9 +144,10 @@ const EditAnnouncementPage = () => {
         if (!isUserChangeImage) {
           return;
         }
-        let imageRef = ref(storage, AnnouncementImage);
+        let imageRef = firebaseRef(storage, AnnouncementImage);
+
         const deleteImage = async () => {
-          await deleteObject(imageRef);
+          await deleteFirebaseObject(imageRef);
           console.log("success deleting an image");
         };
         deleteImage();
@@ -170,6 +184,11 @@ const EditAnnouncementPage = () => {
       AnnouncementDescription: data?.AnnouncementDescription,
       AnnouncementDate: getCurrentDate(),
     };
+
+    if (!isUserChangeImage) {
+      editAnnouncement(arg);
+      return;
+    }
 
     editAnnouncement(arg);
   };

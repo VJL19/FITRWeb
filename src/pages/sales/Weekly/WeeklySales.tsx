@@ -39,6 +39,8 @@ import {
 import WeeklyGrowthRate from "./WeeklyGrowthRate";
 import NetworkError from "src/components/NetworkError";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import ServerError from "src/components/ServerError";
 
 const WeeklySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -53,6 +55,8 @@ const WeeklySales = () => {
       monthlyUserSales: item.TotalSalesPerWeek,
     })
   );
+
+  const { isOnline } = useUserOnline();
 
   const sessionUsers = sessionUserSales?.result?.map(
     (item: IWeeklySalesAnalytics, index) => ({
@@ -122,10 +126,16 @@ const WeeklySales = () => {
   ];
 
   if (
-    sessionErr?.status === NETWORK_ERROR.FETCH_ERROR ||
-    monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline)
   ) {
     return <NetworkError />;
+  }
+  if (
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
+  ) {
+    return <ServerError />;
   }
   return (
     <Container sx={{ height: 450 }}>

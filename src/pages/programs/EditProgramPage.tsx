@@ -23,6 +23,7 @@ import React from "react";
 import RichTextEditor from "src/components/RichTextEditor";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const EditProgramPage = () => {
   const {
@@ -36,6 +37,7 @@ const EditProgramPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const { isOnline } = useUserOnline();
 
   const [editProgram, { data, error, isLoading, status }] =
     useEditProgramControllerMutation();
@@ -64,10 +66,17 @@ const EditProgramPage = () => {
     if (status === "rejected" && isSubmitted) {
       showFailedToast(data?.message, "toast_program");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_program"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_program"
       );
     }

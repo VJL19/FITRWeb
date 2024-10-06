@@ -1,0 +1,14 @@
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  padding-left: 250px;
+  height: 70px;
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 1.5px 0px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 2.5px 0px 0px rgba(0, 0, 0, 0.75);
+  align-items: center;
+}
+.breadcrumbs-container {
+  display: grid;
+  grid-template-columns: 20% 80%;
+}

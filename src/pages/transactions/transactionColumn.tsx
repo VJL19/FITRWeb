@@ -310,7 +310,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
             }
           >
             <NavLink
-              to={`/dashboard/transactions/view_subscription/:${currentRowData.SubscriptionID}`}
+              to={`/dashboard/transactions/view_subscription`}
               style={navLinkTextStyle}
             >
               View
@@ -325,7 +325,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
             startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           >
             <NavLink
-              to={`/dashboard/transactions/edit_subscription/:${currentRowData.SubscriptionID}`}
+              to={`/dashboard/transactions/edit_subscription`}
               style={navLinkTextStyle}
             >
               Edit

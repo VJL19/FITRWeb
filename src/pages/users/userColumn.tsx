@@ -325,10 +325,7 @@ const _columns: GridColDef<IAttendance>[] = [
               <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
             }
           >
-            <NavLink
-              to={`/dashboard/users/view_user/:${currentRowData.UserID}`}
-              style={navLinkTextStyle}
-            >
+            <NavLink to={`/dashboard/users/view_user`} style={navLinkTextStyle}>
               View
             </NavLink>
           </Button>
@@ -339,10 +336,7 @@ const _columns: GridColDef<IAttendance>[] = [
             onClick={onClick}
             startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           >
-            <NavLink
-              to={`/dashboard/users/edit_user/:${currentRowData.UserID}`}
-              style={navLinkTextStyle}
-            >
+            <NavLink to={`/dashboard/users/edit_user`} style={navLinkTextStyle}>
               Edit
             </NavLink>
           </Button>

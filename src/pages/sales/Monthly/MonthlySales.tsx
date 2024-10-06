@@ -39,6 +39,8 @@ import {
 import MonthlyGrowthRate from "./MonthlyGrowthRate";
 import NetworkError from "src/components/NetworkError";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import ServerError from "src/components/ServerError";
 
 const MonthlySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -46,6 +48,8 @@ const MonthlySales = () => {
     useGetMonthlySessionUserSalesMutation();
   const [getMonthlyUsers, { data: monthlyUserSales, error: monthlyErr }] =
     useGetMonthlyMUserSalesMutation();
+
+  const { isOnline } = useUserOnline();
 
   const monthlyUsers = monthlyUserSales?.result?.map(
     (item: IMonthlySalesAnalytics) => item
@@ -97,10 +101,16 @@ const MonthlySales = () => {
     (getTotalMonthlySessionSales(data) + getTotalMonthlyMSales(data)) / 12;
 
   if (
-    sessionErr?.status === NETWORK_ERROR.FETCH_ERROR ||
-    monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline)
   ) {
     return <NetworkError />;
+  }
+  if (
+    (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) ||
+    (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
+  ) {
+    return <ServerError />;
   }
 
   return (

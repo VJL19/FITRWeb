@@ -43,6 +43,7 @@ const CreateUserPage = () => {
     control,
     setValue,
     getValues,
+    reset,
     formState: { isSubmitted, isSubmitting, errors },
   } = useForm<TUserSchema>({ resolver: zodResolver(userSchema) });
 
@@ -65,6 +66,7 @@ const CreateUserPage = () => {
         showSuccessToast(data?.message, "toast_user");
       };
       sendOTPEmail({ Email: getValues("Email") });
+      reset();
       deplayShowToast();
     }
     if (status === "rejected" && isSubmitted) {

@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRoute } from "src/reducers/route";
@@ -24,11 +23,14 @@ import RenderRfidInput from "src/components/RenderRfidInput";
 import RFIDRemover from "src/components/RFIDRemover";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
+import MIUIDataGrid from "src/components/MIUIDataGrid";
+import { useUserOnline } from "src/hooks/useUserOnline";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const { open } = useSelector((state: RootState) => state.modal);
+  const { isOnline } = useUserOnline();
 
   const VISIBLE_FIELDS = [
     "RowID",
@@ -68,10 +70,17 @@ const ProgramPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_program");
     }
-    if (error?.status === NETWORK_ERROR.FETCH_ERROR) {
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
         "Network error has occured. Please check your internet connection and try again this action",
+        "toast_program"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
         "toast_program"
       );
     }
@@ -122,31 +131,12 @@ const ProgramPage = () => {
       </h1>
       <RFIDRemover
         children={
-          <DataGrid
+          <MIUIDataGrid
             rows={rows}
             columns={columns}
             loading={isFetching || isUninitialized}
-            pageSizeOptions={[5, 10, 15, 20, 25]}
-            disableRowSelectionOnClick
-            slotProps={{
-              loadingOverlay: {
-                variant: "skeleton",
-                noRowsVariant: "skeleton",
-              },
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-            }}
+            variant="skeleton"
+            nowRowsVariant="skeleton"
           />
         }
       />
@@ -158,7 +148,7 @@ const ProgramPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/suggested_programs/create_program/`}
+          to={`/dashboard/suggested_programs/create_program`}
           style={navLinkTextStyle}
         >
           create

@@ -15,6 +15,9 @@ import {
 import { AppDispatch, RootState } from "src/store/store";
 import { TOtpSchema, otpSchema } from "src/utils/validations/userSchema";
 import OtpInput from "react-otp-input";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
 
 const CreateUserConfirmationPage = () => {
   const [timer, setTimer] = useState(60 * 2);
@@ -27,8 +30,12 @@ const CreateUserConfirmationPage = () => {
     { data: emailCode, status: emailStat, isLoading, error: emailErr },
   ] = useSendEmailMutation();
 
-  const [activateAccount, { status: activateStatus, data }] =
-    useActivateUserAccountMutation();
+  const [
+    activateAccount,
+    { status: activateStatus, data, error: activateErr },
+  ] = useActivateUserAccountMutation();
+
+  const { isOnline } = useUserOnline();
 
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,6 +72,22 @@ const CreateUserConfirmationPage = () => {
   useEffect(() => {
     if (emailStat === "fulfilled") {
       dispatch(setOTPToken(emailCode?.code));
+      setTimer(60 * 2);
+      isValid(true);
+    }
+    if (emailErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_user"
+      );
+    }
+    if (emailErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_user"
+      );
     }
   }, [emailStat]);
 
@@ -79,15 +102,27 @@ const CreateUserConfirmationPage = () => {
 
   useEffect(() => {
     if (activateStatus === "fulfilled") {
-      showSuccessToast(
-        "Successfully activated this registration!",
-        "toast_user"
-      );
+      showSuccessToast("Successfully complete the registration!", "toast_user");
+
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         navigate("/dashboard/users", { replace: true });
       };
       delayRedirect();
+    }
+    if (activateErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_user"
+      );
+    }
+    if (activateErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_user"
+      );
     }
   }, [activateStatus]);
 
@@ -101,7 +136,6 @@ const CreateUserConfirmationPage = () => {
       return;
     }
     if (OTPToken === Number(data.OTPCode)) {
-      showSuccessToast("Successfully complete the registration!", "toast_user");
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         activateAccount({ Email: Email });
@@ -115,8 +149,6 @@ const CreateUserConfirmationPage = () => {
   };
   const handleResend = () => {
     sendOTPEmail({ Email: Email });
-    setTimer(60 * 2);
-    isValid(true);
   };
   return (
     <div>
@@ -151,6 +183,7 @@ const CreateUserConfirmationPage = () => {
           variant="contained"
           size="large"
           onClick={handleResend}
+          disabled={isLoading}
         >
           Resend OTP
         </Button>

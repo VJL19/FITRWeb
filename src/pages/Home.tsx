@@ -26,6 +26,7 @@ const Home = () => {
   return (
     <Container sx={{ height: 450 }}>
       <RenderRfidInput />
+
       <h1>DASHBOARD</h1>
 
       <Container

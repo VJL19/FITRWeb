@@ -1,5 +1,4 @@
 import { Container, Button, Stack } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -17,12 +16,18 @@ import {
 } from "src/reducers/users";
 import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
-import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import { storage } from "src/global/firebaseConfig";
-import { ref, deleteObject } from "firebase/storage";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import { showFailedToast, showSuccessToast } from "src/components/showToast";
 import RFIDRemover from "src/components/RFIDRemover";
+import { NETWORK_ERROR } from "src/utils/constants/Errors";
+import delayShowToast from "src/utils/functions/delayToast";
+import { useUserOnline } from "src/hooks/useUserOnline";
+import MIUIDataGrid from "src/components/MIUIDataGrid";
+import {
+  deleteFirebaseObject,
+  firebaseRef,
+} from "src/utils/functions/firebase";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -33,7 +38,10 @@ const UserPage = () => {
   const { UserID, ProfilePic } = useSelector(
     (state: RootState) => state.user.userData
   );
-  const [deleteUser, { status: deleteStatus }] = useDeleteUserAccountMutation();
+
+  const { isOnline } = useUserOnline();
+  const [deleteUser, { status: deleteStatus, error }] =
+    useDeleteUserAccountMutation();
 
   const { data, isFetching, isUninitialized } = useGetAllUsersQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -61,17 +69,37 @@ const UserPage = () => {
     if (deleteStatus === "rejected") {
       showFailedToast(data?.message, "toast_user");
     }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
+      delayShowToast(
+        "failed",
+        "Network error has occured. Please check your internet connection and try again this action",
+        "toast_user"
+      );
+    }
+    if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
+      delayShowToast(
+        "failed",
+        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_user"
+      );
+    }
+  }, [deleteStatus, data?.message]);
+  useEffect(() => {
+    if (deleteStatus === "fulfilled") {
+      let imageRef = firebaseRef(storage, ProfilePic);
+
+      try {
+        const deleteImage = async () => {
+          await deleteFirebaseObject(imageRef);
+          console.log("success at deleting an image.");
+        };
+        deleteImage();
+      } catch (err) {
+        console.log("there was an error in deleting an image");
+      }
+    }
   }, [deleteStatus, data?.message]);
   const handleDeleteUser = async () => {
-    let imageRef = ref(storage, ProfilePic);
-
-    try {
-      await deleteObject(imageRef);
-      console.log("success");
-    } catch (err) {
-      console.log("there was an error in deleting an image");
-    }
-
     dispatch(handleClose());
     deleteUser({ UserID: UserID });
   };
@@ -102,44 +130,12 @@ const UserPage = () => {
       </h1>
       <RFIDRemover
         children={
-          <DataGrid
+          <MIUIDataGrid
             rows={rows}
             columns={columns}
             loading={isFetching || isUninitialized}
-            pageSizeOptions={[5, 10, 15, 20, 25]}
-            disableRowSelectionOnClick
-            slotProps={{
-              loadingOverlay: {
-                variant: "skeleton",
-                noRowsVariant: "skeleton",
-              },
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-              noResultsOverlay: () => (
-                <Stack
-                  height="100%"
-                  alignItems="center"
-                  justifyContent="center"
-                  flex={1}
-                  flexDirection={"row"}
-                  gap={1.5}
-                >
-                  <PlaylistRemoveIcon fontSize="large" htmlColor="#202020" />
-                  No results found
-                </Stack>
-              ),
-            }}
+            variant="skeleton"
+            nowRowsVariant="skeleton"
           />
         }
       />
@@ -150,7 +146,7 @@ const UserPage = () => {
         size="medium"
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
-        <NavLink to={`/dashboard/users/create_user/`} style={navLinkTextStyle}>
+        <NavLink to={`/dashboard/users/create_user`} style={navLinkTextStyle}>
           create
         </NavLink>
       </Button>

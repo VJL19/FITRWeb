@@ -152,7 +152,7 @@ const _columns: GridColDef[] = [
             }
           >
             <NavLink
-              to={`/dashboard/announcements/view_announcement/:${currentRowData.AnnouncementID}`}
+              to={`/dashboard/announcements/view_announcement`}
               style={navLinkTextStyle}
             >
               View
@@ -166,7 +166,7 @@ const _columns: GridColDef[] = [
             startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           >
             <NavLink
-              to={`/dashboard/announcements/edit_announcement/:${currentRowData.AnnouncementID}`}
+              to={`/dashboard/announcements/edit_announcement`}
               style={navLinkTextStyle}
             >
               Edit

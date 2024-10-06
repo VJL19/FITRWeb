@@ -142,7 +142,7 @@ const _record_files_columns: GridColDef[] = [
             }
           >
             <NavLink
-              to={`/dashboard/records/view_record/:${currentRowData.RecordID}`}
+              to={`/dashboard/records/view_record`}
               style={navLinkTextStyle}
             >
               View
@@ -156,7 +156,7 @@ const _record_files_columns: GridColDef[] = [
             startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           >
             <NavLink
-              to={`/dashboard/records/edit_record/:${currentRowData.RecordID}`}
+              to={`/dashboard/records/edit_record`}
               style={navLinkTextStyle}
             >
               Edit
