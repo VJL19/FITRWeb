@@ -159,6 +159,12 @@ const ReportPage = () => {
   ) {
     return <NotAuthorized />;
   }
+  if (
+    error?.status === HTTP_ERROR.BAD_REQUEST ||
+    financialErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
+    return <NotAuthorized />;
+  }
 
   return (
     <Box

@@ -151,6 +151,12 @@ const DailySales = () => {
   ) {
     return <NotAuthorized />;
   }
+  if (
+    sessionErr?.status === HTTP_ERROR.BAD_REQUEST ||
+    monthlyErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
+    return <NotAuthorized />;
+  }
 
   return (
     <Container sx={{ height: 450 }}>

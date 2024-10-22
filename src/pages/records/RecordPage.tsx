@@ -112,7 +112,10 @@ const RecordPage = () => {
         "toast_record"
       );
     }
-    if (deleteError?.status === HTTP_ERROR?.UNAUTHORIZED) {
+    if (
+      deleteError?.status === HTTP_ERROR?.UNAUTHORIZED ||
+      deleteError?.status === HTTP_ERROR?.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -135,7 +138,10 @@ const RecordPage = () => {
         "toast_record"
       );
     }
-    if (uploadError?.status === HTTP_ERROR?.UNAUTHORIZED) {
+    if (
+      uploadError?.status === HTTP_ERROR?.UNAUTHORIZED ||
+      uploadError?.status === HTTP_ERROR?.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -195,7 +201,10 @@ const RecordPage = () => {
     return <LoadingIndicator />;
   }
 
-  if (recordErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    recordErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    recordErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
 

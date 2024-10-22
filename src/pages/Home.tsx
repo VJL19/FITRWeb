@@ -27,7 +27,10 @@ const Home = () => {
     dispatch(setRoute("Home"));
   }, []);
 
-  if (tokenErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    tokenErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    tokenErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
 

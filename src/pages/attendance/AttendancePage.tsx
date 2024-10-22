@@ -86,6 +86,16 @@ const AttendancePage = () => {
         "toast_attendance"
       );
     }
+    if (
+      attendanceErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+      attendanceErr?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_attendance"
+      );
+    }
   }, [status]);
 
   const columns = React.useMemo(
@@ -100,7 +110,10 @@ const AttendancePage = () => {
     return <LoadingIndicator />;
   }
 
-  if (attendanceErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    attendanceErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    attendanceErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
 

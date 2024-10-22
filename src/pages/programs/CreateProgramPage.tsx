@@ -70,7 +70,10 @@ const CreateProgramPage = () => {
         "toast_program"
       );
     }
-    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+    if (
+      error?.status === HTTP_ERROR.UNAUTHORIZED ||
+      error?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",

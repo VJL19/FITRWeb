@@ -87,7 +87,10 @@ const ProgramPage = () => {
         "toast_program"
       );
     }
-    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+    if (
+      error?.status === HTTP_ERROR.UNAUTHORIZED ||
+      error?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -122,7 +125,10 @@ const ProgramPage = () => {
     return <LoadingIndicator />;
   }
 
-  if (suggestedProgramErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    suggestedProgramErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    suggestedProgramErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
 

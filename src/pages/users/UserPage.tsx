@@ -90,7 +90,10 @@ const UserPage = () => {
         "toast_user"
       );
     }
-    if (allUserErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    if (
+      allUserErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+      allUserErr?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -125,7 +128,10 @@ const UserPage = () => {
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;
   }
-  if (allUserErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    allUserErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    allUserErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
   return (

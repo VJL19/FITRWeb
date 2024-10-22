@@ -109,7 +109,10 @@ const TransactionPage = () => {
         "toast_transaction"
       );
     }
-    if (transErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    if (
+      transErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+      transErr?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -137,7 +140,10 @@ const TransactionPage = () => {
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;
   }
-  if (transErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+  if (
+    transErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    transErr?.status === HTTP_ERROR.BAD_REQUEST
+  ) {
     return <NotAuthorized />;
   }
   return (
