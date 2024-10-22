@@ -44,6 +44,7 @@ export const announcementApi = createApi({
   reducerPath: "admin/announcements",
   baseQuery: fetchBaseQuery({
     baseUrl: config.BASE_URL,
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     getAnnouncements: builder.query<IAnnouncementState, void>({

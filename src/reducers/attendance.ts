@@ -35,6 +35,7 @@ export const attendanceApi = createApi({
   reducerPath: "user/attendance",
   baseQuery: fetchBaseQuery({
     baseUrl: config.BASE_URL,
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     getUsersAttendance: builder.query<IAttendanceState, void>({

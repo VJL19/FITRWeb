@@ -28,6 +28,8 @@ import {
   deleteFirebaseObject,
   firebaseRef,
 } from "src/utils/functions/firebase";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -43,7 +45,12 @@ const UserPage = () => {
   const [deleteUser, { status: deleteStatus, error }] =
     useDeleteUserAccountMutation();
 
-  const { data, isFetching, isUninitialized } = useGetAllUsersQuery(undefined, {
+  const {
+    data,
+    isFetching,
+    isUninitialized,
+    error: allUserErr,
+  } = useGetAllUsersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -83,6 +90,13 @@ const UserPage = () => {
         "toast_user"
       );
     }
+    if (allUserErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_user"
+      );
+    }
   }, [deleteStatus, data?.message]);
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
@@ -110,6 +124,9 @@ const UserPage = () => {
 
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;
+  }
+  if (allUserErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
   }
   return (
     <Container

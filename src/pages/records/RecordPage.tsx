@@ -34,6 +34,8 @@ import {
   firebaseRef,
 } from "src/utils/functions/firebase";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import NotAuthorized from "src/components/NotAuthorized";
 const RecordPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -45,6 +47,7 @@ const RecordPage = () => {
     data: records,
     isFetching: recordFetching,
     isUninitialized: recordIsUninitialized,
+    error: recordErr,
   } = useGetAllFileRecordsQuery(undefined, { refetchOnMountOrArgChange: true });
 
   const [
@@ -109,6 +112,13 @@ const RecordPage = () => {
         "toast_record"
       );
     }
+    if (deleteError?.status === HTTP_ERROR?.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_record"
+      );
+    }
   }, [deleteStatus]);
   useEffect(() => {
     if (uploadError?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
@@ -122,6 +132,13 @@ const RecordPage = () => {
       delayShowToast(
         "failed",
         "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_record"
+      );
+    }
+    if (uploadError?.status === HTTP_ERROR?.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
         "toast_record"
       );
     }
@@ -176,6 +193,10 @@ const RecordPage = () => {
   console.log("file state", file);
   if (loading || deleteStatus === "pending") {
     return <LoadingIndicator />;
+  }
+
+  if (recordErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
   }
 
   return (

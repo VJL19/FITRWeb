@@ -30,6 +30,7 @@ import getCurrentDate from "src/utils/functions/date_fns";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 const CreateTransactionPage = () => {
   const {
     handleSubmit,
@@ -92,6 +93,13 @@ const CreateTransactionPage = () => {
       delayShowToast(
         "failed",
         "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_transaction"
+      );
+    }
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
         "toast_transaction"
       );
     }

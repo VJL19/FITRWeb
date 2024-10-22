@@ -15,13 +15,21 @@ import TotalPendingTransactionPage from "./transactions/TotalPendingTransactionP
 import TotalAnnouncementCreatedPage from "./dashboard/announcement/TotalAnnouncementCreatedPage";
 import TodaySales from "./sales/TodaySales";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import { useGetAccessWebTokenQuery } from "src/reducers/login";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import NotAuthorized from "src/components/NotAuthorized";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
 
+  const { data: token, error: tokenErr } = useGetAccessWebTokenQuery();
   useEffect(() => {
     dispatch(setRoute("Home"));
   }, []);
+
+  if (tokenErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
+  }
 
   return (
     <Container sx={{ height: 450 }}>

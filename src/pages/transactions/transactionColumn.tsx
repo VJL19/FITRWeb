@@ -166,35 +166,6 @@ const _columns: GridColDef<ISubscriptions>[] = [
     type: "singleSelect",
     valueOptions: ["GCash", "Paymaya", "CreditCard", "Cash"],
   },
-  {
-    field: "SubscriptionUploadedImage",
-    headerName: "Subscription Uploaded Image",
-    renderHeader: (params) => {
-      return <b>{params.field.split("Subscription")[1]}</b>;
-    },
-    width: 220,
-    align: "center",
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-    renderCell: (params) => {
-      const currentRow: ISubscriptions = params.row;
-      return (
-        <Stack
-          direction="row"
-          sx={{ alignSelf: "center", justifyContent: "center" }}
-        >
-          <img
-            height={65}
-            src={
-              currentRow.SubscriptionUploadedImage === "default_poster.png"
-                ? thumbnail
-                : currentRow.SubscriptionUploadedImage
-            }
-          />
-        </Stack>
-      );
-    },
-  },
 
   {
     flex: 1,
@@ -257,7 +228,6 @@ const _columns: GridColDef<ISubscriptions>[] = [
       return <b>{params.field}</b>;
     },
     width: 310,
-    headerAlign: "center",
     headerClassName: "super-app-theme--header",
     renderCell: (params) => {
       const dispatch = useDispatch();
@@ -299,38 +269,39 @@ const _columns: GridColDef<ISubscriptions>[] = [
       };
 
       return (
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="contained"
-            color="info"
-            size="medium"
-            onClick={onClick}
-            startIcon={
-              <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
-            }
+        <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
+          <NavLink
+            to={`/dashboard/transactions/view_subscription`}
+            style={navLinkTextStyle}
           >
-            <NavLink
-              to={`/dashboard/transactions/view_subscription`}
-              style={navLinkTextStyle}
+            <Button
+              variant="contained"
+              color="info"
+              size="small"
+              onClick={onClick}
+              style={{ height: 40 }}
+              startIcon={
+                <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
+              }
             >
               View
-            </NavLink>
-          </Button>
-          <Button
-            variant="contained"
-            color="warning"
-            size="medium"
-            // disabled={}
-            onClick={onClick}
-            startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+            </Button>
+          </NavLink>
+          <NavLink
+            to={`/dashboard/transactions/edit_subscription`}
+            style={navLinkTextStyle}
           >
-            <NavLink
-              to={`/dashboard/transactions/edit_subscription`}
-              style={navLinkTextStyle}
+            <Button
+              variant="contained"
+              color="warning"
+              size="small"
+              style={{ height: 40 }}
+              onClick={onClick}
+              startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
             >
               Edit
-            </NavLink>
-          </Button>
+            </Button>
+          </NavLink>
           <Button
             variant="contained"
             color="error"

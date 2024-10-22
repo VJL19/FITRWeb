@@ -18,6 +18,8 @@ import {
 } from "src/utils/constants/FILE_EXTENSIONS";
 import { ref, getMetadata } from "firebase/storage";
 import { storage } from "src/global/firebaseConfig";
+import { useGetAccessWebTokenQuery } from "src/reducers/login";
+import NotAuthorized from "src/components/NotAuthorized";
 const ViewAnnouncementPage = () => {
   const {
     AnnouncementTitle,
@@ -36,6 +38,7 @@ const ViewAnnouncementPage = () => {
     resolver: zodResolver(announcementSchema),
   });
 
+  const { data, error: tokenErr } = useGetAccessWebTokenQuery();
   const [metadata, setMetadata] = useState<string | undefined>("");
 
   const mediaRef = ref(storage, AnnouncementImage);
@@ -60,6 +63,11 @@ const ViewAnnouncementPage = () => {
   const handleBack = () => {
     navigate("/dashboard/announcements", { replace: true });
   };
+
+  console.log(data);
+  if (tokenErr?.status === 400) {
+    return <NotAuthorized />;
+  }
 
   return (
     <div style={{ padding: 15 }}>

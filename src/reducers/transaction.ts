@@ -49,6 +49,7 @@ export const transactionApi = createApi({
   tagTypes: ["transaction"],
   baseQuery: fetchBaseQuery({
     baseUrl: config.BASE_URL,
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     getAllUsersTransactions: builder.query<ITransactionApiState, void>({

@@ -20,6 +20,7 @@ import {
   firebaseRef,
 } from "src/utils/functions/firebase";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const EditRecordPage = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -52,6 +53,13 @@ const EditRecordPage = () => {
       delayShowToast(
         "failed",
         "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_record"
+      );
+    }
+    if (error?.status === HTTP_ERROR?.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
         "toast_record"
       );
     }

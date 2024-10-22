@@ -41,6 +41,8 @@ import NetworkError from "src/components/NetworkError";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import ServerError from "src/components/ServerError";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const WeeklySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -137,6 +139,13 @@ const WeeklySales = () => {
   ) {
     return <ServerError />;
   }
+  if (
+    sessionErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    monthlyErr?.status === HTTP_ERROR.UNAUTHORIZED
+  ) {
+    return <NotAuthorized />;
+  }
+
   return (
     <Container sx={{ height: 450 }}>
       <FormControl sx={{ width: "10%" }}>

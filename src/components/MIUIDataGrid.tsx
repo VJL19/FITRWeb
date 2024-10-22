@@ -13,6 +13,7 @@ type TDataGridProps = {
   loading?: boolean | undefined;
   variant?: GridLoadingOverlayVariant | undefined;
   nowRowsVariant?: GridLoadingOverlayVariant | undefined;
+  onRowClick?: (params: any) => void;
 };
 
 const MIUIDataGrid = ({
@@ -21,10 +22,17 @@ const MIUIDataGrid = ({
   loading,
   variant,
   nowRowsVariant,
+  onRowClick,
 }: TDataGridProps) => {
   return (
     <DataGrid
+      sx={{
+        "& .MuiDataGrid-row:hover": {
+          cursor: "pointer",
+        },
+      }}
       rows={rows}
+      onRowClick={onRowClick}
       columns={columns}
       loading={loading}
       pageSizeOptions={[5, 10, 15, 20, 25]}

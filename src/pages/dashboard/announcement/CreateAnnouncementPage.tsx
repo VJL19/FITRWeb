@@ -38,6 +38,7 @@ import { VIDEO_FORMATS } from "src/utils/constants/FILE_EXTENSIONS";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const CreateAnnouncementPage = () => {
   const {
@@ -109,6 +110,13 @@ const CreateAnnouncementPage = () => {
       delayShowToast(
         "failed",
         "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "toast_announcement"
+      );
+    }
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
         "toast_announcement"
       );
     }

@@ -59,6 +59,7 @@ export const salesAnalyticsApi = createApi({
   tagTypes: ["sales_analytics"],
   baseQuery: fetchBaseQuery({
     baseUrl: config.BASE_URL,
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     getDailySessionUserSales: builder.query<IDailySalesAnalyticsApiState, void>(

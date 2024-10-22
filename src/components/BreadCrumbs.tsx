@@ -16,7 +16,7 @@ const BreadCrumbs = () => {
       currentLink += `/${crumb}`;
 
       return (
-        <React.Fragment key={crumb}>
+        <div key={crumb}>
           {currentLink === location.pathname ? (
             <Typography sx={{ color: "text.primary" }}>{crumb}</Typography>
           ) : (
@@ -29,7 +29,7 @@ const BreadCrumbs = () => {
               {crumb}
             </NavLink>
           )}
-        </React.Fragment>
+        </div>
       );
     });
   return (

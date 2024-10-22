@@ -57,6 +57,7 @@ export const usersApi = createApi({
   reducerPath: "user/registered",
   baseQuery: fetchBaseQuery({
     baseUrl: config.BASE_URL,
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     getAllUsers: builder.query<IUserApiState, void>({

@@ -35,6 +35,8 @@ import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import NetworkError from "src/components/NetworkError";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import ServerError from "src/components/ServerError";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import NotAuthorized from "src/components/NotAuthorized";
 
 const DailySales = () => {
   const { data: sessionUserSales, error: sessionErr } =
@@ -142,6 +144,12 @@ const DailySales = () => {
     (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
   ) {
     return <ServerError />;
+  }
+  if (
+    sessionErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    monthlyErr?.status === HTTP_ERROR.UNAUTHORIZED
+  ) {
+    return <NotAuthorized />;
   }
 
   return (

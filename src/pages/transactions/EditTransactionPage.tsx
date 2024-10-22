@@ -125,13 +125,7 @@ const EditTransactionPage = () => {
         </Button>
         <h1>EDIT TRANSACTION PAGE</h1>
 
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href={SubscriptionUploadedImage}
-        >
-          <img src={SubscriptionUploadedImage} height={500} />
-        </a>
+        <h3>Billing Details</h3>
 
         <h4>Amount - {SubscriptionAmount} PHP </h4>
         <h4>Paid By - {SubscriptionBy}</h4>

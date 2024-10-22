@@ -47,7 +47,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(data?.user?.Role);
   useEffect(() => {
     if (!data?.isAuthenticated) {
       navigate("/login", { replace: true });

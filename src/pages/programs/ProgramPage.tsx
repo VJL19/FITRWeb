@@ -25,6 +25,8 @@ import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import MIUIDataGrid from "src/components/MIUIDataGrid";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import NotAuthorized from "src/components/NotAuthorized";
 
 const ProgramPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,6 +47,7 @@ const ProgramPage = () => {
     isFetching,
     isUninitialized,
     status,
+    error: suggestedProgramErr,
   } = useGetSuggestedProgramQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -84,6 +87,13 @@ const ProgramPage = () => {
         "toast_program"
       );
     }
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_program"
+      );
+    }
   }, [deleteStatus, data?.message]);
   const rows = suggested_programs?.result?.map((suggested_program) => ({
     ...suggested_program,
@@ -110,6 +120,10 @@ const ProgramPage = () => {
 
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;
+  }
+
+  if (suggestedProgramErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
   }
 
   return (

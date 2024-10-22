@@ -26,7 +26,10 @@ const initialState: IProgramSliceState = {
 const config = loadConfig();
 
 export const programApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: config.BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: config.BASE_URL,
+    credentials: "include",
+  }),
   tagTypes: ["suggested_program"],
   reducerPath: "admin/suggested_program",
   endpoints: (builder) => ({

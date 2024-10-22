@@ -26,7 +26,10 @@ const config = loadConfig();
 export const recordApi = createApi({
   tagTypes: ["records"],
   reducerPath: "/admin/records",
-  baseQuery: fetchBaseQuery({ baseUrl: config.BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: config.BASE_URL,
+    credentials: "include",
+  }),
   endpoints: (builder) => ({
     getAllFileRecords: builder.query<IRecordApiState, void>({
       query: () => "/admin/records/all_records",

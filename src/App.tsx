@@ -10,6 +10,7 @@ import ChangePasswordPage from "./pages/auth/ChangePasswordPage";
 import LandingPage from "./pages/promotional/LandingPage";
 function App() {
   const { data, status, error } = useGetAccessWebTokenQuery();
+
   const navigate = useNavigate();
   const location = useLocation();
 

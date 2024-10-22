@@ -29,6 +29,8 @@ import {
   firebaseRef,
 } from "src/utils/functions/firebase";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 const AnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -47,6 +49,7 @@ const AnnouncementPage = () => {
   const {
     data: announcements,
     isFetching,
+    error: announcementErr,
     isUninitialized,
   } = useGetAnnouncementsQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -101,6 +104,13 @@ const AnnouncementPage = () => {
         "toast_announcement"
       );
     }
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_announcement"
+      );
+    }
   }, [deleteStatus, data?.message]);
   useEffect(() => {
     if (deleteStatus === "fulfilled") {
@@ -146,6 +156,9 @@ const AnnouncementPage = () => {
     return <LoadingIndicator />;
   }
 
+  if (announcementErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
+  }
   return (
     <Box
       sx={{

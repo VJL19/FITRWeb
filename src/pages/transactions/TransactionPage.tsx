@@ -29,6 +29,8 @@ import {
   deleteFirebaseObject,
   firebaseRef,
 } from "src/utils/functions/firebase";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const TransactionPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -36,12 +38,14 @@ const TransactionPage = () => {
     dispatch(setRoute("Transactions"));
   }, []);
 
-  const { data, isFetching, isUninitialized } = useGetAllUsersTransactionsQuery(
-    undefined,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const {
+    data,
+    isFetching,
+    isUninitialized,
+    error: transErr,
+  } = useGetAllUsersTransactionsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const VISIBLE_FIELDS = [
     "RowID",
@@ -105,6 +109,13 @@ const TransactionPage = () => {
         "toast_transaction"
       );
     }
+    if (transErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+      delayShowToast(
+        "failed",
+        "You are not authenticated please login again!",
+        "toast_transaction"
+      );
+    }
   }, [deleteStatus, data?.message]);
 
   useEffect(() => {
@@ -125,6 +136,9 @@ const TransactionPage = () => {
 
   if (deleteStatus === "pending") {
     return <LoadingIndicator />;
+  }
+  if (transErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
   }
   return (
     <Box

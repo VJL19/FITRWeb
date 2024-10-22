@@ -50,6 +50,8 @@ import delayShowToast from "src/utils/functions/delayToast";
 import NetworkError from "src/components/NetworkError";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import ServerError from "src/components/ServerError";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import NotAuthorized from "src/components/NotAuthorized";
 const ReportPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState("");
@@ -149,6 +151,13 @@ const ReportPage = () => {
     (financialErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
   ) {
     return <ServerError />;
+  }
+
+  if (
+    error?.status === HTTP_ERROR.UNAUTHORIZED ||
+    financialErr?.status === HTTP_ERROR.UNAUTHORIZED
+  ) {
+    return <NotAuthorized />;
   }
 
   return (

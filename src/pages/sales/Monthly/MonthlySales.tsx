@@ -41,6 +41,8 @@ import NetworkError from "src/components/NetworkError";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import ServerError from "src/components/ServerError";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
 const MonthlySales = () => {
   const [selectedValue, setSelectedValue] = useState("");
@@ -111,6 +113,12 @@ const MonthlySales = () => {
     (monthlyErr?.status === NETWORK_ERROR.FETCH_ERROR && isOnline)
   ) {
     return <ServerError />;
+  }
+  if (
+    sessionErr?.status === HTTP_ERROR.UNAUTHORIZED ||
+    monthlyErr?.status === HTTP_ERROR.UNAUTHORIZED
+  ) {
+    return <NotAuthorized />;
   }
 
   return (

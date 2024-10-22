@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { loginUser, useGetAccessWebTokenQuery } from "src/reducers/auth";
+import { loginUser, useGetAccessWebTokenQuery } from "src/reducers/login";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "src/assets/logo_1.png";
 import "./styles.css";
@@ -29,9 +29,12 @@ import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import { useUserOnline } from "src/hooks/useUserOnline";
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { data: accessTokenData } = useGetAccessWebTokenQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: accessTokenData, error: tokenErr } = useGetAccessWebTokenQuery(
+    undefined,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const {
     handleSubmit,

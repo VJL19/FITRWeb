@@ -1,9 +1,10 @@
-import { Box, Button, Container } from "@mui/material";
+import { Avatar, Box, Button, Container } from "@mui/material";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import React from "react";
 import { useGetAllRecentAttendanceQuery } from "src/reducers/attendance";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
+import thumbnail from "src/assets/thumbnail_no_img.jpg";
 
 const RecentAttendeesPage = () => {
   const {
@@ -65,16 +66,14 @@ const RecentAttendeesPage = () => {
               gap: 3,
             }}
           >
-            <img
-              style={{
-                border: 5,
-                borderWidth: 5,
-                borderColor: "#ff2e00",
-                borderRadius: "50%",
-              }}
-              src={recentUser.ProfilePic}
-              alt="a user profile"
-              height={40}
+            <Avatar
+              alt={`${recentUser.ProfilePic}`}
+              src={`${
+                recentUser.ProfilePic === "default_poster.png"
+                  ? thumbnail
+                  : recentUser.ProfilePic
+              }`}
+              sx={{ width: 56, height: 56 }}
             />
             <h5>
               {recentUser.FirstName} {recentUser.LastName}

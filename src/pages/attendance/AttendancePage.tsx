@@ -21,6 +21,8 @@ import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import MIUIDataGrid from "src/components/MIUIDataGrid";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import NotAuthorized from "src/components/NotAuthorized";
+import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 const AttendancePage = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -34,7 +36,9 @@ const AttendancePage = () => {
     isUninitialized,
     status,
     error: attendanceErr,
-  } = useGetUsersAttendanceQuery();
+  } = useGetUsersAttendanceQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [uploadRecordFile, { data: uploadFileData, error }] =
     useUploadFileRecordMutation();
@@ -94,6 +98,10 @@ const AttendancePage = () => {
   console.log("file state", file);
   if (loading || deleteStatus === "pending") {
     return <LoadingIndicator />;
+  }
+
+  if (attendanceErr?.status === HTTP_ERROR.UNAUTHORIZED) {
+    return <NotAuthorized />;
   }
 
   return (

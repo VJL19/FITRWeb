@@ -315,31 +315,33 @@ const _columns: GridColDef<IAttendance>[] = [
       };
 
       return (
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="contained"
-            color="info"
-            size="medium"
-            onClick={onClick}
-            startIcon={
-              <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
-            }
-          >
-            <NavLink to={`/dashboard/users/view_user`} style={navLinkTextStyle}>
+        <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
+          <NavLink to={`/dashboard/users/view_user`} style={navLinkTextStyle}>
+            <Button
+              variant="contained"
+              color="info"
+              size="small"
+              style={{ height: 40 }}
+              onClick={onClick}
+              startIcon={
+                <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
+              }
+            >
               View
-            </NavLink>
-          </Button>
-          <Button
-            variant="contained"
-            color="warning"
-            size="medium"
-            onClick={onClick}
-            startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-          >
-            <NavLink to={`/dashboard/users/edit_user`} style={navLinkTextStyle}>
+            </Button>
+          </NavLink>
+          <NavLink to={`/dashboard/users/edit_user`} style={navLinkTextStyle}>
+            <Button
+              variant="contained"
+              color="warning"
+              size="small"
+              style={{ height: 40 }}
+              onClick={onClick}
+              startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+            >
               Edit
-            </NavLink>
-          </Button>
+            </Button>
+          </NavLink>
           <Button
             variant="contained"
             color="error"
