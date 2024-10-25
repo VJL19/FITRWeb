@@ -182,7 +182,7 @@ const TransactionPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/transactions/create_subscription`}
+          to={`/transactions/create_subscription`}
           style={navLinkTextStyle}
         >
           create

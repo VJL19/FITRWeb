@@ -201,7 +201,7 @@ const AnnouncementPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/announcements/create_announcement`}
+          to={`/announcements/create_announcement`}
           style={navLinkTextStyle}
         >
           create

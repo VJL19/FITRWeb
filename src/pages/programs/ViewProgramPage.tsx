@@ -12,7 +12,7 @@ const ViewProgramPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/suggested_programs", { replace: true });
+    navigate("/suggested_programs", { replace: true });
   };
   return (
     <div>

@@ -168,7 +168,7 @@ const ProgramPage = () => {
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
         <NavLink
-          to={`/dashboard/suggested_programs/create_program`}
+          to={`/suggested_programs/create_program`}
           style={navLinkTextStyle}
         >
           create

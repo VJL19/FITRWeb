@@ -143,7 +143,7 @@ const _columns: GridColDef[] = [
       return (
         <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
           <NavLink
-            to={`/dashboard/announcements/view_announcement`}
+            to={`/announcements/view_announcement`}
             style={navLinkTextStyle}
           >
             <Button
@@ -160,7 +160,7 @@ const _columns: GridColDef[] = [
             </Button>
           </NavLink>
           <NavLink
-            to={`/dashboard/announcements/edit_announcement`}
+            to={`/announcements/edit_announcement`}
             style={navLinkTextStyle}
           >
             <Button

@@ -3,13 +3,16 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
-import { useGetAccessWebTokenQuery } from "./reducers/login";
+import {
+  useGetAccessWebTokenQuery,
+  useGetAuthTokenQuery,
+} from "./reducers/login";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ForgotPasswordConfirmationPage from "./pages/auth/ForgotPasswordConfirmationPage";
 import ChangePasswordPage from "./pages/auth/ChangePasswordPage";
 import LandingPage from "./pages/promotional/LandingPage";
 function App() {
-  const { data, status, error } = useGetAccessWebTokenQuery();
+  const { data, status, error } = useGetAuthTokenQuery();
 
   const navigate = useNavigate();
   const location = useLocation();

@@ -12,7 +12,7 @@ const ViewRecordPage = () => {
 
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate("/dashboard/records", { replace: true });
+    navigate("/records", { replace: true });
   };
   console.log(RecordName.split(".")[1]);
   if (RecordName.split(".")[1] === "xlsx") {

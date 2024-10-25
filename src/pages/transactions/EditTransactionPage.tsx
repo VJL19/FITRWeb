@@ -35,6 +35,8 @@ const EditTransactionPage = () => {
     SubscriptionBy,
     FirstName,
     MiddleName,
+    Email,
+    ContactNumber,
     SubscriptionID,
     SubscriptionAmount,
     SubscriptionType,
@@ -59,7 +61,7 @@ const EditTransactionPage = () => {
     useFulfillUserTransactionMutation();
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate("/dashboard/transactions", { replace: true });
+    navigate("/transactions", { replace: true });
   };
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const EditTransactionPage = () => {
       };
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        navigate("/dashboard/transactions", { replace: true });
+        handleBack();
       };
       deplayShowToast();
       delayRedirect();
@@ -126,12 +128,16 @@ const EditTransactionPage = () => {
         <h1>EDIT TRANSACTION PAGE</h1>
 
         <h3>Billing Details</h3>
+        <p>Paid By - {SubscriptionBy}</p>
+        <p>Email - {Email}</p>
+        <p>Contact Number - {ContactNumber}</p>
 
-        <h4>Amount - {SubscriptionAmount} PHP </h4>
-        <h4>Paid By - {SubscriptionBy}</h4>
-        <h4>Type - {SubscriptionType}</h4>
-        <h4>Method - {SubscriptionMethod}</h4>
-        <h3>Status - {SubscriptionStatus}</h3>
+        <h3>Payment Details</h3>
+        <p>Amount - {SubscriptionAmount} PHP </p>
+        <p>Date Paid - {new Date(SubscriptionEntryDate).toDateString()}</p>
+        <p>Type - {SubscriptionType}</p>
+        <p>Method - {SubscriptionMethod}</p>
+        <p>Status - {SubscriptionStatus}</p>
         {SubscriptionStatus !== "Fulfill" &&
           SubscriptionStatus !== "Reject" && (
             <Stack width={"100%"}>

@@ -94,8 +94,10 @@ const CreateUserPage = () => {
         "toast_user"
       );
     }
-    if (error?.status === HTTP_ERROR.UNAUTHORIZED ||
-      error?.status === HTTP_ERROR.BAD_REQUEST ) {
+    if (
+      error?.status === HTTP_ERROR.UNAUTHORIZED ||
+      error?.status === HTTP_ERROR.BAD_REQUEST
+    ) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -108,7 +110,7 @@ const CreateUserPage = () => {
     if (emailStat === "fulfilled") {
       dispatch(setOTPToken(emailCode?.code));
 
-      navigate("/dashboard/users/create_user/confirmation_email", {
+      navigate("/users/create_user/confirmation_email", {
         replace: true,
       });
     }
@@ -124,7 +126,7 @@ const CreateUserPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/dashboard/users", { replace: true });
+    navigate("/users", { replace: true });
   };
 
   if (isLoading) {

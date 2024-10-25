@@ -39,17 +39,16 @@ const CreateProgramPage = () => {
   const { isOnline } = useUserOnline();
 
   const handleBack = () => {
-    navigate("/dashboard/suggested_programs", { replace: true });
+    navigate("/suggested_programs", { replace: true });
   };
 
   useEffect(() => {
     if (status === "fulfilled" && isSubmitted) {
       showSuccessToast(data?.message, "toast_program");
-
+      reset();
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/suggested_programs", { replace: true });
-        reset();
+        handleBack();
       };
       delayRedirect();
     }

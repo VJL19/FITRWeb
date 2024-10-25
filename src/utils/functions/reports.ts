@@ -9,6 +9,11 @@ import {
   IWeeklySalesData,
   IWeeklySessionSalesData,
 } from "../types/sales_analytics.types";
+import {
+  IDailyAttendeesData,
+  IMonthlyAttendeesData,
+  IWeeklyAttendeesData,
+} from "../types/attendees_analytics.types";
 
 //sales overview (today (24 hrs))
 const getTotalTodaySessionSales = (
@@ -376,6 +381,195 @@ const getAverageMonthlySalesByDate = (
 
   return !Number.isNaN(averageSalesByDate) ? averageSalesByDate : 0;
 };
+
+//attendance overview (daily)
+const getTotalDailySessionAttendees = (
+  data: IDailyAttendeesData[] | undefined
+): number => {
+  let totalDailyAttendees = 0;
+  const getTotalDailyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalDailyAttendees?.length!; i++) {
+    totalDailyAttendees += getTotalDailyAttendees?.[i]!;
+  }
+  return totalDailyAttendees;
+};
+const getAverageDailySessionAttendees = (
+  data: IDailyAttendeesData[] | undefined
+): number => {
+  let totalDailyAttendees = 0;
+  const getAverageDailyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getAverageDailyAttendees?.length!; i++) {
+    totalDailyAttendees += getAverageDailyAttendees?.[i]!;
+  }
+
+  const averageDailySessionAttendees =
+    totalDailyAttendees / getAverageDailyAttendees?.length!;
+
+  return !Number.isNaN(averageDailySessionAttendees)
+    ? averageDailySessionAttendees
+    : 0;
+};
+const getTotalDailyMonthlyAttendees = (
+  data: IDailyAttendeesData[] | undefined
+): number => {
+  let totalDailyAttendees = 0;
+  const getTotalAmountDailyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalAmountDailyAttendees?.length!; i++) {
+    totalDailyAttendees += getTotalAmountDailyAttendees?.[i]!;
+  }
+  return totalDailyAttendees;
+};
+const getAverageDailyMonthlyAttendees = (
+  data: IDailyAttendeesData[] | undefined
+): number => {
+  let totalDailyAttendees = 0;
+  const getTotalAmountDailyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalAmountDailyAttendees?.length!; i++) {
+    totalDailyAttendees += getTotalAmountDailyAttendees?.[i]!;
+  }
+  const averageDailyMonthlyAttendees =
+    totalDailyAttendees / getTotalAmountDailyAttendees?.length!;
+
+  return !Number.isNaN(averageDailyMonthlyAttendees)
+    ? averageDailyMonthlyAttendees
+    : 0;
+};
+//attendance overview (weekly)
+const getTotalWeeklySessionAttendees = (
+  data: IWeeklyAttendeesData[] | undefined
+): number => {
+  let totalWeeklyAttendees = 0;
+  const getTotalWeeklyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalWeeklyAttendees?.length!; i++) {
+    totalWeeklyAttendees += getTotalWeeklyAttendees?.[i]!;
+  }
+  return totalWeeklyAttendees;
+};
+const getAverageWeeklySessionAttendees = (
+  data: IWeeklyAttendeesData[] | undefined
+): number => {
+  let totalWeeklyAttendees = 0;
+  const getTotalWeeklyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalWeeklyAttendees?.length!; i++) {
+    totalWeeklyAttendees += getTotalWeeklyAttendees?.[i]!;
+  }
+
+  const averageWeeklySessionAttendees = totalWeeklyAttendees / 5;
+
+  return !Number.isNaN(averageWeeklySessionAttendees)
+    ? averageWeeklySessionAttendees
+    : 0;
+};
+const getTotalWeeklyMonthlyAttendees = (
+  data: IWeeklyAttendeesData[] | undefined
+): number => {
+  let totalWeeklyAttendees = 0;
+  const getTotalWeeklyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalWeeklyAttendees?.length!; i++) {
+    totalWeeklyAttendees += getTotalWeeklyAttendees?.[i]!;
+  }
+  return totalWeeklyAttendees;
+};
+const getAverageWeeklyMonthlyAttendees = (
+  data: IWeeklyAttendeesData[] | undefined
+): number => {
+  let totalWeeklyAttendees = 0;
+  const getTotalWeeklyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalWeeklyAttendees?.length!; i++) {
+    totalWeeklyAttendees += getTotalWeeklyAttendees?.[i]!;
+  }
+  const averageWeeklyMonthlyAttendees = totalWeeklyAttendees / 5;
+
+  return !Number.isNaN(averageWeeklyMonthlyAttendees)
+    ? averageWeeklyMonthlyAttendees
+    : 0;
+};
+
+//attendance overview (monthly)
+const getTotalMonthlySessionAttendees = (
+  data: IMonthlyAttendeesData[] | undefined
+): number => {
+  let totalMonthlyAttendees = 0;
+  const getTotalMonthlyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalMonthlyAttendees?.length!; i++) {
+    totalMonthlyAttendees += getTotalMonthlyAttendees?.[i]!;
+  }
+  return totalMonthlyAttendees;
+};
+const getAverageMonthlySessionAttendees = (
+  data: IMonthlyAttendeesData[] | undefined
+): number => {
+  let totalMonthlyAttendees = 0;
+  const getTotalMonthlyAttendees = data?.map((res) =>
+    Number(res.sessionUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalMonthlyAttendees?.length!; i++) {
+    totalMonthlyAttendees += getTotalMonthlyAttendees?.[i]!;
+  }
+
+  const averageMonthlySessionAttendees = totalMonthlyAttendees / 12;
+
+  return !Number.isNaN(averageMonthlySessionAttendees)
+    ? averageMonthlySessionAttendees
+    : 0;
+};
+const getTotalMonthlyMAttendees = (
+  data: IMonthlyAttendeesData[] | undefined
+): number => {
+  let totalMonthlyAttendees = 0;
+  const getTotalMonthlyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalMonthlyAttendees?.length!; i++) {
+    totalMonthlyAttendees += getTotalMonthlyAttendees?.[i]!;
+  }
+  return totalMonthlyAttendees;
+};
+const getAverageMonthlyMAttendees = (
+  data: IMonthlyAttendeesData[] | undefined
+): number => {
+  let totalMonthlyAttendees = 0;
+  const getTotalMonthlyAttendees = data?.map((res) =>
+    Number(res.monthlyUserAttendees)
+  );
+
+  for (let i = 0; i < getTotalMonthlyAttendees?.length!; i++) {
+    totalMonthlyAttendees += getTotalMonthlyAttendees?.[i]!;
+  }
+  const averageMonthlyMAttendees = totalMonthlyAttendees / 12;
+
+  return !Number.isNaN(averageMonthlyMAttendees) ? averageMonthlyMAttendees : 0;
+};
+
 export {
   getTotalTodaySessionSales,
   getAverageTodaySessionSales,
@@ -402,4 +596,16 @@ export {
   getTotalUserSessionSalesByDate,
   getTotalDailySessionSales,
   getAverageDailySessionSales,
+  getTotalDailySessionAttendees,
+  getTotalDailyMonthlyAttendees,
+  getAverageDailySessionAttendees,
+  getAverageDailyMonthlyAttendees,
+  getTotalWeeklyMonthlyAttendees,
+  getTotalWeeklySessionAttendees,
+  getAverageWeeklySessionAttendees,
+  getAverageWeeklyMonthlyAttendees,
+  getTotalMonthlySessionAttendees,
+  getTotalMonthlyMAttendees,
+  getAverageMonthlySessionAttendees,
+  getAverageMonthlyMAttendees,
 };

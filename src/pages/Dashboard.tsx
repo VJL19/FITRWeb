@@ -35,13 +35,16 @@ import ViewRecordPage from "./records/ViewRecordPage";
 import useListen from "src/hooks/useListen";
 import InputReader from "src/components/InputReader";
 import AttendancePage from "./attendance/AttendancePage";
-import { useGetAccessWebTokenQuery } from "src/reducers/login";
+import {
+  useGetAccessWebTokenQuery,
+  useGetAuthTokenQuery,
+} from "src/reducers/login";
 import { UserRole } from "src/utils/enums/ROLE";
 import LandingPage from "./promotional/LandingPage";
 import BreadCrumbs from "src/components/BreadCrumbs";
 import SideBar from "src/components/SideBar";
 const Dashboard = () => {
-  const { data, status, error } = useGetAccessWebTokenQuery(undefined, {
+  const { data, status, error } = useGetAuthTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
   const navigate = useNavigate();
@@ -81,88 +84,61 @@ const Dashboard = () => {
           <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route element={<Home />} path="/dashboard" index />
-              <Route
-                element={<AnnouncementPage />}
-                path="/dashboard/announcements"
-              />
+              <Route element={<AnnouncementPage />} path="/announcements" />
               <Route
                 element={<CreateAnnouncementPage />}
-                path={"/dashboard/announcements/create_announcement"}
+                path={"/announcements/create_announcement"}
               />
               <Route
                 element={<ViewAnnouncementPage />}
-                path={"/dashboard/announcements/view_announcement"}
+                path={"/announcements/view_announcement"}
               />
               <Route
                 element={<EditAnnouncementPage />}
-                path={"/dashboard/announcements/edit_announcement"}
+                path={"/announcements/edit_announcement"}
               />
-              <Route
-                element={<ProgramPage />}
-                path="/dashboard/suggested_programs"
-              />
+              <Route element={<ProgramPage />} path="/suggested_programs" />
 
               <Route
                 element={<CreateProgramPage />}
-                path={"/dashboard/suggested_programs/create_program"}
+                path={"/suggested_programs/create_program"}
               />
               <Route
                 element={<ViewProgramPage />}
-                path={"/dashboard/suggested_programs/view_program"}
+                path={"/suggested_programs/view_program"}
               />
               <Route
                 element={<EditProgramPage />}
-                path={"/dashboard/suggested_programs/edit_program"}
+                path={"/suggested_programs/edit_program"}
               />
-              <Route element={<RecordPage />} path="/dashboard/records" />
-              <Route
-                element={<AttendancePage />}
-                path="/dashboard/attendance"
-              />
-              <Route
-                element={<EditRecordPage />}
-                path="/dashboard/records/edit_record"
-              />
+              <Route element={<RecordPage />} path="/records" />
+              <Route element={<AttendancePage />} path="/attendance" />
+              <Route element={<EditRecordPage />} path="/records/edit_record" />
 
-              <Route
-                element={<ViewRecordPage />}
-                path="/dashboard/records/view_record"
-              />
-              <Route element={<ReportPage />} path="/dashboard/reports" />
-              <Route element={<SalePage />} path="/dashboard/sales" />
-              <Route
-                element={<TransactionPage />}
-                path="/dashboard/transactions"
-              />
+              <Route element={<ViewRecordPage />} path="/records/view_record" />
+              <Route element={<ReportPage />} path="/reports" />
+              <Route element={<SalePage />} path="/sales" />
+              <Route element={<TransactionPage />} path="/transactions" />
               <Route
                 element={<CreateTransactionPage />}
-                path={"/dashboard/transactions/create_subscription"}
+                path={"/transactions/create_subscription"}
               />
               <Route
                 element={<ViewTransactionPage />}
-                path={"/dashboard/transactions/view_subscription"}
+                path={"/transactions/view_subscription"}
               />
               <Route
                 element={<EditTransactionPage />}
-                path={"/dashboard/transactions/edit_subscription"}
+                path={"/transactions/edit_subscription"}
               />
-              <Route element={<UserPage />} path="/dashboard/users" />
-              <Route
-                element={<CreateUserPage />}
-                path={"/dashboard/users/create_user"}
-              />
+              <Route element={<UserPage />} path="/users" />
+              <Route element={<CreateUserPage />} path={"/users/create_user"} />
               <Route
                 element={<CreateUserConfirmationPage />}
-                path={"/dashboard/users/create_user/confirmation_email"}
+                path={"/users/create_user/confirmation_email"}
               />
-              <Route
-                element={<ViewUserPage />}
-                path={"/dashboard/users/view_user"}
-              />
-              <Route
-                element={<EditUserPage />}
-                path={"/dashboard/users/edit_user"}
-              />
+              <Route element={<ViewUserPage />} path={"/users/view_user"} />
+              <Route element={<EditUserPage />} path={"/users/edit_user"} />
             </Route>
           </Routes>
         </React.Fragment>

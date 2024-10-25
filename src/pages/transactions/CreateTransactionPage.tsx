@@ -67,7 +67,7 @@ const CreateTransactionPage = () => {
       };
       const deplayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        navigate("/dashboard/transactions", { replace: true });
+        handleBack();
       };
       deplayShowToast();
       deplayRedirect();
@@ -129,7 +129,7 @@ const CreateTransactionPage = () => {
   console.log("admin reg error", error);
 
   const handleBack = () => {
-    navigate("/dashboard/transactions", { replace: true });
+    navigate("/transactions", { replace: true });
   };
 
   if (isLoading) {

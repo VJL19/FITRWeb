@@ -71,7 +71,7 @@ const EditAnnouncementPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/announcements", { replace: true });
+    navigate("/announcements", { replace: true });
   };
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const EditAnnouncementPage = () => {
 
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/announcements", { replace: true });
+        handleBack();
         setImagePreview(undefined);
         reset();
       };

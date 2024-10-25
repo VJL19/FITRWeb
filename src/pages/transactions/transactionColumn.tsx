@@ -12,6 +12,7 @@ import ISubscriptions from "src/utils/types/subscription.types";
 import { setTransactionData } from "src/reducers/transaction";
 import dayjs from "dayjs";
 import { renderDate } from "src/utils/functions/date_fns";
+import { replaceCharWithAsterisk } from "src/utils/functions/text_fns";
 
 const _columns: GridColDef<ISubscriptions>[] = [
   {
@@ -122,7 +123,8 @@ const _columns: GridColDef<ISubscriptions>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) => `${row.SubscriptionBy}`,
+    valueGetter: (params, row) =>
+      replaceCharWithAsterisk(`${row.SubscriptionBy}`),
   },
 
   {
@@ -237,6 +239,8 @@ const _columns: GridColDef<ISubscriptions>[] = [
         LastName: currentRowData.LastName,
         FirstName: currentRowData.FirstName,
         MiddleName: currentRowData.MiddleName,
+        Email: currentRowData.Email,
+        ContactNumber: currentRowData.ContactNumber,
         SubscriptionID: currentRowData.SubscriptionID,
         SubscriptionAmount: currentRowData.SubscriptionAmount,
         SubscriptionType: currentRowData.SubscriptionType,
@@ -248,8 +252,6 @@ const _columns: GridColDef<ISubscriptions>[] = [
         No_M_SubscriptionID: 0,
         Birthday: "",
         Age: "",
-        ContactNumber: "",
-        Email: "",
         Address: "",
         Height: "",
         Weight: "",
@@ -271,7 +273,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
       return (
         <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
           <NavLink
-            to={`/dashboard/transactions/view_subscription`}
+            to={`/transactions/view_subscription`}
             style={navLinkTextStyle}
           >
             <Button
@@ -288,7 +290,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
             </Button>
           </NavLink>
           <NavLink
-            to={`/dashboard/transactions/edit_subscription`}
+            to={`/transactions/edit_subscription`}
             style={navLinkTextStyle}
           >
             <Button

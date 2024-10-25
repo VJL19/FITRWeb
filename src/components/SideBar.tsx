@@ -52,19 +52,19 @@ const SideBar = () => {
             <h5 style={{ textTransform: "uppercase" }}>Home</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/announcements" style={navLinkTextStyle}>
+        <NavLink to="/announcements" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Announcements")}>
             <CampaignIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Announcements</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/suggested_programs" style={navLinkTextStyle}>
+        <NavLink to="/suggested_programs" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Programs")}>
             <FitnessCenterIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Programs</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/attendance" style={navLinkTextStyle}>
+        <NavLink to="/attendance" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Attendance")}>
             <AccessTimeFilledOutlinedIcon
               fontSize="large"
@@ -73,31 +73,31 @@ const SideBar = () => {
             <h5 style={{ textTransform: "uppercase" }}>Attendance</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/records" style={navLinkTextStyle}>
+        <NavLink to="/records" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Records")}>
             <ArticleIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Records</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/reports" style={navLinkTextStyle}>
+        <NavLink to="/reports" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Reports")}>
             <DescriptionIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Reports</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/sales" style={navLinkTextStyle}>
+        <NavLink to="/sales" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Sales")}>
             <PaymentsIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Sales</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/transactions" style={navLinkTextStyle}>
+        <NavLink to="/transactions" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Transactions")}>
             <CurrencyExchangeIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Transactions</h5>
           </div>
         </NavLink>
-        <NavLink to="/dashboard/users" style={navLinkTextStyle}>
+        <NavLink to="/users" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Users")}>
             <GroupIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Users</h5>

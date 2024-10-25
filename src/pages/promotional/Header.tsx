@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import "../promotional/styles/Header.css";
-import { useGetAccessWebTokenQuery } from "src/reducers/login";
+import {
+  useGetAccessWebTokenQuery,
+  useGetAuthTokenQuery,
+} from "src/reducers/login";
 import { UserRole } from "src/utils/enums/ROLE";
 import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "src/components/LoadingIndicator";
 import { useLogoutUserWebMutation } from "src/reducers/login";
 
 const Header = () => {
-  const { data, status, error } = useGetAccessWebTokenQuery(undefined, {
+  const { data, status, error } = useGetAuthTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
   const [logoutUser, { status: logoutStatus, data: logoutData }] =

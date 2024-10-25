@@ -30,7 +30,7 @@ const ViewUserPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/users", { replace: true });
+    navigate("/users", { replace: true });
   };
   console.log(Birthday);
   return (

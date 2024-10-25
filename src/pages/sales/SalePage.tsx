@@ -15,6 +15,9 @@ import DailySales from "./Daily/DailySales";
 import WeeklySales from "./Weekly/WeeklySales";
 import MonthlySales from "./Monthly/MonthlySales";
 import RenderRfidInput from "src/components/RenderRfidInput";
+import DailyAttendees from "../reports/attendees/DailyAttendees";
+import WeeklyAttendees from "../reports/attendees/WeeklyAttendees";
+import MonthlyAttendees from "../reports/attendees/MonthlyAttendees";
 
 const SalePage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,13 +26,13 @@ const SalePage = () => {
 
   const activeFilter = useMemo(() => {
     if (selectedValue === "Daily") {
-      return <DailySales />;
+      return <DailyAttendees />;
     }
     if (selectedValue === "Weekly") {
-      return <WeeklySales />;
+      return <WeeklyAttendees />;
     }
     if (selectedValue === "Monthly") {
-      return <MonthlySales />;
+      return <MonthlyAttendees />;
     }
   }, [selectedValue]);
 

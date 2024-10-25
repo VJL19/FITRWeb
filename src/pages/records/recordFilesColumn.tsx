@@ -132,10 +132,7 @@ const _record_files_columns: GridColDef[] = [
 
       return (
         <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
-          <NavLink
-            to={`/dashboard/records/view_record`}
-            style={navLinkTextStyle}
-          >
+          <NavLink to={`/records/view_record`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="info"
@@ -149,10 +146,7 @@ const _record_files_columns: GridColDef[] = [
               View
             </Button>
           </NavLink>
-          <NavLink
-            to={`/dashboard/records/edit_record`}
-            style={navLinkTextStyle}
-          >
+          <NavLink to={`/records/edit_record`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="warning"

@@ -61,7 +61,7 @@ const ViewAnnouncementPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/announcements", { replace: true });
+    navigate("/announcements", { replace: true });
   };
 
   console.log(data);

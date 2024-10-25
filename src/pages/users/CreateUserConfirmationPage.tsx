@@ -106,7 +106,7 @@ const CreateUserConfirmationPage = () => {
 
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/users", { replace: true });
+        navigate("/users", { replace: true });
       };
       delayRedirect();
     }

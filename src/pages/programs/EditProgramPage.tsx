@@ -50,7 +50,7 @@ const EditProgramPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/dashboard/suggested_programs", { replace: true });
+    navigate("/suggested_programs", { replace: true });
   };
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const EditProgramPage = () => {
 
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/suggested_programs", { replace: true });
+        handleBack();
         reset();
       };
       delayRedirect();

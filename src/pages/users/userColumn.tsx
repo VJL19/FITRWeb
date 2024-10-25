@@ -13,6 +13,7 @@ import IAttendance from "src/utils/types/attendance.types";
 import IUser from "src/utils/types/users.types";
 import { setUserData } from "src/reducers/users";
 import Avatar from "@mui/material/Avatar";
+import { replaceCharWithAsterisk } from "src/utils/functions/text_fns";
 
 const _columns: GridColDef<IAttendance>[] = [
   {
@@ -31,16 +32,17 @@ const _columns: GridColDef<IAttendance>[] = [
   {
     field: "RowID",
     headerName: "Row ID",
-
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
+    type: "number",
     align: "center",
     width: 100,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    sortable: true,
-    renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+    renderCell: (params) =>
+      Number(params.api.getAllRowIds().indexOf(params.id) + 1),
+    valueFormatter: (value) => Number(value),
     filterable: false,
   },
   {
@@ -128,8 +130,11 @@ const _columns: GridColDef<IAttendance>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      `${row.FirstName} ${row.MiddleName} ${row.LastName}`,
+    valueGetter: (params, row) => {
+      return replaceCharWithAsterisk(
+        `${row.FirstName} ${row.MiddleName} ${row.LastName}`
+      );
+    },
   },
   {
     field: "Age",
@@ -165,6 +170,7 @@ const _columns: GridColDef<IAttendance>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    valueGetter: (value, row) => replaceCharWithAsterisk(row.ContactNumber),
   },
   {
     field: "Address",
@@ -316,7 +322,7 @@ const _columns: GridColDef<IAttendance>[] = [
 
       return (
         <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
-          <NavLink to={`/dashboard/users/view_user`} style={navLinkTextStyle}>
+          <NavLink to={`/users/view_user`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="info"
@@ -330,7 +336,7 @@ const _columns: GridColDef<IAttendance>[] = [
               View
             </Button>
           </NavLink>
-          <NavLink to={`/dashboard/users/edit_user`} style={navLinkTextStyle}>
+          <NavLink to={`/users/edit_user`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="warning"

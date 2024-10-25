@@ -13,23 +13,19 @@ import {
   Bar,
   Rectangle,
 } from "recharts";
-import {
-  useGetDailySessionUserSalesQuery,
-  useGetDailyMonthlyUserSalesQuery,
-} from "src/reducers/sales_analytics";
 import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
 import { formatCurrency } from "src/utils/functions/formatCurrency";
 import {
+  getAverageDailyMonthlyAttendees,
   getAverageDailyMonthlySales,
+  getAverageDailySessionAttendees,
   getAverageDailySessionSales,
+  getTotalDailyMonthlyAttendees,
   getTotalDailyMonthlySales,
+  getTotalDailySessionAttendees,
   getTotalDailySessionSales,
 } from "src/utils/functions/reports";
-import {
-  IDailySalesAnalytics,
-  IDailySalesData,
-} from "src/utils/types/sales_analytics.types";
-import DailyGrowthRate from "./DailyGrowthRate";
+
 import { formatDate } from "src/utils/functions/date_fns";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import NetworkError from "src/components/NetworkError";
@@ -37,54 +33,66 @@ import { useUserOnline } from "src/hooks/useUserOnline";
 import ServerError from "src/components/ServerError";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 import NotAuthorized from "src/components/NotAuthorized";
+import {
+  IDailyAttendeesAnalytics,
+  IDailyAttendeesData,
+} from "src/utils/types/attendees_analytics.types";
+import {
+  useGetDailySessionUserAttendeesQuery,
+  useGetDailyMonthlyUserAttendeesQuery,
+} from "src/reducers/attendees_analytics";
 
-const DailySales = () => {
-  const { data: sessionUserSales, error: sessionErr } =
-    useGetDailySessionUserSalesQuery(undefined, {
+const DailyAttendees = () => {
+  const {
+    data: sessionUserAttendees,
+    error: sessionErr,
+    status,
+  } = useGetDailySessionUserAttendeesQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: monthlyUserAttendees, error: monthlyErr } =
+    useGetDailyMonthlyUserAttendeesQuery(undefined, {
       refetchOnMountOrArgChange: true,
     });
-  const { data: monthlyUserSales, error: monthlyErr } =
-    useGetDailyMonthlyUserSalesQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    });
 
-  const monthlyUsers = monthlyUserSales?.result?.map(
-    (item: IDailySalesAnalytics) => item
+  const monthlyUsers = monthlyUserAttendees?.result?.map(
+    (item: IDailyAttendeesAnalytics) => item
   );
-  const sessionUsers = sessionUserSales?.result?.map(
-    (item: IDailySalesAnalytics) => item
+  const sessionUsers = sessionUserAttendees?.result?.map(
+    (item: IDailyAttendeesAnalytics) => item
   );
+
   const { isOnline } = useUserOnline();
 
-  const daily_sales_data: Array<{
+  const daily_attendees_data: Array<{
     date?: string;
-    sessionUserSales?: number;
-    monthlyUserSales?: number;
+    sessionUserAttendees?: number;
+    monthlyUserAttendees?: number;
   }> = [];
 
   for (let i = 0; i < 7; i++) {
     let d = new Date();
     d.setDate(d.getDate() - i);
     let formatD = d.toISOString().split("T")[0];
-    daily_sales_data.push({
+    daily_attendees_data.push({
       date: new Date(formatDate(d)).toDateString(),
-      sessionUserSales: Number(
+      sessionUserAttendees: Number(
         sessionUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
-              formatD === mUsers.SubscriptionEntryDate.split(" ")[0]
+              formatD === mUsers.DateTapped.split(" ")[0]
           )
-          .map((e) => e.TotalSales)
+          .map((e) => e.TotalAttendees)
       ),
-      monthlyUserSales: Number(
+      monthlyUserAttendees: Number(
         monthlyUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
-              formatD === mUsers.SubscriptionEntryDate.split(" ")[0]
+              formatD === mUsers.DateTapped.split(" ")[0]
           )
-          .map((e) => e.TotalSales)
+          .map((e) => e.TotalAttendees)
       ),
     });
   }
@@ -95,40 +103,43 @@ const DailySales = () => {
   //     : sessionUserSales?.result;
   const newArr = sessionUsers?.length === 0 ? monthlyUsers : sessionUsers;
 
-  console.log(daily_sales_data.length);
-  const data: IDailySalesData[] | undefined = newArr?.map(
-    (item: IDailySalesAnalytics) => ({
+  const data: IDailyAttendeesData[] | undefined = newArr?.map(
+    (item: IDailyAttendeesAnalytics) => ({
       Day: item.Day,
-      SubscriptionEntryDate: item.SubscriptionEntryDate,
-      sessionUserSales: Number(
+      DateTapped: item.DateTapped,
+      sessionUserAttendees: Number(
         sessionUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
               item.Day === mUsers.Day
           )
-          .map((e) => e.TotalSales)
+          .map((e) => e.TotalAttendees)
       ),
-      monthlyUserSales: Number(
+      monthlyUserAttendees: Number(
         monthlyUsers
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
               item.Day === mUsers.Day
           )
-          .map((e) => e.TotalSales)
+          .map((e) => e.TotalAttendees)
       ),
     })
   );
 
-  const totalDailySalesBySession = getTotalDailySessionSales(data);
-  const averageDailySalesBySession = getAverageDailySessionSales(data);
-  const totalDailySalesByMonthly = getTotalDailyMonthlySales(data);
-  const averageDailySalesByMonthly = getAverageDailyMonthlySales(data);
-  const totalDailySales =
-    getTotalDailySessionSales(data) + getTotalDailyMonthlySales(data);
-  const averageDailySales =
-    (getTotalDailySessionSales(data) + getTotalDailyMonthlySales(data)) / 2;
+  console.log(data);
+
+  const totalDailyAttendeesBySession = getTotalDailySessionAttendees(data);
+  const averageDailyAttendeesBySession = getAverageDailySessionAttendees(data);
+  const totalDailyAttendeesByMonthly = getTotalDailyMonthlyAttendees(data);
+  const averageDailyAttendeesByMonthly = getAverageDailyMonthlyAttendees(data);
+  const totalDailyAttendees =
+    getTotalDailySessionAttendees(data) + getTotalDailyMonthlyAttendees(data);
+  const averageDailyAttendees =
+    (getTotalDailySessionAttendees(data) +
+      getTotalDailyMonthlyAttendees(data)) /
+    2;
 
   if (
     (sessionErr?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) ||
@@ -168,33 +179,29 @@ const DailySales = () => {
       >
         <Box component="div">
           <h2>SESSION</h2>
-          Total Sales : {formatCurrency(totalDailySalesBySession)} PHP
+          Total Attendees : {totalDailyAttendeesBySession}
           <Box component="div">
-            Average Sales : {formatCurrency(averageDailySalesBySession)} PHP
+            Average Attendees : {averageDailyAttendeesBySession} %
           </Box>
         </Box>
         <Box component="div">
           <h2>MONTHLY</h2>
-          Total Sales : {formatCurrency(totalDailySalesByMonthly)} PHP
+          Total Attendees : {totalDailyAttendeesByMonthly}
           <Box component="div">
-            Average Sales : {formatCurrency(averageDailySalesByMonthly)} PHP
+            Average Attendees : {averageDailyAttendeesByMonthly} %
           </Box>
         </Box>
         <Box>
           <h2>TOTAL</h2>
-          <Box component="div">
-            Total : {formatCurrency(totalDailySales)} PHP
-          </Box>
-          <Box component="div">
-            Average : {formatCurrency(averageDailySales)} PHP
-          </Box>
+          <Box component="div">Total : {totalDailyAttendees}</Box>
+          <Box component="div">Average : {averageDailyAttendees} %</Box>
         </Box>
       </Box>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           width={500}
           height={300}
-          data={daily_sales_data.reverse()}
+          data={daily_attendees_data.reverse()}
           margin={{
             top: 5,
             right: 30,
@@ -209,13 +216,13 @@ const DailySales = () => {
           <Legend />
           <Line
             type="monotone"
-            dataKey="sessionUserSales"
+            dataKey="sessionUserAttendees"
             stroke="#202020"
             activeDot={{ r: 8 }}
           />
           <Line
             type="monotone"
-            dataKey="monthlyUserSales"
+            dataKey="monthlyUserAttendees"
             stroke="#ff2e00"
             activeDot={{ r: 8 }}
           />
@@ -225,7 +232,7 @@ const DailySales = () => {
         <BarChart
           width={500}
           height={300}
-          data={daily_sales_data}
+          data={daily_attendees_data}
           margin={{
             top: 20,
             right: 30,
@@ -239,20 +246,19 @@ const DailySales = () => {
           <Tooltip formatter={(value) => formatCurrency(Number(value))} />
           <Legend />
           <Bar
-            dataKey="sessionUserSales"
+            dataKey="sessionUserAttendees"
             fill="#202020"
             activeBar={<Rectangle fill="pink" stroke="blue" />}
           />
           <Bar
-            dataKey="monthlyUserSales"
+            dataKey="monthlyUserAttendees"
             fill="#ff2e00"
             activeBar={<Rectangle fill="gold" stroke="purple" />}
           />
         </BarChart>
       </ResponsiveContainer>
-      <DailyGrowthRate />
     </Container>
   );
 };
 
-export default DailySales;
+export default DailyAttendees;

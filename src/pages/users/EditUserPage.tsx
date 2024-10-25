@@ -97,7 +97,7 @@ const EditUserPage = () => {
       const deplayShowToast = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         showSuccessToast(data?.message, "toast_user");
-        navigate("/dashboard/users", { replace: true });
+        handleBack();
       };
       deplayShowToast();
     }
@@ -149,7 +149,7 @@ const EditUserPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/dashboard/users", { replace: true });
+    navigate("/users", { replace: true });
   };
 
   console.log("edit user", data);

@@ -37,7 +37,7 @@ const EditRecordPage = () => {
   useEffect(() => {
     if (status === "fulfilled") {
       showSuccessToast(data?.message, "toast_record");
-      navigate("/dashboard/records", { replace: true });
+      handleBack();
     }
     if (status === "rejected") {
       showFailedToast(data?.message, "toast_record");
@@ -101,7 +101,7 @@ const EditRecordPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/dashboard/records", { replace: true });
+    navigate("/records", { replace: true });
   };
 
   // console.log("edit upload file data", data);

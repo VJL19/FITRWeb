@@ -169,7 +169,7 @@ const UserPage = () => {
         size="medium"
         startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
       >
-        <NavLink to={`/dashboard/users/create_user`} style={navLinkTextStyle}>
+        <NavLink to={`/users/create_user`} style={navLinkTextStyle}>
           create
         </NavLink>
       </Button>

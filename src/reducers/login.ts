@@ -44,6 +44,10 @@ export const loginApi = createApi({
       query: () => "/admin/user/guest_dashboard",
       providesTags: ["authenticate"],
     }),
+    getAuthToken: builder.query<IAccessWebToken, void>({
+      query: () => "/admin/user/auth_dashboard",
+      providesTags: ["authenticate"],
+    }),
     logoutUserWeb: builder.mutation<IAccessWebToken, void>({
       query: () => ({
         url: "/admin/user/logout_account",
@@ -65,6 +69,7 @@ export const {
   useLoginUserMutation,
   useGetAccessWebTokenQuery,
   useGetAccessTokenGuestQuery,
+  useGetAuthTokenQuery,
   useLogoutUserWebMutation,
   useLoginAsGuestMutation,
 } = loginApi;

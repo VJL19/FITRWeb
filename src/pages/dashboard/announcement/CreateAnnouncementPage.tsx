@@ -65,7 +65,7 @@ const CreateAnnouncementPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleBack = () => {
-    navigate("/dashboard/announcements", { replace: true });
+    navigate("/announcements", { replace: true });
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ const CreateAnnouncementPage = () => {
       showSuccessToast(data?.message, "toast_announcement");
       const delayRedirect = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        navigate("/dashboard/announcements", { replace: true });
+        handleBack();
         setImagePreview(undefined);
 
         reset();

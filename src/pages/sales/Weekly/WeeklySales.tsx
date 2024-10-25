@@ -68,13 +68,13 @@ const WeeklySales = () => {
     })
   );
   const newArr =
-    sessionUserSales?.result.length === 0
-      ? monthlyUserSales?.result
-      : sessionUserSales?.result?.length! > monthlyUserSales?.result.length!
-      ? sessionUserSales?.result
-      : monthlyUserSales?.result?.length! > sessionUserSales?.result.length!
-      ? monthlyUserSales?.result
-      : sessionUserSales?.result;
+    sessionUsers?.length === 0
+      ? monthlyUsers
+      : sessionUsers?.length! > monthlyUsers?.length!
+      ? sessionUsers
+      : monthlyUsers?.length! > sessionUsers?.length!
+      ? monthlyUsers
+      : sessionUsers;
 
   const data: IWeeklySalesData[] | undefined = newArr?.map(
     (item: IWeeklySalesAnalytics, index: number) => ({
@@ -142,6 +142,12 @@ const WeeklySales = () => {
   if (
     sessionErr?.status === HTTP_ERROR.UNAUTHORIZED ||
     monthlyErr?.status === HTTP_ERROR.UNAUTHORIZED
+  ) {
+    return <NotAuthorized />;
+  }
+  if (
+    sessionErr?.status === HTTP_ERROR.BAD_REQUEST ||
+    monthlyErr?.status === HTTP_ERROR.BAD_REQUEST
   ) {
     return <NotAuthorized />;
   }

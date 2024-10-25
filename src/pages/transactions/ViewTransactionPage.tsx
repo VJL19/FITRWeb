@@ -12,6 +12,8 @@ const ViewTransactionPage = () => {
     FirstName,
     MiddleName,
     SubscriptionAmount,
+    ContactNumber,
+    Email,
     SubscriptionType,
     SubscriptionBy,
     SubscriptionUploadedImage,
@@ -22,7 +24,7 @@ const ViewTransactionPage = () => {
 
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate("/dashboard/transactions", { replace: true });
+    navigate("/transactions", { replace: true });
   };
   return (
     <div>
@@ -45,11 +47,15 @@ const ViewTransactionPage = () => {
         >
           <h3>Billing Details</h3>
         </a>
-        <h4>Amount - {SubscriptionAmount} PHP </h4>
-        <h4>Paid By - {SubscriptionBy}</h4>
-        <h4>Type - {SubscriptionType}</h4>
-        <h4>Method - {SubscriptionMethod}</h4>
-        <h3>Status - {SubscriptionStatus}</h3>
+        <p>Paid By - {SubscriptionBy}</p>
+        <p>Email - {Email}</p>
+        <p>Contact Number - {ContactNumber}</p>
+
+        <h3>Payment Details</h3>
+        <p>Amount - {SubscriptionAmount} PHP </p>
+        <p>Type - {SubscriptionType}</p>
+        <p>Method - {SubscriptionMethod}</p>
+        <p>Status - {SubscriptionStatus}</p>
       </Container>
     </div>
   );
