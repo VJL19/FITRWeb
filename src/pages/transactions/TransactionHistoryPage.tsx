@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   transactionApi,
   useDeleteTransactionMutation,
-  useGetAllUsersTransactionsQuery,
+  useGetAllUsersTransactionsHistoryQuery,
 } from "src/reducers/transaction";
 import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
@@ -32,10 +32,10 @@ import {
 import NotAuthorized from "src/components/NotAuthorized";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 
-const TransactionPage = () => {
+const TransactionHistoryPage = () => {
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    dispatch(setRoute("Transactions"));
+    dispatch(setRoute("Transaction_History"));
   }, []);
 
   const {
@@ -43,7 +43,7 @@ const TransactionPage = () => {
     isFetching,
     isUninitialized,
     error: transErr,
-  } = useGetAllUsersTransactionsQuery(undefined, {
+  } = useGetAllUsersTransactionsHistoryQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -161,7 +161,7 @@ const TransactionPage = () => {
     >
       <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        TODAY'S TRANSACTIONS
+        TRANSACTIONS HISTORY
       </h1>
       <RFIDRemover
         children={
@@ -198,4 +198,4 @@ const TransactionPage = () => {
   );
 };
 
-export default TransactionPage;
+export default TransactionHistoryPage;

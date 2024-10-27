@@ -61,7 +61,7 @@ const MonthlySales = () => {
   );
   let year_items = [];
 
-  const newArr = sessionUsers.length === 0 ? monthlyUsers : sessionUserSales;
+  const newArr = sessionUsers?.length === 0 ? monthlyUsers : sessionUsers;
   const data: IMonthlySalesData[] | undefined = newArr?.map(
     (item: IMonthlySalesAnalytics) => ({
       Months: item.Months,

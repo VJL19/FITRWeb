@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { setRoute } from "src/reducers/route";
 import { AppDispatch, RootState } from "src/store/store";
 import _columns from "./attendanceColumn";
-import { useGetUsersAttendanceQuery } from "src/reducers/attendance";
+import { useGetUsersAttendanceHistoryQuery } from "src/reducers/attendance";
 import {
   useDeleteFileRecordMutation,
   useGetAllFileRecordsQuery,
@@ -23,7 +23,7 @@ import MIUIDataGrid from "src/components/MIUIDataGrid";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import NotAuthorized from "src/components/NotAuthorized";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
-const AttendancePage = () => {
+const AttendanceHistoryPage = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const fileRef = useRef<HTMLInputElement | null | undefined>();
@@ -36,7 +36,7 @@ const AttendancePage = () => {
     isUninitialized,
     status,
     error: attendanceErr,
-  } = useGetUsersAttendanceQuery(undefined, {
+  } = useGetUsersAttendanceHistoryQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -59,7 +59,7 @@ const AttendancePage = () => {
   const [deleteFile, { status: deleteStatus, data: deleteFileData }] =
     useDeleteFileRecordMutation();
   useEffect(() => {
-    dispatch(setRoute("Attendance"));
+    dispatch(setRoute("Attendance_History"));
   }, []);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const AttendancePage = () => {
     >
       <RenderRfidInput />
       <h1 style={{ letterSpacing: 1.3, textTransform: "uppercase" }}>
-        Today's Attendance
+        Attendance History
       </h1>
       <RFIDRemover
         children={
@@ -151,4 +151,4 @@ const AttendancePage = () => {
   );
 };
 
-export default AttendancePage;
+export default AttendanceHistoryPage;

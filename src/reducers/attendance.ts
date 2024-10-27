@@ -42,6 +42,10 @@ export const attendanceApi = createApi({
       query: () => "/admin/attendance/users_attendance",
       providesTags: ["attendance"],
     }),
+    getUsersAttendanceHistory: builder.query<IAttendanceState, void>({
+      query: () => "/admin/attendance/history/users_attendance",
+      providesTags: ["attendance"],
+    }),
 
     getAllRecentAttendance: builder.query<IAttendanceState, void>({
       query: () => "/admin/attendance/all_recent_attendance",
@@ -129,6 +133,7 @@ export const { setAttendanceData, setCheckRfidMessage } =
   attendanceSlice.actions;
 export const {
   useGetUsersAttendanceQuery,
+  useGetUsersAttendanceHistoryQuery,
   useGetAttendanceByDateMutation,
   useGetAllRecentAttendanceQuery,
   useCheckUserRFIDNumberMutation,

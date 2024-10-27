@@ -14,11 +14,20 @@ interface IUserApiState {
 interface IUserSliceState {
   userData: IUser;
   OTPToken: number;
+  adminAccountData: IUser;
+  adminOTPToken: number;
 }
 
 interface IEmailState {
   code: number;
   result: { message: string; code: number };
+}
+
+interface IAdminChangeAccountState {
+  message: string;
+  status: number;
+  result: IUser[];
+  error: string;
 }
 
 interface IActivationAccountState {
@@ -48,6 +57,26 @@ const initialState: IUserSliceState = {
     Username: "",
   },
   OTPToken: 0,
+  adminAccountData: {
+    UserID: 0,
+    Birthday: "",
+    Address: "",
+    SubscriptionType: "",
+    LastName: "",
+    FirstName: "",
+    MiddleName: "",
+    Age: "",
+    ContactNumber: "",
+    Email: "",
+    Gender: "",
+    Password: "",
+    ConfirmPassword: "",
+    Height: "",
+    Weight: "",
+    ProfilePic: "",
+    Username: "",
+  },
+  adminOTPToken: 0,
 };
 
 const config = loadConfig();
@@ -107,6 +136,33 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ["users"],
     }),
+    sendEmailChangeAccount: builder.mutation<IEmailState, { Email: string }>({
+      query: (arg) => ({
+        url: "/admin/user/change_account",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["users"],
+    }),
+    adminChangeAccount: builder.mutation<
+      IAdminChangeAccountState,
+      {
+        ProfilePic: string;
+        UserID: number;
+        Username: string;
+        Email: string;
+        ContactNumber: string;
+        Password: string;
+        ConfirmPassword: string;
+      }
+    >({
+      query: (arg) => ({
+        url: "/admin/user/edit_account",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["users"],
+    }),
     activateUserAccount: builder.mutation<
       IActivationAccountState,
       { Email: string }
@@ -141,17 +197,30 @@ const userSlice = createSlice({
     setOTPToken: (state, { payload }) => {
       state.OTPToken = payload;
     },
+    setAdminAccountData: (state, action: PayloadAction<IUser>) => {
+      state.adminAccountData = action.payload;
+    },
+    setAdminOTPToken: (state, { payload }) => {
+      state.adminOTPToken = payload;
+    },
   },
 });
-export const { setUserData, setOTPToken } = userSlice.actions;
+export const {
+  setUserData,
+  setOTPToken,
+  setAdminAccountData,
+  setAdminOTPToken,
+} = userSlice.actions;
 export const {
   useGetAllUsersQuery,
   useGetAllTotalUsersQuery,
+  useAdminChangeAccountMutation,
   useGetAllTotalSessionUsersQuery,
   useGetAllTotalMonthlyUsersQuery,
   useRegisterUserMutation,
   useUpdateUserMutation,
   useSendEmailMutation,
+  useSendEmailChangeAccountMutation,
   useDeleteUserAccountMutation,
   useActivateUserAccountMutation,
 } = usersApi;

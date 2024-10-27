@@ -12,7 +12,7 @@ import TotalSessionUsersPage from "./users/TotalSessionUsersPage";
 import TotalMonthlyUsersPage from "./users/TotalMonthlyUsersPage";
 import TotalFulfilledTransactionPage from "./transactions/TotalFulfilledTransactionPage";
 import TotalPendingTransactionPage from "./transactions/TotalPendingTransactionPage";
-import TotalAnnouncementCreatedPage from "./dashboard/announcement/TotalAnnouncementCreatedPage";
+import TotalAnnouncementCreatedPage from "./announcement/TotalAnnouncementCreatedPage";
 import TodaySales from "./sales/TodaySales";
 import RenderRfidInput from "src/components/RenderRfidInput";
 import { useGetAccessWebTokenQuery } from "src/reducers/login";

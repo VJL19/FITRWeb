@@ -6,18 +6,17 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import AnnouncementPage from "./dashboard/announcement/AnnouncementPage";
+import AnnouncementPage from "./announcement/AnnouncementPage";
 import Home from "./Home";
 import ProtectedRoute from "./ProtectedRoute";
 import ProgramPage from "./programs/ProgramPage";
 import RecordPage from "./records/RecordPage";
 import ReportPage from "./reports/ReportPage";
-import SalePage from "./sales/SalePage";
 import TransactionPage from "./transactions/TransactionPage";
 import UserPage from "./users/UserPage";
-import ViewAnnouncementPage from "./dashboard/announcement/ViewAnnouncementPage";
-import EditAnnouncementPage from "./dashboard/announcement/EditAnnouncementPage";
-import CreateAnnouncementPage from "./dashboard/announcement/CreateAnnouncementPage";
+import ViewAnnouncementPage from "./announcement/ViewAnnouncementPage";
+import EditAnnouncementPage from "./announcement/EditAnnouncementPage";
+import CreateAnnouncementPage from "./announcement/CreateAnnouncementPage";
 import CreateTransactionPage from "./transactions/CreateTransactionPage";
 import ViewTransactionPage from "./transactions/ViewTransactionPage";
 import EditTransactionPage from "./transactions/EditTransactionPage";
@@ -43,6 +42,15 @@ import { UserRole } from "src/utils/enums/ROLE";
 import LandingPage from "./promotional/LandingPage";
 import BreadCrumbs from "src/components/BreadCrumbs";
 import SideBar from "src/components/SideBar";
+import MainLayout from "src/components/layout/MainLayout";
+import { routes } from "src/routes";
+import AttendanceHistoryPage from "./attendance/AttendanceHistoryPage";
+import GenerateReport from "src/components/GenerateReport";
+import TransactionHistoryPage from "./transactions/TransactionHistoryPage";
+import Analytics from "src/components/Analytics";
+import ManageAccountPage from "./auth/ManageAccountPage";
+import ChangeAccountPage from "./auth/ChangeAccountPage";
+import ChangeAccountConfirmationPage from "./auth/ChangeAccountConfirmationPage";
 const Dashboard = () => {
   const { data, status, error } = useGetAuthTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -83,7 +91,6 @@ const Dashboard = () => {
         <React.Fragment>
           <Routes>
             <Route path="/" element={<ProtectedRoute />}>
-              <Route element={<Home />} path="/dashboard" index />
               <Route element={<AnnouncementPage />} path="/announcements" />
               <Route
                 element={<CreateAnnouncementPage />}
@@ -97,6 +104,7 @@ const Dashboard = () => {
                 element={<EditAnnouncementPage />}
                 path={"/announcements/edit_announcement"}
               />
+              <Route element={<Home />} path="/dashboard" index />
               <Route element={<ProgramPage />} path="/suggested_programs" />
 
               <Route
@@ -112,13 +120,37 @@ const Dashboard = () => {
                 path={"/suggested_programs/edit_program"}
               />
               <Route element={<RecordPage />} path="/records" />
-              <Route element={<AttendancePage />} path="/attendance" />
               <Route element={<EditRecordPage />} path="/records/edit_record" />
 
               <Route element={<ViewRecordPage />} path="/records/view_record" />
               <Route element={<ReportPage />} path="/reports" />
-              <Route element={<SalePage />} path="/sales" />
+
+              <Route element={<AttendancePage />} path="/attendance" />
+              <Route
+                element={<GenerateReport selectedValue="Attendance Report" />}
+                path="/attendance/attendance_reports"
+              />
+              <Route
+                element={<AttendanceHistoryPage />}
+                path="/attendance/attendance_history"
+              />
+              <Route
+                element={<Analytics selectedItem="Attendance" />}
+                path="/attendance/attendance_analytics"
+              />
               <Route element={<TransactionPage />} path="/transactions" />
+              <Route
+                element={<TransactionHistoryPage />}
+                path="/transactions/transaction_history"
+              />
+              <Route
+                element={<Analytics selectedItem="Sales" />}
+                path="/transactions/transaction_analytics"
+              />
+              <Route
+                element={<GenerateReport selectedValue="Financial Report" />}
+                path="/transactions/transaction_reports"
+              />
               <Route
                 element={<CreateTransactionPage />}
                 path={"/transactions/create_subscription"}
@@ -137,9 +169,24 @@ const Dashboard = () => {
                 element={<CreateUserConfirmationPage />}
                 path={"/users/create_user/confirmation_email"}
               />
+              <Route
+                element={<ManageAccountPage />}
+                path={"/dashboard/manage_account"}
+              />
+              <Route
+                element={<ChangeAccountConfirmationPage />}
+                path={"/dashboard/manage_account/confirmation_email"}
+              />
+              <Route
+                element={<ChangeAccountPage />}
+                path={"/dashboard/manage_account/change_account"}
+              />
               <Route element={<ViewUserPage />} path={"/users/view_user"} />
               <Route element={<EditUserPage />} path={"/users/edit_user"} />
             </Route>
+            {/* <Route path="/" element={<MainLayout />}>
+              {routes}
+            </Route> */}
           </Routes>
         </React.Fragment>
       </div>

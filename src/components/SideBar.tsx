@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/SideBar.css";
 import logo from "src/assets/logo_1.png";
 import CampaignIcon from "@mui/icons-material/Campaign";
@@ -15,9 +15,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
 import { NavLink, useNavigate } from "react-router-dom";
 import dynamicStyles from "src/utils/functions/dynamicStyles";
-import { useLogoutUserWebMutation } from "../reducers/login";
+import {
+  useGetAccessWebTokenQuery,
+  useLogoutUserWebMutation,
+} from "../reducers/login";
 import LoadingIndicator from "./LoadingIndicator";
-
+import { Avatar, Collapse, List } from "@mui/material";
+import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import HistoryIcon from "@mui/icons-material/History";
+import BarChartIcon from "@mui/icons-material/BarChart";
 export const navLinkTextStyle = {
   textDecoration: "none",
   color: "#f5f5f5",
@@ -25,27 +32,70 @@ export const navLinkTextStyle = {
 };
 const SideBar = () => {
   const { route } = useSelector((state: RootState) => state.route);
+  const [open, setOpen] = useState(false);
 
+  const { data: tokenData } = useGetAccessWebTokenQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [logoutUser, { status, data }] = useLogoutUserWebMutation();
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
 
   console.log("logout data", data);
   console.log("logout status", status);
+
   useEffect(() => {
     if (status === "fulfilled") {
       window.location.reload();
     }
   }, [status, data?.message]);
+  const attendanceChildRoute = [
+    "Attendance_History",
+    "Attendance_Analytics",
+    "Attendance_Reports",
+    "Attendance",
+  ];
+  const transactionChildRoute = [
+    "Transaction_History",
+    "Transaction_Analytics",
+    "Transaction_Reports",
+    "Transactions",
+  ];
+
+  useEffect(() => {
+    if (attendanceChildRoute.includes(route)) {
+      setOpen(true);
+    }
+    if (transactionChildRoute.includes(route)) {
+      setOpen(true);
+    }
+  }, [route]);
+
   if (status === "pending") {
     return <LoadingIndicator />;
   }
   return (
     <main className="main--container">
       <aside className="sideNav">
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <img src={logo} height={75} width={"100%"} />
+          <Avatar
+            src={tokenData?.user?.ProfilePic}
+            sx={{
+              height: 90,
+              width: 90,
+              borderWidth: 2,
+              borderColor: "#ff2e00",
+            }}
+          />
         </div>
+        <br />
         <NavLink to="/dashboard" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Home")}>
             <HomeIcon fontSize="large" htmlColor="#f5f5f5" />
@@ -64,38 +114,132 @@ const SideBar = () => {
             <h5 style={{ textTransform: "uppercase" }}>Programs</h5>
           </div>
         </NavLink>
-        <NavLink to="/attendance" style={navLinkTextStyle}>
+        <NavLink
+          to="/attendance"
+          style={navLinkTextStyle}
+          onClick={() => setOpen((prev) => !prev)}
+        >
           <div className={dynamicStyles(route, "Attendance")}>
             <AccessTimeFilledOutlinedIcon
               fontSize="large"
               htmlColor="#f5f5f5"
             />
             <h5 style={{ textTransform: "uppercase" }}>Attendance</h5>
+            {open && attendanceChildRoute.includes(route) ? (
+              <ExpandLessOutlinedIcon />
+            ) : (
+              <ExpandMoreOutlinedIcon />
+            )}
           </div>
+          <Collapse
+            in={open && attendanceChildRoute.includes(route)}
+            timeout="auto"
+          >
+            <List>
+              <NavLink
+                to="/attendance/attendance_history"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Attendance_History")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <HistoryIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>History</h5>
+                </div>
+              </NavLink>
+              <NavLink
+                to="/attendance/attendance_analytics"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Attendance_Analytics")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <BarChartIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>Analytics</h5>
+                </div>
+              </NavLink>
+              <NavLink
+                to="/attendance/attendance_reports"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Attendance_Reports")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <DescriptionIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>Reports</h5>
+                </div>
+              </NavLink>
+            </List>
+          </Collapse>
         </NavLink>
-        <NavLink to="/records" style={navLinkTextStyle}>
-          <div className={dynamicStyles(route, "Records")}>
-            <ArticleIcon fontSize="large" htmlColor="#f5f5f5" />
-            <h5 style={{ textTransform: "uppercase" }}>Records</h5>
-          </div>
-        </NavLink>
-        <NavLink to="/reports" style={navLinkTextStyle}>
-          <div className={dynamicStyles(route, "Reports")}>
-            <DescriptionIcon fontSize="large" htmlColor="#f5f5f5" />
-            <h5 style={{ textTransform: "uppercase" }}>Reports</h5>
-          </div>
-        </NavLink>
-        <NavLink to="/sales" style={navLinkTextStyle}>
-          <div className={dynamicStyles(route, "Sales")}>
-            <PaymentsIcon fontSize="large" htmlColor="#f5f5f5" />
-            <h5 style={{ textTransform: "uppercase" }}>Sales</h5>
-          </div>
-        </NavLink>
-        <NavLink to="/transactions" style={navLinkTextStyle}>
+
+        <NavLink
+          to="/transactions"
+          style={navLinkTextStyle}
+          onClick={() => setOpen((prev) => !prev)}
+        >
           <div className={dynamicStyles(route, "Transactions")}>
             <CurrencyExchangeIcon fontSize="large" htmlColor="#f5f5f5" />
             <h5 style={{ textTransform: "uppercase" }}>Transactions</h5>
+            {open && transactionChildRoute.includes(route) ? (
+              <ExpandLessOutlinedIcon />
+            ) : (
+              <ExpandMoreOutlinedIcon />
+            )}
           </div>
+          <Collapse
+            in={open && transactionChildRoute.includes(route)}
+            timeout="auto"
+          >
+            <List>
+              <NavLink
+                to="/transactions/transaction_history"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Transaction_History")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <HistoryIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>History</h5>
+                </div>
+              </NavLink>
+              <NavLink
+                to="/transactions/transaction_analytics"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Transaction_Analytics")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <BarChartIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>Analytics</h5>
+                </div>
+              </NavLink>
+
+              <NavLink
+                to="/transactions/transaction_reports"
+                style={navLinkTextStyle}
+              >
+                <div
+                  className={dynamicStyles(route, "Transaction_Reports")}
+                  style={{ paddingLeft: 15 }}
+                >
+                  <DescriptionIcon fontSize="large" htmlColor="#f5f5f5" />
+                  <h5 style={{ textTransform: "uppercase" }}>Reports</h5>
+                </div>
+              </NavLink>
+            </List>
+          </Collapse>
+          <NavLink to="/records" style={navLinkTextStyle}>
+            <div className={dynamicStyles(route, "Records")}>
+              <ArticleIcon fontSize="large" htmlColor="#f5f5f5" />
+              <h5 style={{ textTransform: "uppercase" }}>Records</h5>
+            </div>
+          </NavLink>
         </NavLink>
         <NavLink to="/users" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Users")}>
@@ -105,18 +249,6 @@ const SideBar = () => {
         </NavLink>
 
         <hr />
-        <NavLink
-          to="/login"
-          style={navLinkTextStyle}
-          onClick={() => {
-            logoutUser();
-          }}
-        >
-          <div className="icon--block">
-            <LogoutIcon fontSize="large" htmlColor="#f5f5f5" />
-            <h5 style={{ textTransform: "uppercase" }}>Log Out</h5>
-          </div>
-        </NavLink>
       </aside>
       <article></article>
     </main>

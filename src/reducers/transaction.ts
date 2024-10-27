@@ -56,6 +56,10 @@ export const transactionApi = createApi({
       query: () => "/user/subscription/all_subscriptions",
       providesTags: ["transaction"],
     }),
+    getAllUsersTransactionsHistory: builder.query<ITransactionApiState, void>({
+      query: () => "/user/subscription/history/all_subscriptions",
+      providesTags: ["transaction"],
+    }),
     getAllUsersTransactionsByDate: builder.mutation<
       ITransactionApiState,
       { selectedDate: string }
@@ -132,6 +136,7 @@ export const { setTransactionData } = transactionSlice.actions;
 
 export const {
   useGetAllUsersTransactionsQuery,
+  useGetAllUsersTransactionsHistoryQuery,
   useFulfillUserTransactionMutation,
   useGetAllPendingTransactionsQuery,
   useGetAllFulfillTransactionsQuery,

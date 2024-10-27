@@ -17,7 +17,7 @@ const RecentAttendeesPage = () => {
 
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/dashboard/attendance");
+    navigate("/attendance");
     window.scrollTo(0, 0);
   };
   if (isFetching || isUninitialized) {

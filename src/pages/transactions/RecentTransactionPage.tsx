@@ -15,7 +15,7 @@ const RecentTransactionPage = () => {
 
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/dashboard/transactions");
+    navigate("/transactions");
     window.scrollTo(0, 0);
   };
   if (isFetching || isUninitialized) {
