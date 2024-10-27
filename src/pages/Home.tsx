@@ -49,27 +49,7 @@ const Home = () => {
         }}
       >
         <TotalProgramCreatedPage />
-        <Box
-          sx={{
-            width: 300,
-            height: "100%",
-            textAlign: "center",
-            boxShadow: "1px 3px 34px -15px rgba(0,0,0,0.75);",
-            position: "relative",
-          }}
-        >
-          <MonetizationOnIcon
-            style={{
-              position: "absolute",
-              left: "15%",
-              width: "100%",
-              height: "100%",
-              zIndex: 2,
-            }}
-            htmlColor="rgba(0,0,0, 0.15)"
-          />
-          <h2>SALES</h2>
-        </Box>
+
         <TotalAnnouncementCreatedPage />
       </Container>
       <h2>USERS</h2>
@@ -98,17 +78,6 @@ const Home = () => {
       >
         <TotalPendingTransactionPage />
         <TotalFulfilledTransactionPage />
-        <Box
-          sx={{
-            width: 300,
-            height: "100%",
-            textAlign: "center",
-            boxShadow: "1px 3px 34px -15px rgba(0,0,0,0.75);",
-          }}
-        >
-          <h2>SALES</h2>
-          <MonetizationOnIcon fontSize="large" htmlColor="#121212" />
-        </Box>
       </Container>
 
       <TodaySales />

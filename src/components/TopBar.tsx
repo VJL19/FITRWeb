@@ -31,11 +31,10 @@ const TopBar = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           color: "white",
         }}
       >
-        <MenuIcon fontSize="large" htmlColor="#f5f5f5" />
         <div style={{ display: "flex", paddingRight: 75, height: 50 }}>
           <p style={{ paddingRight: 25 }}>{tempEmail}</p>
           <DropdownMenu />
