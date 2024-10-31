@@ -119,6 +119,7 @@ export const usersApi = createApi({
         UserID: number | undefined;
         SubscriptionType: string;
         RFIDNumber: string | undefined;
+        IsRFIDActive: string | undefined;
       }
     >({
       query: (arg) => ({

@@ -131,9 +131,7 @@ const _columns: GridColDef<IAttendance>[] = [
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     valueGetter: (params, row) => {
-      return replaceCharWithAsterisk(
-        `${row.FirstName} ${row.MiddleName} ${row.LastName}`
-      );
+      return `${row.FirstName} ${row.MiddleName} ${row.LastName}`;
     },
   },
   {
@@ -310,6 +308,7 @@ const _columns: GridColDef<IAttendance>[] = [
         ProfilePic: currentRowData.ProfilePic,
         Username: currentRowData.Username,
         RFIDNumber: currentRowData.RFIDNumber,
+        IsRFIDActive: currentRowData.IsRFIDActive,
       };
       const onClick = () => {
         dispatch(setUserData(arg));

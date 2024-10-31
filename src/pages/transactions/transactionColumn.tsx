@@ -123,8 +123,7 @@ const _columns: GridColDef<ISubscriptions>[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      replaceCharWithAsterisk(`${row.SubscriptionBy}`),
+    valueGetter: (params, row) => `${row.SubscriptionBy}`,
   },
 
   {

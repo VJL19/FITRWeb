@@ -70,6 +70,7 @@ export const userSchema = z
       .max(10, { message: "RFID number only max at 10 digits." })
       .optional()
       .nullable(),
+    IsRFIDActive: z.boolean().optional().nullable(),
   })
   .refine((data) => data.Password === data.ConfirmPassword, {
     message: "Password do not match",

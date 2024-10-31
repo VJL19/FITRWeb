@@ -35,11 +35,15 @@ import { useUserOnline } from "src/hooks/useUserOnline";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import RFID_STATUS from "src/utils/enums/RFID_CARD";
 const EditUserPage = () => {
   const {
     handleSubmit,
     register,
     setValue,
+    getValues,
     control,
     formState: { isSubmitted, isSubmitting, errors },
   } = useForm<TUserSchema>({ resolver: zodResolver(userSchema) });
@@ -61,6 +65,7 @@ const EditUserPage = () => {
     Username,
     Height,
     Weight,
+    IsRFIDActive,
     RFIDNumber,
   } = useSelector((state: RootState) => state.user.userData);
 
@@ -144,6 +149,9 @@ const EditUserPage = () => {
       UserID: UserID,
       SubscriptionType: data.SubscriptionType,
       RFIDNumber: data.RFIDNumber,
+      IsRFIDActive: data.IsRFIDActive
+        ? RFID_STATUS.RFID_ACTIVE
+        : RFID_STATUS.RFID_NOT_ACTIVE,
     };
     updateUser(arg);
   };
@@ -151,6 +159,8 @@ const EditUserPage = () => {
   const handleBack = () => {
     navigate("/users", { replace: true });
   };
+
+  console.log("isrfiactive", IsRFIDActive);
 
   console.log("edit user", data);
   console.log("edit error", error);
@@ -308,12 +318,24 @@ const EditUserPage = () => {
           <Stack width={"100%"}>
             <TextField
               {...register("RFIDNumber")}
-              inputMode="text"
+              inputProps={{ type: "number" }}
               defaultValue={RFIDNumber}
               error={errors.RFIDNumber ? true : false}
               label="Enter RFID number"
               sx={{ width: "100%" }}
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  {...register("IsRFIDActive")}
+                  defaultChecked={
+                    IsRFIDActive === RFID_STATUS.RFID_ACTIVE ? true : false
+                  }
+                />
+              }
+              label="RFID Active?"
+            />
+            <DisplayFormError errors={errors.IsRFIDActive} />
             <DisplayFormError errors={errors.RFIDNumber} />
           </Stack>
         </Stack>

@@ -37,6 +37,9 @@ import { useUserOnline } from "src/hooks/useUserOnline";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import RFID_STATUS from "src/utils/enums/RFID_CARD";
 const CreateUserPage = () => {
   const {
     handleSubmit,
@@ -94,10 +97,7 @@ const CreateUserPage = () => {
         "toast_user"
       );
     }
-    if (
-      error?.status === HTTP_ERROR.UNAUTHORIZED ||
-      error?.status === HTTP_ERROR.BAD_REQUEST
-    ) {
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -117,8 +117,30 @@ const CreateUserPage = () => {
   }, [emailStat]);
   const onSubmit = async (data: TUserSchema) => {
     setValue("ProfilePic", "default_poster.png");
+
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    registerUser(data);
+    const arg: TUserSchema = {
+      LastName: data.LastName,
+      FirstName: data.FirstName,
+      MiddleName: data.MiddleName,
+      Age: data.Age,
+      Gender: data.Gender,
+      ContactNumber: data.ContactNumber,
+      Birthday: data.Birthday,
+      Email: data.Email,
+      Address: data.Address,
+      Height: data.Height,
+      Weight: data.Weight,
+      IsRFIDActive: data.IsRFIDActive
+        ? RFID_STATUS.RFID_ACTIVE
+        : RFID_STATUS.RFID_NOT_ACTIVE,
+      RFIDNumber: data.RFIDNumber === "" ? null : data.RFIDNumber,
+      Username: data.Username,
+      Password: data.Password,
+      ConfirmPassword: data.ConfirmPassword,
+      SubscriptionType: data.SubscriptionType,
+    };
+    registerUser(arg);
     dispatch(setUserData(data));
     console.log("admin reg user", data);
     console.log("admin reg status", status);
@@ -272,6 +294,13 @@ const CreateUserPage = () => {
               label="Enter RFID number"
               sx={{ width: "100%" }}
             />
+            <FormControlLabel
+              control={
+                <Checkbox {...register("IsRFIDActive")} defaultChecked />
+              }
+              label="RFID Active?"
+            />
+            <DisplayFormError errors={errors.IsRFIDActive} />
             <DisplayFormError errors={errors.RFIDNumber} />
           </Stack>
         </Stack>

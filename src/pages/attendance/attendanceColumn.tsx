@@ -112,8 +112,7 @@ const _columns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      replaceCharWithAsterisk(`${row.FirstName} ${row.LastName}`),
+    valueGetter: (params, row) => `${row.FirstName} ${row.LastName}`,
   },
 
   {
