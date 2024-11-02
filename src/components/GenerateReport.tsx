@@ -118,22 +118,40 @@ const GenerateReport = ({ selectedValue }: { selectedValue: string }) => {
     averageMonthlySales: averageMonthlySalesByDate.toFixed(2),
   };
 
+  const handleStartDate = (
+    newDateValue: dayjs.Dayjs | null,
+    onChange: (...event: any[]) => void
+  ) => {
+    const formatStartDate = dayjs(newDateValue).format("YYYY-MM-DD");
+    onChange(formatStartDate);
+  };
+
+  const handleEndDate = (
+    newDateValue: dayjs.Dayjs | null,
+    onChange: (...event: any[]) => void
+  ) => {
+    const formatEndDate = dayjs(newDateValue).format("YYYY-MM-DD");
+    onChange(formatEndDate);
+    if (selectedValue === "Attendance Report") {
+      filterAttendance({
+        startDate: getValues("startDate"),
+        endDate: formatEndDate,
+      });
+
+      return;
+    }
+    filterFinancial({
+      startDate: getValues("startDate"),
+      endDate: formatEndDate,
+    });
+  };
+
   const handleDateChange = (
     newDateValue: dayjs.Dayjs | null,
     onChange: (...event: any[]) => void
   ) => {
     const formatDate = dayjs(newDateValue).format("YYYY-MM-DD");
     onChange(formatDate);
-    if (selectedValue === "Attendance Report") {
-      filterAttendance({
-        selectedDate: formatDate,
-      });
-
-      return;
-    }
-    filterFinancial({
-      selectedDate: formatDate,
-    });
   };
 
   const handleExcelAttendance = async () => {
@@ -184,13 +202,16 @@ const GenerateReport = ({ selectedValue }: { selectedValue: string }) => {
         <h1>FINANCIAL GENERATE REPORT</h1>
       )}
 
-      <Stack width={"100%"}>
+      <Stack
+        width={"100%"}
+        sx={{ display: "flex", flexDirection: "row", gap: 2.5 }}
+      >
         {selectedValue !== "" && (
           <React.Fragment>
             <Box component="div" sx={{ width: "15%" }}>
-              <h3>Select date</h3>
+              <h3>Select start date</h3>
               <Controller
-                name="selectedDate"
+                name="startDate"
                 control={control}
                 defaultValue={undefined}
                 rules={{ required: true }}
@@ -200,7 +221,7 @@ const GenerateReport = ({ selectedValue }: { selectedValue: string }) => {
                     value={dayjs(value)}
                     label="Date"
                     onChange={(newDateValue) =>
-                      handleDateChange(newDateValue, onChange)
+                      handleStartDate(newDateValue, onChange)
                     }
                   />
                 )}
@@ -208,10 +229,35 @@ const GenerateReport = ({ selectedValue }: { selectedValue: string }) => {
             </Box>
           </React.Fragment>
         )}
-        <DisplayFormError errors={errors.selectedDate} />
+        <DisplayFormError errors={errors.startDate} />
+        {selectedValue !== "" && (
+          <React.Fragment>
+            <Box component="div" sx={{ width: "15%" }}>
+              <h3>Select end date</h3>
+              <Controller
+                name="endDate"
+                control={control}
+                defaultValue={undefined}
+                rules={{ required: true }}
+                render={({ field: { onChange, value, ...restField } }) => (
+                  <DatePicker
+                    {...restField}
+                    value={dayjs(value)}
+                    label="Date"
+                    onChange={(newDateValue) =>
+                      handleEndDate(newDateValue, onChange)
+                    }
+                  />
+                )}
+              />
+            </Box>
+          </React.Fragment>
+        )}
+        <DisplayFormError errors={errors.endDate} />
       </Stack>
       {selectedValue === "Attendance Report" &&
-        getValues("selectedDate") !== undefined &&
+        getValues("startDate") !== undefined &&
+        getValues("endDate") !== undefined &&
         error?.status !== NETWORK_ERROR.FETCH_ERROR && (
           <React.Fragment>
             <h2>Preview</h2>
@@ -255,7 +301,8 @@ const GenerateReport = ({ selectedValue }: { selectedValue: string }) => {
           </React.Fragment>
         )}
       {selectedValue === "Financial Report" &&
-        getValues("selectedDate") !== undefined &&
+        getValues("startDate") !== undefined &&
+        getValues("endDate") !== undefined &&
         financialErr?.status !== NETWORK_ERROR.FETCH_ERROR && (
           <React.Fragment>
             <h2>Preview</h2>

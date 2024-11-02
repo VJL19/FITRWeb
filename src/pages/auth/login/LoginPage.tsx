@@ -27,6 +27,9 @@ import "react-toastify/dist/ReactToastify.css";
 import delayShowToast from "src/utils/functions/delayToast";
 import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import { useUserOnline } from "src/hooks/useUserOnline";
+import { setAdminAccountData } from "src/reducers/users";
+import { AppDispatch } from "src/store/store";
+import { useDispatch } from "react-redux";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { data: accessTokenData, error: tokenErr } = useGetAccessWebTokenQuery(
@@ -44,6 +47,7 @@ const LoginPage = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const dispatch: AppDispatch = useDispatch();
   const [loginUserr, { data, status, isLoading, error }] =
     useLoginUserMutation();
 
@@ -63,6 +67,26 @@ const LoginPage = () => {
     if (status === "fulfilled") {
       delayShowToast("success", data?.details, "toast_login");
       navigate("/homepage", { replace: true });
+      dispatch(
+        setAdminAccountData({
+          RFIDNumber: accessTokenData?.user?.RFIDNumber!,
+          LastName: "",
+          FirstName: "",
+          MiddleName: "",
+          Birthday: "",
+          Age: "",
+          ContactNumber: "",
+          Email: "",
+          Address: "",
+          Height: "",
+          Weight: "",
+          Username: "",
+          Password: "",
+          ConfirmPassword: "",
+          SubscriptionType: "",
+          Gender: "",
+        })
+      );
     }
     if (status === "rejected") {
       delayShowToast(

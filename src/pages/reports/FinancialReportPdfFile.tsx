@@ -37,7 +37,11 @@ const FinancialReportPdfFile = ({
       ?.map(
         (user: ISubscriptions) => `
   <tr>
-    <td colspan="2">${user.FirstName} ${user.LastName}</td>
+    <td colspan="2">${
+      user.FirstName === null || user.LastName === undefined
+        ? user.SubscriptionBy
+        : `${user.FirstName} ${user.LastName}`
+    }</td>
     <td colspan="2">${user.SubscriptionType}</td>
     <td colspan="2">${user.SubscriptionAmount} PHP</td>
     <td colspan="2">${user.SubscriptionStatus}</td>

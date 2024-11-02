@@ -53,8 +53,7 @@ const TotalProgramCreatedPage = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start",
-          marginLeft: 25,
+          justifyContent: "space-evenly",
         }}
       >
         <h2>PROGRAMS</h2>

@@ -11,6 +11,7 @@ const RenderRfidInput = () => {
     handleChange,
     rfidNumber,
     handleInput,
+    setRfidNumber,
     rfidData,
     setRfidData,
     toggleFocus,
@@ -22,6 +23,16 @@ const RenderRfidInput = () => {
   const { data } = useSelector(
     (state: RootState) => state.attendance.checkRfidStatus
   );
+
+  const { RFIDNumber } = useSelector(
+    (state: RootState) => state.user.adminAccountData
+  );
+  const { userTempRfidNumber } = useSelector((state: RootState) => state.user);
+  //check if the admin spare rfid is equal to the tap then assign the input payload
+
+  const dynamicRfidNumber =
+    rfidNumber === RFIDNumber ? userTempRfidNumber : rfidNumber;
+
   useEffect(() => {
     if (rfidNumber.length === 10) {
       console.log(data);
@@ -36,6 +47,7 @@ const RenderRfidInput = () => {
   const props = {
     handleChange,
     rfidNumber,
+    dynamicRfidNumber,
     handleInput,
     toggleFocus,
     inputRef,

@@ -51,10 +51,16 @@ import Analytics from "src/components/Analytics";
 import ManageAccountPage from "./auth/ManageAccountPage";
 import ChangeAccountPage from "./auth/ChangeAccountPage";
 import ChangeAccountConfirmationPage from "./auth/ChangeAccountConfirmationPage";
+import CreateAttendanceRecordPage from "./attendance/CreateAttendanceRecordPage";
+import ViewAttendanceRecordPage from "./attendance/ViewAttendanceRecordPage";
+import EditAttendanceRecordPage from "./attendance/EditAttendanceRecordPage";
+import AttendanceGuestTapPage from "./attendance/AttendanceGuestTapPage";
+
 const Dashboard = () => {
   const { data, status, error } = useGetAuthTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -126,6 +132,22 @@ const Dashboard = () => {
               <Route element={<ReportPage />} path="/reports" />
 
               <Route element={<AttendancePage />} path="/attendance" />
+              <Route
+                element={<CreateAttendanceRecordPage />}
+                path="/attendance/create_attendance"
+              />
+              <Route
+                element={<AttendanceGuestTapPage />}
+                path="/attendance/guest_tap"
+              />
+              <Route
+                element={<ViewAttendanceRecordPage />}
+                path="/attendance/view_attendance"
+              />
+              <Route
+                element={<EditAttendanceRecordPage />}
+                path="/attendance/edit_attendance"
+              />
               <Route
                 element={<GenerateReport selectedValue="Attendance Report" />}
                 path="/attendance/attendance_reports"

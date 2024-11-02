@@ -272,7 +272,7 @@ const getTotalUsersAttendanceByDate = (
     ({ UserID }, index) => !ids!.includes(UserID, index + 1)
   );
 
-  return newArr?.length;
+  return data?.result?.length!;
 };
 const getTotalSessionUsersAttendanceByDate = (
   data: IAttendanceState | undefined
@@ -282,8 +282,9 @@ const getTotalSessionUsersAttendanceByDate = (
     ({ UserID }, index) => !ids!.includes(UserID, index + 1)
   );
 
-  return newArr?.filter((res) => res.SubscriptionType === SUBSCRIPTIONS.SESSION)
-    .length;
+  return data?.result?.filter(
+    (res) => res.SubscriptionType === SUBSCRIPTIONS.SESSION
+  ).length;
 };
 const getTotalMonthlyUsersAttendanceByDate = (
   data: IAttendanceState | undefined
@@ -293,8 +294,9 @@ const getTotalMonthlyUsersAttendanceByDate = (
     ({ UserID }, index) => !ids!.includes(UserID, index + 1)
   );
 
-  return newArr?.filter((res) => res.SubscriptionType === SUBSCRIPTIONS.MONTHLY)
-    .length;
+  return data?.result?.filter(
+    (res) => res.SubscriptionType === SUBSCRIPTIONS.MONTHLY
+  ).length;
 };
 
 //financial reports

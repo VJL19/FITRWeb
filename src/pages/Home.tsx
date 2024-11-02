@@ -18,6 +18,9 @@ import RenderRfidInput from "src/components/RenderRfidInput";
 import { useGetAccessWebTokenQuery } from "src/reducers/login";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
 import NotAuthorized from "src/components/NotAuthorized";
+import TotalRecentAttendeesPage from "./attendance/TotalRecentAttendeesPage";
+import TotalTodayTransactionPage from "./transactions/TotalTodayTransactionPage";
+import { setAdminAccountData } from "src/reducers/users";
 
 const Home = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -25,6 +28,7 @@ const Home = () => {
   const { data: token, error: tokenErr } = useGetAccessWebTokenQuery();
   useEffect(() => {
     dispatch(setRoute("Home"));
+    dispatch(setAdminAccountData({ RFIDNumber: token?.user?.RFIDNumber! }));
   }, []);
 
   if (
@@ -48,9 +52,9 @@ const Home = () => {
           gap: 2.5,
         }}
       >
-        <TotalProgramCreatedPage />
-
         <TotalAnnouncementCreatedPage />
+        <TotalRecentAttendeesPage />
+        <TotalProgramCreatedPage />
       </Container>
       <h2>USERS</h2>
       <Container
@@ -78,6 +82,7 @@ const Home = () => {
       >
         <TotalPendingTransactionPage />
         <TotalFulfilledTransactionPage />
+        <TotalTodayTransactionPage />
       </Container>
 
       <TodaySales />

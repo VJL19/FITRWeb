@@ -22,10 +22,34 @@ export interface IRfidError {
 export interface IAttendanceSliceState {
   attendanceData: IAttendance[] | undefined;
   checkRfidStatus: IRfidError;
+  attendanceSelectedData: IAttendance;
 }
 
 const initialState: IAttendanceSliceState = {
   attendanceData: [],
+  attendanceSelectedData: {
+    AttendanceID: 0,
+    SubscriptionType: "",
+    TimeIn: "",
+    TimeOut: "",
+    SubscriptionExpectedEnd: "",
+    DateTapped: "",
+    IsPaid: "",
+    LastName: "",
+    FirstName: "",
+    MiddleName: "",
+    Birthday: "",
+    Age: "",
+    ContactNumber: "",
+    Email: "",
+    Address: "",
+    Height: "",
+    Weight: "",
+    Username: "",
+    Password: "",
+    ConfirmPassword: "",
+    Gender: "",
+  },
   checkRfidStatus: { data: { message: "", status: "" } },
 };
 const config = loadConfig();
@@ -42,6 +66,10 @@ export const attendanceApi = createApi({
       query: () => "/admin/attendance/users_attendance",
       providesTags: ["attendance"],
     }),
+    getUsersTotalAttendance: builder.query<IAttendanceState, void>({
+      query: () => "/admin/attendance/total_users_attendance",
+      providesTags: ["attendance"],
+    }),
     getUsersAttendanceHistory: builder.query<IAttendanceState, void>({
       query: () => "/admin/attendance/history/users_attendance",
       providesTags: ["attendance"],
@@ -53,11 +81,12 @@ export const attendanceApi = createApi({
     }),
     getAttendanceByDate: builder.mutation<
       IAttendanceState,
-      { selectedDate: string }
+      { startDate: string; endDate: string }
     >({
-      query: ({ selectedDate }) => ({
-        url: `/admin/generate_report/attendance/specific_date:${selectedDate}`,
-        method: "GET",
+      query: (arg) => ({
+        url: `/admin/generate_report/attendance/specific_date`,
+        method: "POST",
+        body: arg,
       }),
       invalidatesTags: ["attendance"],
     }),
@@ -110,6 +139,51 @@ export const attendanceApi = createApi({
       }),
       invalidatesTags: ["attendance"],
     }),
+    createUserRecord: builder.mutation<
+      IAttendanceState,
+      {
+        LastName: string;
+        FirstName: string;
+        SubscriptionType: string;
+        TimeIn: string;
+        TimeOut: string;
+        DateTapped: string;
+      }
+    >({
+      query: (arg) => ({
+        url: "/admin/attendance/create_record",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["attendance"],
+    }),
+
+    updateUserRecord: builder.mutation<
+      IAttendanceState,
+      {
+        AttendanceID: number | undefined;
+        TimeIn: string;
+        TimeOut: string;
+        DateTapped: string;
+      }
+    >({
+      query: (arg) => ({
+        url: "/admin/attendance/update_record",
+        method: "POST",
+        body: arg,
+      }),
+      invalidatesTags: ["attendance"],
+    }),
+    deleteUserRecord: builder.mutation<
+      IAttendanceState,
+      { AttendanceID: number | undefined }
+    >({
+      query: ({ AttendanceID }) => ({
+        url: `/admin/attendance/delete_record:${AttendanceID}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["attendance"],
+    }),
   }),
 });
 
@@ -126,18 +200,28 @@ export const attendanceSlice = createSlice({
     setCheckRfidMessage: (state, action: PayloadAction<IRfidError>) => {
       state.checkRfidStatus = action.payload;
     },
+    setAttendanceSelectedData: (state, action: PayloadAction<IAttendance>) => {
+      state.attendanceSelectedData = action.payload;
+    },
   },
 });
 
-export const { setAttendanceData, setCheckRfidMessage } =
-  attendanceSlice.actions;
+export const {
+  setAttendanceData,
+  setCheckRfidMessage,
+  setAttendanceSelectedData,
+} = attendanceSlice.actions;
 export const {
   useGetUsersAttendanceQuery,
+  useUpdateUserRecordMutation,
+  useDeleteUserRecordMutation,
+  useGetUsersTotalAttendanceQuery,
   useGetUsersAttendanceHistoryQuery,
   useGetAttendanceByDateMutation,
   useGetAllRecentAttendanceQuery,
   useCheckUserRFIDNumberMutation,
   useTapRFIDCardUserMutation,
+  useCreateUserRecordMutation,
   useCheckUserTapRFIDMutation,
   useGetTestConnectionMutation,
 } = attendanceApi;

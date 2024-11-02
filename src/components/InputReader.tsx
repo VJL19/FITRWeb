@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/store";
 
 type InputReaderProps = {
   rfidNumber: string;
@@ -19,12 +21,21 @@ const InputReader = ({
   onBlur,
   onFocus,
 }: InputReaderProps) => {
+  const { userTempRfidNumber } = useSelector((state: RootState) => state.user);
+
+  const { RFIDNumber } = useSelector(
+    (state: RootState) => state.user.adminAccountData
+  );
+
+  const dynamicRfidNumber =
+    rfidNumber === RFIDNumber ? userTempRfidNumber : rfidNumber;
+
   return (
     <React.Fragment>
       <label />
       <input
         ref={inputRef}
-        value={rfidNumber}
+        value={dynamicRfidNumber}
         type="text"
         id="rfidInput"
         onFocus={onFocus}

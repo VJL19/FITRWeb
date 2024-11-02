@@ -53,7 +53,6 @@ const AttendanceHistoryPage = () => {
     "TimeOut",
     "DateTapped",
     "SubscriptionType",
-    "Expiration",
   ];
 
   const [deleteFile, { status: deleteStatus, data: deleteFileData }] =

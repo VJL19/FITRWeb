@@ -62,7 +62,7 @@ const RecentAttendeesPage = () => {
               borderBottomColor: "gray",
               display: "flex",
               alignItems: "center",
-              justfiyContent: "center",
+              justifyContent: "space-between",
               gap: 3,
             }}
           >

@@ -17,6 +17,7 @@ interface ISubscriptions extends IUser {
   TotalSessionUserSales?: number;
   TotalMonthlyUserSales?: number;
   AverageSales?: number;
+  TotalTodayTransactions?: number;
   AverageSessionSales?: number;
   AverageMonthlySales?: number;
 }

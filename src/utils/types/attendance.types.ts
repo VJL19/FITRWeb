@@ -11,6 +11,7 @@ interface IAttendance extends IUser {
   TotalUsers?: number;
   TotalSessionUsers?: number;
   TotalMonthlyUsers?: number;
+  TotalTodaysAttendees?: number;
 }
 
 export default IAttendance;

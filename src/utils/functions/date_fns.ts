@@ -1,5 +1,5 @@
 const getCurrentDate = () => {
-  const todayDate = new Date().toISOString().slice(0, 10);
+  const todayDate = new Date().toLocaleDateString("fr-CA");
   const getTime = new Date().toLocaleString().slice(10, 30);
   return `${todayDate} ${getTime}`;
 };

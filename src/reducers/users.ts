@@ -16,6 +16,7 @@ interface IUserSliceState {
   OTPToken: number;
   adminAccountData: IUser;
   adminOTPToken: number;
+  userTempRfidNumber: string;
 }
 
 interface IEmailState {
@@ -64,6 +65,7 @@ const initialState: IUserSliceState = {
     SubscriptionType: "",
     LastName: "",
     FirstName: "",
+    RFIDNumber: "",
     MiddleName: "",
     Age: "",
     ContactNumber: "",
@@ -74,9 +76,11 @@ const initialState: IUserSliceState = {
     Height: "",
     Weight: "",
     ProfilePic: "",
+
     Username: "",
   },
   adminOTPToken: 0,
+  userTempRfidNumber: "",
 };
 
 const config = loadConfig();
@@ -152,6 +156,7 @@ export const usersApi = createApi({
         UserID: number;
         Username: string;
         Email: string;
+        RFIDNumber: string;
         ContactNumber: string;
         Password: string;
         ConfirmPassword: string;
@@ -204,11 +209,15 @@ const userSlice = createSlice({
     setAdminOTPToken: (state, { payload }) => {
       state.adminOTPToken = payload;
     },
+    setUserTempRfidNumber: (state, action: PayloadAction<string>) => {
+      state.userTempRfidNumber = action.payload;
+    },
   },
 });
 export const {
   setUserData,
   setOTPToken,
+  setUserTempRfidNumber,
   setAdminAccountData,
   setAdminOTPToken,
 } = userSlice.actions;

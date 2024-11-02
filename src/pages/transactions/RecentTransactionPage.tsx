@@ -36,7 +36,7 @@ const RecentTransactionPage = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-around",
+          justifyContent: "space-evenly",
         }}
       >
         <h2>Recent Transactions</h2>
@@ -60,14 +60,12 @@ const RecentTransactionPage = () => {
               borderBottomColor: "gray",
               display: "flex",
               alignItems: "center",
-              justfiyContent: "center",
-              gap: 3,
+              justifyContent: "space-between",
             }}
           >
             <h5>{recentUser.SubscriptionBy}</h5>
 
-            <h4>{recentUser.SubscriptionAmount} PHP</h4>
-            <h4>{recentUser.SubscriptionStatus}</h4>
+            <p>{recentUser.SubscriptionAmount} PHP</p>
             <p>{new Date(recentUser.SubscriptionEntryDate).toLocaleString()}</p>
           </Container>
         </React.Fragment>

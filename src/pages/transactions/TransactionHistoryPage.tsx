@@ -7,7 +7,7 @@ import CustomModal from "src/components/CustomModal";
 import { navLinkTextStyle } from "src/components/SideBar";
 import { setRoute } from "src/reducers/route";
 import { AppDispatch, RootState } from "src/store/store";
-import _columns from "./transactionColumn";
+import _columns from "./transactionHistoryColumn";
 import AddIcon from "@mui/icons-material/Add";
 import {
   transactionApi,
@@ -175,19 +175,6 @@ const TransactionHistoryPage = () => {
         }
       />
 
-      <Button
-        variant="contained"
-        color="success"
-        size="medium"
-        startIcon={<AddIcon fontSize="large" htmlColor="#f5f5f5" />}
-      >
-        <NavLink
-          to={`/transactions/create_subscription`}
-          style={navLinkTextStyle}
-        >
-          create
-        </NavLink>
-      </Button>
       <CustomModal
         open={open}
         handleDeleteClick={handleDeleteTransaction}

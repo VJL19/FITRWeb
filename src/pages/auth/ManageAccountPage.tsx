@@ -66,6 +66,7 @@ const ManageAccountPage = () => {
   if (isLoading) {
     return <LoadingIndicator />;
   }
+
   return (
     <div>
       <Container maxWidth="md">
@@ -92,6 +93,10 @@ const ManageAccountPage = () => {
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <h3>Contact Number:</h3>
             <p>{replaceCharWithAsterisk(data?.user?.ContactNumber!)}</p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <h3>Spare RFID Card:</h3>
+            <p>{data?.user?.RFIDNumber}</p>
           </div>
         </div>
         <Button

@@ -8,13 +8,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
-import IAttendance from "src/utils/types/attendance.types";
+import ISubscriptions from "src/utils/types/subscription.types";
+import { setTransactionData } from "src/reducers/transaction";
 import dayjs from "dayjs";
 import { renderDate } from "src/utils/functions/date_fns";
-import Avatar from "@mui/material/Avatar";
-import { setAttendanceSelectedData } from "src/reducers/attendance";
+import { replaceCharWithAsterisk } from "src/utils/functions/text_fns";
 
-const _columns: GridColDef[] = [
+const _columns: GridColDef<ISubscriptions>[] = [
   {
     field: "UserID",
     headerName: "User ID",
@@ -22,7 +22,6 @@ const _columns: GridColDef[] = [
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    flex: 1,
     align: "center",
     width: 100,
     headerAlign: "center",
@@ -43,40 +42,42 @@ const _columns: GridColDef[] = [
     renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     filterable: false,
   },
-
   {
     field: "ProfilePic",
     headerName: "Profile Pic",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
-    flex: 1,
+    width: 100,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     renderCell: (params) => {
-      const currentRow: IAttendance = params.row;
+      const currentRow: ISubscriptions = params.row;
       return (
         <Stack
           direction="row"
-          sx={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+          sx={{ alignSelf: "center", justifyContent: "center" }}
         >
-          <Avatar
-            alt={`${currentRow.ProfilePic}`}
-            src={`${
+          <img
+            style={{
+              borderWidth: 1.5,
+              borderRadius: "50%",
+              borderColor: "green",
+              border: 15,
+            }}
+            height={65}
+            src={
               currentRow.ProfilePic === "default_poster.png"
                 ? thumbnail
                 : currentRow.ProfilePic
-            }`}
-            sx={{ width: 56, height: 56 }}
+            }
           />
         </Stack>
       );
     },
   },
   {
-    flex: 1,
     align: "center",
     field: "FirstName",
     headerName: "First Name",
@@ -94,138 +95,162 @@ const _columns: GridColDef[] = [
       return <b>{params.field}</b>;
     },
     width: 180,
-    flex: 1,
     align: "center",
 
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
   },
   {
+    field: "MiddleName",
+    headerName: "Middle Name",
+    renderHeader: (params) => {
+      return <b>{params.field}</b>;
+    },
+    width: 180,
+    align: "center",
+
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+  },
+  {
+    flex: 1,
     field: "FullName",
     headerName: "Full Name",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
-    width: 180,
-    flex: 1,
+    width: 120,
     align: "center",
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) => `${row.FirstName} ${row.LastName}`,
+    valueGetter: (params, row) => `${row.SubscriptionBy}`,
   },
 
   {
+    flex: 1,
+    field: "SubscriptionAmount",
+    headerName: "Subscription Amount",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Subscription")[1]}</b>;
+    },
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    valueGetter: (params, row) => `${row.SubscriptionAmount} PHP`,
+  },
+  {
+    flex: 1,
     field: "SubscriptionType",
     headerName: "Subscription Type",
     renderHeader: (params) => {
-      return <b>Type</b>;
+      return <b>{params.field.split("Subscription")[1]}</b>;
     },
-    width: 180,
-    flex: 1,
+    width: 120,
     align: "center",
-
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     type: "singleSelect",
     valueOptions: ["Session", "Monthly"],
   },
   {
-    field: "TimeIn",
-    headerName: "Time In",
-    renderHeader: (params) => {
-      return <b>{params.field}</b>;
-    },
-    width: 180,
     flex: 1,
+    field: "SubscriptionMethod",
+    headerName: "Subscription Method",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Subscription")[1]}</b>;
+    },
+    width: 120,
     align: "center",
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    type: "singleSelect",
+    valueOptions: ["GCash", "Paymaya", "CreditCard", "Cash"],
+  },
 
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-  },
   {
-    field: "TimeOut",
-    headerName: "Time Out",
-    renderHeader: (params) => {
-      return <b>{params.field}</b>;
-    },
-    width: 180,
     flex: 1,
-    align: "center",
-
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-  },
-  {
-    field: "DateTapped",
-    headerName: "Date Tapped",
+    field: "SubscriptionEntryDate",
+    headerName: "Subscription Entry Date",
     renderHeader: (params) => {
-      return <b>{params.field}</b>;
+      return <b>{params.field.split("Subscription")[1]}</b>;
     },
-    width: 220,
-    align: "center",
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-    type: "date",
-    renderCell: (params) => renderDate(params.row?.DateTapped),
-    valueFormatter: (params: IAttendance) =>
-      dayjs(params.DateTapped).format("YYYY/MM/DD"),
-  },
-  {
-    field: "Expiration",
-    headerName: "Expiration",
-    renderHeader: (params) => {
-      return <b>{params.field}</b>;
-    },
-    width: 180,
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
-    headerClassName: "super-app-theme--header",
-    valueGetter: (params, row) =>
-      row.SubscriptionExpectedEnd !== "Expired when timeout"
-        ? new Date(row.SubscriptionExpectedEnd).toDateString()
-        : row.SubscriptionExpectedEnd,
-  },
-  {
-    field: "IsPaid",
-    headerName: "Is Paid",
-    renderHeader: (params) => {
-      return <b>{params.field}</b>;
-    },
-    flex: 1,
     align: "center",
     width: 150,
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
+    type: "date",
+    renderCell: (params) => renderDate(params.row?.SubscriptionEntryDate),
+    valueFormatter: (params: ISubscriptions) =>
+      dayjs(params.SubscriptionEntryDate).format("YYYY/MM/DD"),
   },
-
   {
+    field: "SubscriptionStatus",
+    headerName: "Subscription Status",
+    renderHeader: (params) => {
+      return <b>{params.field.split("Subscription")[1]}</b>;
+    },
+    width: 180,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "super-app-theme--header",
+    renderCell: (params) => {
+      const currentRow: ISubscriptions = params.row;
+      return (
+        <Stack
+          direction="row"
+          sx={{
+            flex: 0.5,
+            alignSelf: "center",
+            justifyContent: "center",
+            color: "#f5f5f5",
+            backgroundColor:
+              currentRow.SubscriptionStatus === "Fulfill"
+                ? "#388e3c"
+                : currentRow.SubscriptionStatus === "pending"
+                ? "#f57c00"
+                : "#d32f2f",
+          }}
+        >
+          {currentRow.SubscriptionStatus === "pending"
+            ? currentRow.SubscriptionStatus.toUpperCase()
+            : currentRow.SubscriptionStatus.concat("ed").toUpperCase()}
+        </Stack>
+      );
+    },
+    type: "singleSelect",
+    valueOptions: ["pending", "Fulfill", "REJECT"],
+  },
+  {
+    align: "center",
     field: "Actions",
     headerName: "Actions",
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
     width: 310,
-    headerAlign: "center",
     headerClassName: "super-app-theme--header",
     renderCell: (params) => {
       const dispatch = useDispatch();
-      const currentRowData: IAttendance = params.row;
-      const arg: IAttendance = {
-        AttendanceID: currentRowData.AttendanceID,
+      const currentRowData: ISubscriptions = params.row;
+      const arg: ISubscriptions = {
+        ProfilePic: currentRowData.ProfilePic,
         LastName: currentRowData.LastName,
         FirstName: currentRowData.FirstName,
-        TimeIn: currentRowData.TimeIn,
-        TimeOut: currentRowData.TimeOut,
-        DateTapped: currentRowData.DateTapped,
+        MiddleName: currentRowData.MiddleName,
+        Email: currentRowData.Email,
+        ContactNumber: currentRowData.ContactNumber,
+        SubscriptionID: currentRowData.SubscriptionID,
+        SubscriptionAmount: currentRowData.SubscriptionAmount,
         SubscriptionType: currentRowData.SubscriptionType,
-        SubscriptionExpectedEnd: "",
-        IsPaid: "",
-        MiddleName: "",
+        SubscriptionUploadedImage: currentRowData.SubscriptionUploadedImage,
+        SubscriptionEntryDate: currentRowData.SubscriptionEntryDate,
+        SubscriptionStatus: currentRowData.SubscriptionStatus,
+        SubscriptionMethod: currentRowData.SubscriptionMethod,
+        SubscriptionBy: currentRowData.SubscriptionBy,
+        No_M_SubscriptionID: 0,
         Birthday: "",
         Age: "",
-        ContactNumber: "",
-        Email: "",
         Address: "",
         Height: "",
         Weight: "",
@@ -235,23 +260,27 @@ const _columns: GridColDef[] = [
         Gender: "",
       };
       const onClick = () => {
-        dispatch(setAttendanceSelectedData(arg));
+        // dispatch(setAnnouncementData(arg));
+        dispatch(setTransactionData(arg));
       };
 
       const handleDelete = () => {
         dispatch(handleOpen());
-        dispatch(setAttendanceSelectedData(arg));
+        dispatch(setTransactionData(arg));
       };
 
       return (
-        <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
-          <NavLink to={`/attendance/view_attendance`} style={navLinkTextStyle}>
+        <Stack direction="row" width="100%" height="100%">
+          <NavLink
+            to={`/transactions/view_subscription`}
+            style={navLinkTextStyle}
+          >
             <Button
               variant="contained"
               color="info"
-              size="small"
-              style={{ height: 40 }}
+              size="medium"
               onClick={onClick}
+              style={{ height: 40, width: "auto" }}
               startIcon={
                 <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
               }
@@ -259,27 +288,6 @@ const _columns: GridColDef[] = [
               View
             </Button>
           </NavLink>
-          <NavLink to={`/attendance/edit_attendance`} style={navLinkTextStyle}>
-            <Button
-              variant="contained"
-              color="warning"
-              size="small"
-              style={{ height: 40 }}
-              onClick={onClick}
-              startIcon={<EditIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-            >
-              Edit
-            </Button>
-          </NavLink>
-          <Button
-            variant="contained"
-            color="error"
-            size="medium"
-            onClick={handleDelete}
-            startIcon={<DeleteIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
-          >
-            Delete
-          </Button>
         </Stack>
       );
     },

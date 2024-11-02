@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   IRfidError,
   setCheckRfidMessage,
@@ -7,7 +7,7 @@ import {
   useCheckUserTapRFIDMutation,
   useTapRFIDCardUserMutation,
 } from "src/reducers/attendance";
-import { AppDispatch } from "src/store/store";
+import { AppDispatch, RootState } from "src/store/store";
 import { SUBSCRIPTIONS } from "src/utils/enums/SUBSCRIPTIONS";
 import getCurrentDate, { formatTime } from "src/utils/functions/date_fns";
 import { advanceMonthlyEnd } from "src/utils/functions/subscription_fns";
@@ -34,6 +34,16 @@ const useRFIDListen = () => {
   ] = useCheckUserTapRFIDMutation();
 
   const dispatch: AppDispatch = useDispatch();
+
+  const { RFIDNumber } = useSelector(
+    (state: RootState) => state.user.adminAccountData
+  );
+  const { userTempRfidNumber } = useSelector((state: RootState) => state.user);
+  //check if the admin spare rfid is equal to the tap then assign the input payload
+
+  const dynamicRfidNumber =
+    rfidNumber === RFIDNumber ? userTempRfidNumber : rfidNumber;
+
   function onMousemove() {
     toggleFocus();
   }
@@ -149,13 +159,25 @@ const useRFIDListen = () => {
     }
   }, [checkStatus, checkData?.message]);
 
+  // console.log("hey user temp rfid numbber", dynamicRfidNumber);
+
   useEffect(() => {
     console.log(rfidNumber.length);
+
     if (rfidNumber.length === 10) {
-      checkUserRFID({ RFIDNumber: rfidNumber });
+      if (rfidNumber === RFIDNumber) {
+        checkUserRFID({ RFIDNumber: userTempRfidNumber });
+        setTimeout(() => {
+          if (rfidNumber.length === 10 || rfidNumber.length > 10) {
+            setRfidNumber("");
+          }
+        }, 1500);
+      } else {
+        checkUserRFID({ RFIDNumber: rfidNumber });
+      }
     }
     setTimeout(() => {
-      if (rfidNumber.length === 10) {
+      if (rfidNumber.length === 10 || rfidNumber.length > 10) {
         setRfidNumber("");
       }
     }, 1500);
@@ -177,6 +199,7 @@ const useRFIDListen = () => {
     rfidNumber,
     handleChange,
     handleInput,
+    setRfidNumber,
     inputRef,
     toggleFocus,
     tapStatus,

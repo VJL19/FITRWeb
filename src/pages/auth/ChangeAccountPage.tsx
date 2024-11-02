@@ -143,10 +143,7 @@ const ChangeAccountPage = () => {
         "toast_changeacc"
       );
     }
-    if (
-      error?.status === HTTP_ERROR.UNAUTHORIZED ||
-      error?.status === HTTP_ERROR.BAD_REQUEST
-    ) {
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",
@@ -172,6 +169,7 @@ const ChangeAccountPage = () => {
       Email: data.Email,
       ContactNumber: data.ContactNumber,
       Password: data.Password,
+      RFIDNumber: data.RFIDNumber,
       ConfirmPassword: data.ConfirmPassword,
     };
     changeAccount(arg);
@@ -252,6 +250,17 @@ const ChangeAccountPage = () => {
             />
             <DisplayFormError errors={errors.ContactNumber} />
           </Stack>
+          <Stack width={"100%"}>
+            <TextField
+              {...register("RFIDNumber")}
+              inputProps={{ type: "number" }}
+              required
+              error={errors.ContactNumber && true}
+              label="Enter your spare rfid card number"
+              sx={{ width: "100%" }}
+            />
+            <DisplayFormError errors={errors.RFIDNumber} />
+          </Stack>
         </Stack>
         <h3>Account Setup</h3>
         <Stack direction={"row"}>
@@ -331,6 +340,7 @@ const ChangeAccountPage = () => {
           </Stack>
         </Stack>
 
+        <br />
         <Button
           disabled={isSubmitting}
           endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}

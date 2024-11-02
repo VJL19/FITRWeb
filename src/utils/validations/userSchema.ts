@@ -13,6 +13,11 @@ export const adminSchema = z
       .max(11, {
         message: "Contact number should not be more than 11 numbers",
       }),
+    RFIDNumber: z
+      .string()
+      .max(10, { message: "RFID number only max at 10 digits." })
+      .optional()
+      .nullable(),
     Username: z
       .string()
       .min(1, { message: "Username is required" })
