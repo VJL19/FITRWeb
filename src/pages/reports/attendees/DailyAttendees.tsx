@@ -70,7 +70,7 @@ const DailyAttendees = () => {
     monthlyUserAttendees?: number;
   }> = [];
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i <= 7; i++) {
     let d = new Date();
     d.setDate(d.getDate() - i);
     let formatD = d.toISOString().split("T")[0];
@@ -112,7 +112,7 @@ const DailyAttendees = () => {
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.SESSION &&
-              item.Day === mUsers.Day
+              item.DateTapped === mUsers.DateTapped
           )
           .map((e) => e.TotalAttendees)
       ),
@@ -121,7 +121,7 @@ const DailyAttendees = () => {
           ?.filter(
             (mUsers) =>
               mUsers.SubscriptionType === SUBSCRIPTIONS.MONTHLY &&
-              item.Day === mUsers.Day
+              mUsers.DateTapped === item.DateTapped
           )
           .map((e) => e.TotalAttendees)
       ),
@@ -132,7 +132,8 @@ const DailyAttendees = () => {
 
   const totalDailyAttendeesBySession = getTotalDailySessionAttendees(data);
   const averageDailyAttendeesBySession = getAverageDailySessionAttendees(data);
-  const totalDailyAttendeesByMonthly = getTotalDailyMonthlyAttendees(data);
+  const totalDailyAttendeesByMonthly =
+    getTotalDailyMonthlyAttendees(daily_attendees_data);
   const averageDailyAttendeesByMonthly = getAverageDailyMonthlyAttendees(data);
   const totalDailyAttendees =
     getTotalDailySessionAttendees(data) + getTotalDailyMonthlyAttendees(data);

@@ -215,8 +215,18 @@ const _columns: GridColDef[] = [
         AttendanceID: currentRowData.AttendanceID,
         LastName: currentRowData.LastName,
         FirstName: currentRowData.FirstName,
-        TimeIn: currentRowData.TimeIn,
-        TimeOut: currentRowData.TimeOut,
+        TimeIn:
+          +currentRowData.TimeIn.split(":")[0] < 10
+            ? currentRowData.TimeIn.split(":")[0].toString().padStart(2, "0") +
+              ":" +
+              currentRowData.TimeIn.split(":")[1]
+            : currentRowData.TimeIn,
+        TimeOut:
+          +currentRowData.TimeOut.split(":")[0] < 10
+            ? currentRowData.TimeOut.split(":")[0].toString().padStart(2, "0") +
+              ":" +
+              currentRowData.TimeOut.split(":")[1]
+            : currentRowData.TimeOut,
         DateTapped: currentRowData.DateTapped,
         SubscriptionType: currentRowData.SubscriptionType,
         SubscriptionExpectedEnd: "",

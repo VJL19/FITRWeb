@@ -417,9 +417,7 @@ const getAverageDailySessionAttendees = (
     ? averageDailySessionAttendees
     : 0;
 };
-const getTotalDailyMonthlyAttendees = (
-  data: IDailyAttendeesData[] | undefined
-): number => {
+const getTotalDailyMonthlyAttendees = (data: any[] | undefined): number => {
   let totalDailyAttendees = 0;
   const getTotalAmountDailyAttendees = data?.map((res) =>
     Number(res.monthlyUserAttendees)
