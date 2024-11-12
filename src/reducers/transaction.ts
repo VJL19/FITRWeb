@@ -48,6 +48,10 @@ export const transactionApi = createApi({
   reducerPath: "admin/transaction",
   tagTypes: ["transaction"],
   baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers, { getState }) => {
+      headers.set("ngrok-skip-browser-warning", "any");
+      return headers;
+    },
     baseUrl: config.BASE_URL,
     credentials: "include",
   }),

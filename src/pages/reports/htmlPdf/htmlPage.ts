@@ -82,7 +82,7 @@ const dynamicHtml = ({
             averageMonthlySales !== null ? averageMonthlySales : 0
           } PHP </p>
           <p>Total Sales - ${totalSales !== null ? totalSales : 0} PHP </p>
-          <p>Average Sales For This Day - ${
+          <p>Average Sales between the selected dates - ${
             averageSales !== null ? averageSales : 0
           } PHP </p>
         </div>`

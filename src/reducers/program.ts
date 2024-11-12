@@ -27,6 +27,10 @@ const config = loadConfig();
 
 export const programApi = createApi({
   baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers, { getState }) => {
+      headers.set("ngrok-skip-browser-warning", "any");
+      return headers;
+    },
     baseUrl: config.BASE_URL,
     credentials: "include",
   }),

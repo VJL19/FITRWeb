@@ -3,7 +3,11 @@ import { io } from "socket.io-client";
 import { loadConfig } from "src/global/config";
 
 const config = loadConfig();
-const socket = io(`${config.SOCKET_URL}`);
+const socket = io(`${config.SOCKET_URL}`, {
+  extraHeaders: {
+    "ngrok-skip-browser-warning": "any",
+  },
+});
 export function useRefetchOnMessage(messageType: string, dispatch: () => void) {
   useEffect(() => {
     const handleMessage = () => {

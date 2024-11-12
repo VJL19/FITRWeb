@@ -56,6 +56,10 @@ export const authApi = createApi({
   reducerPath: "user/auth",
   tagTypes: ["auth"],
   baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers, { getState }) => {
+      headers.set("Access-Control-Allow-Origin", `${config.BASE_URL}`);
+      return headers;
+    },
     baseUrl: config.BASE_URL,
   }),
   endpoints: (builder) => ({

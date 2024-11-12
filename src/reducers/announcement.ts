@@ -43,6 +43,10 @@ export const announcementApi = createApi({
   tagTypes: ["admin_announments"],
   reducerPath: "admin/announcements",
   baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers, { getState }) => {
+      headers.set("ngrok-skip-browser-warning", "any");
+      return headers;
+    },
     baseUrl: config.BASE_URL,
     credentials: "include",
   }),

@@ -82,6 +82,9 @@ const TransactionPage = () => {
   useRefetchOnMessage("refresh_transaction", () => {
     dispatch(transactionApi.util.invalidateTags(["transaction"]));
   });
+  useRefetchOnMessage("refresh_subscriptionPage", () => {
+    dispatch(transactionApi.util.invalidateTags(["transaction"]));
+  });
 
   const handleDeleteTransaction = async () => {
     dispatch(handleClose());
