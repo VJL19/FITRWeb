@@ -42,11 +42,11 @@
 @media (max-width: 768px) {
   /* Hide sidebar by default on mobile */
   .sideNav {
-    transform: translateX(-100%); /* Off-screen */
+    transform: translateX(-100%); /* Hidden by default */
+    z-index: 1;
   }
-
-  /* Show sidebar when open */
   .sideNav.open {
-    transform: translateX(0); /* Slide in */
+    transform: translateX(0); /* Visible when open */
+    z-index: 5; /* Enough to appear above main content, but below menu button */
   }
 }
