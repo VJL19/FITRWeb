@@ -30,7 +30,13 @@ export const navLinkTextStyle = {
   color: "#f5f5f5",
   letterSpacing: 1.5,
 };
-const SideBar = () => {
+const SideBar = ({
+  isDrawerOpen,
+  toggleDrawer,
+}: {
+  isDrawerOpen?: boolean | undefined;
+  toggleDrawer: () => void;
+}) => {
   const { route } = useSelector((state: RootState) => state.route);
   const [open, setOpen] = useState(false);
 
@@ -76,7 +82,7 @@ const SideBar = () => {
   }
   return (
     <main className="main--container">
-      <aside className="sideNav">
+      <aside className={`${isDrawerOpen ? "sideNav open" : "sideNav"} `}>
         <div
           style={{
             display: "flex",
@@ -84,6 +90,13 @@ const SideBar = () => {
             alignItems: "center",
           }}
         >
+          <>
+            {isDrawerOpen && (
+              <button className="menu-button" onClick={toggleDrawer}>
+                &#9776; {/* Hamburger icon */}
+              </button>
+            )}
+          </>
           <img src={logo} height={75} width={"100%"} />
           <Avatar
             src={tokenData?.user?.ProfilePic}
@@ -96,6 +109,7 @@ const SideBar = () => {
           />
         </div>
         <br />
+
         <NavLink to="/dashboard" style={navLinkTextStyle}>
           <div className={dynamicStyles(route, "Home")}>
             <HomeIcon fontSize="large" htmlColor="#f5f5f5" />

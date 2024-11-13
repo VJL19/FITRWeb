@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useGetAccessWebTokenQuery } from "src/reducers/login";
 import { replaceCharWithAsterisk } from "src/utils/functions/text_fns";
 import DropdownMenu from "./DropdownMenu";
-const TopBar = () => {
+const TopBar = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
   const { data } = useGetAccessWebTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -26,7 +26,9 @@ const TopBar = () => {
         input?.removeAttribute("disabled");
       }}
     >
-      <div></div>
+      <button className="menu-button" onClick={toggleDrawer}>
+        &#9776; {/* Hamburger icon */}
+      </button>
       <div
         style={{
           display: "flex",

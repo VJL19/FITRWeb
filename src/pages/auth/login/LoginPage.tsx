@@ -213,7 +213,7 @@ const LoginPage = () => {
                 <DisplayFormError errors={errors.Password} />
               </Stack>
             </Stack>
-            <NavLink to="/reset_password">Forgot Password</NavLink > 
+            <NavLink to="/reset_password">Forgot Password</NavLink>
           </div>
 
           {isLoading ? (

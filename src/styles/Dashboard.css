@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 /* Main Container Layout for Desktop */
 .main--container {
   display: grid;
@@ -18,9 +19,7 @@
   color: #f5f5f5;
   font-size: 1.5rem;
   cursor: pointer;
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  position: relative;
   z-index: 1000; /* Higher z-index for visibility */
 }
 
@@ -38,6 +37,7 @@
 /* Show sidebar when open */
 .sideNav.open {
   left: 0; /* Slide in from the left */
+  width: 100%;
 }
 
 /* Mobile Styles */

@@ -26,7 +26,7 @@ const Home = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const { data: token, error: tokenErr } = useGetAccessWebTokenQuery();
-  
+
   useEffect(() => {
     dispatch(setRoute("Home"));
     dispatch(setAdminAccountData({ RFIDNumber: token?.user?.RFIDNumber! }));
@@ -40,14 +40,18 @@ const Home = () => {
   }
 
   return (
-    <Container sx={{ paddingY: 4 }}>
+    <Container sx={{ paddingY: 2 }}>
       <RenderRfidInput />
 
-      <Typography variant="h4"  gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: "600" }}
+      >
         DASHBOARD
       </Typography>
 
-      <Grid container spacing={3} justifyContent="center">
+      <Grid container columnSpacing={1} justifyContent="center">
         <Grid item xs={12} sm={6} md={4}>
           <TotalAnnouncementCreatedPage />
         </Grid>
@@ -59,10 +63,22 @@ const Home = () => {
         </Grid>
       </Grid>
 
-      <Typography variant="h4" sx={{ marginTop: 4 }} >
+      <Typography
+        variant="h4"
+        sx={{
+          marginTop: 4,
+          fontFamily: "'Poppins', sans-serif",
+          fontWeight: "600",
+        }}
+      >
         USERS
       </Typography>
-      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 2 }}>
+      <Grid
+        container
+        columnSpacing={1}
+        justifyContent="center"
+        sx={{ marginTop: 2 }}
+      >
         <Grid item xs={12} sm={6} md={4}>
           <TotalSessionUsersPage />
         </Grid>
@@ -74,10 +90,22 @@ const Home = () => {
         </Grid>
       </Grid>
 
-      <Typography variant="h4" sx={{ marginTop: 4 }} >
+      <Typography
+        variant="h4"
+        sx={{
+          marginTop: 4,
+          fontFamily: "'Poppins', sans-serif",
+          fontWeight: "600",
+        }}
+      >
         SUBSCRIPTIONS
       </Typography>
-      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 2 }}>
+      <Grid
+        container
+        columnSpacing={1}
+        justifyContent="center"
+        sx={{ marginTop: 2 }}
+      >
         <Grid item xs={12} sm={6} md={4}>
           <TotalPendingTransactionPage />
         </Grid>
@@ -90,8 +118,13 @@ const Home = () => {
       </Grid>
 
       <TodaySales />
-      
-      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 4 }}>
+
+      <Grid
+        container
+        columnSpacing={5}
+        justifyContent="center"
+        sx={{ marginTop: 4 }}
+      >
         <Grid item xs={12} sm={6} md={5}>
           <RecentTransactionPage />
         </Grid>

@@ -157,7 +157,6 @@ const EditTransactionPage = () => {
                       required
                       error={errors.SubscriptionStatus && true}
                     >
-                      <MenuItem value="Reject">Reject</MenuItem>
                       <MenuItem value="Fulfill">Fulfill</MenuItem>
                     </Select>
                   </FormControl>

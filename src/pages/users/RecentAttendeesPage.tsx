@@ -26,7 +26,6 @@ const RecentAttendeesPage = () => {
   return (
     <Box
       sx={{
-        width: 500,
         height: 450,
         maxHeight: 450,
         overflowY: "scroll",

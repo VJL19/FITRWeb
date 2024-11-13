@@ -86,7 +86,7 @@ const Dashboard = () => {
 
   // Toggle function for drawer
   const toggleDrawer = () => {
-    setDrawerOpen(!isDrawerOpen);
+    setDrawerOpen((prev) => !prev);
   };
 
   if (data?.user?.Role?.toUpperCase() === UserRole.USER) {
@@ -98,17 +98,16 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <TopBar />
+      <TopBar toggleDrawer={toggleDrawer} />
+
       <BreadCrumbs />
 
       {/* Mobile Menu Button */}
-      <button className="menu-button" onClick={toggleDrawer}>
-        &#9776; {/* Hamburger icon */}
-      </button>
 
       <div className="main--container">
         {/* Sidebar with drawer functionality */}
-        <SideBar  className={isDrawerOpen ? "sideNav open" : "sideNav"} />
+
+        <SideBar isDrawerOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
 
         <div className="dashboard-content">
           <Routes>
