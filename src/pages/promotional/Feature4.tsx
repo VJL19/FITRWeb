@@ -1,13 +1,13 @@
 import React from "react";
 import "../promotional/styles/Feature4.css";
-import phone_left from "src/assets/phone-left.png";
+import pay from "src/assets/payment.png";
 const Feature4 = () => {
   return (
     /* New Yellow Section 4 **/
     <section className="yellow-section4">
       <div className="container1">
         <div className="image-content123">
-          <img src={phone_left} alt="Join Us" />
+          <img src={pay} alt="Join Us" />
         </div>
         <div className="text-content">
           <h2>SUBSCRIPTION AND PAYMENT</h2>

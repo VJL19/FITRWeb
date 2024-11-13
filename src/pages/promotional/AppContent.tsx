@@ -1,10 +1,8 @@
 import React from "react";
 import "../promotional/styles/AppContent.css";
-import phone_left from "src/assets/phone-left.png";
-import phone_middle from "src/assets/phone-middle.png";
-import phone_right from "src/assets/phone-right.png";
-import google_play from "src/assets/googleplay.png";
-import app_store from "src/assets/appstore.png";
+import phone_left from "src/assets/favor.png";
+import phone_middle from "src/assets/homepage.png";
+import phone_right from "src/assets/drawes.png";
 const AppContent = () => {
   return (
     /**APP Section **/

@@ -1,5 +1,5 @@
 import "../promotional/styles/Feature1.css";
-import phone_left from "src/assets/phone-left.png";
+import tutorial from "src/assets/tutorial.png";
 const Feature1 = () => {
   return (
     <section className="yellow-section">
@@ -12,7 +12,7 @@ const Feature1 = () => {
           </p>
         </div>
         <div className="image-content123">
-          <img src={phone_left} alt="Join Us" />
+          <img src={tutorial} alt="Join Us" />
         </div>
       </div>
     </section>

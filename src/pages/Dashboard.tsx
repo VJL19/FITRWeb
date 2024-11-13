@@ -56,13 +56,16 @@ import ViewAttendanceRecordPage from "./attendance/ViewAttendanceRecordPage";
 import EditAttendanceRecordPage from "./attendance/EditAttendanceRecordPage";
 import AttendanceGuestTapPage from "./attendance/AttendanceGuestTapPage";
 
+// Main Dashboard Component
 const Dashboard = () => {
   const { data, status, error } = useGetAuthTokenQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-
   const navigate = useNavigate();
   const location = useLocation();
+
+  // State to manage sidebar drawer visibility on mobile
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (!data?.isAuthenticated) {
@@ -81,6 +84,11 @@ const Dashboard = () => {
     }
   }, [data?.isAuthenticated, location.pathname]);
 
+  // Toggle function for drawer
+  const toggleDrawer = () => {
+    setDrawerOpen(!isDrawerOpen);
+  };
+
   if (data?.user?.Role?.toUpperCase() === UserRole.USER) {
     return <LandingPage />;
   }
@@ -92,45 +100,50 @@ const Dashboard = () => {
     <React.Fragment>
       <TopBar />
       <BreadCrumbs />
+
+      {/* Mobile Menu Button */}
+      <button className="menu-button" onClick={toggleDrawer}>
+        &#9776; {/* Hamburger icon */}
+      </button>
+
       <div className="main--container">
-        <SideBar />
-        <React.Fragment>
+        {/* Sidebar with drawer functionality */}
+        <SideBar  className={isDrawerOpen ? "sideNav open" : "sideNav"} />
+
+        <div className="dashboard-content">
           <Routes>
             <Route path="/" element={<ProtectedRoute />}>
               <Route element={<AnnouncementPage />} path="/announcements" />
               <Route
                 element={<CreateAnnouncementPage />}
-                path={"/announcements/create_announcement"}
+                path="/announcements/create_announcement"
               />
               <Route
                 element={<ViewAnnouncementPage />}
-                path={"/announcements/view_announcement"}
+                path="/announcements/view_announcement"
               />
               <Route
                 element={<EditAnnouncementPage />}
-                path={"/announcements/edit_announcement"}
+                path="/announcements/edit_announcement"
               />
               <Route element={<Home />} path="/dashboard" index />
               <Route element={<ProgramPage />} path="/suggested_programs" />
-
               <Route
                 element={<CreateProgramPage />}
-                path={"/suggested_programs/create_program"}
+                path="/suggested_programs/create_program"
               />
               <Route
                 element={<ViewProgramPage />}
-                path={"/suggested_programs/view_program"}
+                path="/suggested_programs/view_program"
               />
               <Route
                 element={<EditProgramPage />}
-                path={"/suggested_programs/edit_program"}
+                path="/suggested_programs/edit_program"
               />
               <Route element={<RecordPage />} path="/records" />
               <Route element={<EditRecordPage />} path="/records/edit_record" />
-
               <Route element={<ViewRecordPage />} path="/records/view_record" />
               <Route element={<ReportPage />} path="/reports" />
-
               <Route element={<AttendancePage />} path="/attendance" />
               <Route
                 element={<CreateAttendanceRecordPage />}
@@ -175,42 +188,39 @@ const Dashboard = () => {
               />
               <Route
                 element={<CreateTransactionPage />}
-                path={"/transactions/create_subscription"}
+                path="/transactions/create_subscription"
               />
               <Route
                 element={<ViewTransactionPage />}
-                path={"/transactions/view_subscription"}
+                path="/transactions/view_subscription"
               />
               <Route
                 element={<EditTransactionPage />}
-                path={"/transactions/edit_subscription"}
+                path="/transactions/edit_subscription"
               />
               <Route element={<UserPage />} path="/users" />
-              <Route element={<CreateUserPage />} path={"/users/create_user"} />
+              <Route element={<CreateUserPage />} path="/users/create_user" />
               <Route
                 element={<CreateUserConfirmationPage />}
-                path={"/users/create_user/confirmation_email"}
+                path="/users/create_user/confirmation_email"
               />
               <Route
                 element={<ManageAccountPage />}
-                path={"/dashboard/manage_account"}
+                path="/dashboard/manage_account"
               />
               <Route
                 element={<ChangeAccountConfirmationPage />}
-                path={"/dashboard/manage_account/confirmation_email"}
+                path="/dashboard/manage_account/confirmation_email"
               />
               <Route
                 element={<ChangeAccountPage />}
-                path={"/dashboard/manage_account/change_account"}
+                path="/dashboard/manage_account/change_account"
               />
-              <Route element={<ViewUserPage />} path={"/users/view_user"} />
-              <Route element={<EditUserPage />} path={"/users/edit_user"} />
+              <Route element={<ViewUserPage />} path="/users/view_user" />
+              <Route element={<EditUserPage />} path="/users/edit_user" />
             </Route>
-            {/* <Route path="/" element={<MainLayout />}>
-              {routes}
-            </Route> */}
           </Routes>
-        </React.Fragment>
+        </div>
       </div>
     </React.Fragment>
   );

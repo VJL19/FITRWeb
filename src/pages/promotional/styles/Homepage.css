@@ -9,7 +9,7 @@
 
 .overlay {
   height: 100%;
-  width: auto;
+  width: 100%; /* Ensure the overlay covers the full width */
   display: flex;
   justify-content: flex-start; /* Align content to the left */
   align-items: flex-end; /* Align content to the bottom */
@@ -49,4 +49,62 @@
 
 .cta-button:hover {
   background-color: #e02600;
+}
+
+/* Responsive Styling */
+
+/* For tablets (screen width 768px and below) */
+@media (max-width: 768px) {
+  .hero {
+    height: 80vh; /* Reduce height on tablets */
+  }
+
+  .text-container {
+    max-width: 80%; /* Allow the text container to take up more width */
+    padding: 20px; /* Add some padding for small devices */
+  }
+
+  .text-container h1 {
+    font-size: 3rem; /* Smaller title on tablets */
+    line-height: 1.3;
+  }
+
+  .text-container p {
+    font-size: 1rem; /* Smaller text size on tablets */
+  }
+
+  .cta-button {
+    font-size: 1rem; /* Smaller button text on tablets */
+    padding: 0.8rem 1.6rem; /* Adjust padding for a more balanced look */
+  }
+}
+
+/* For mobile devices (screen width 480px and below) */
+@media (max-width: 480px) {
+  .hero {
+    height: 60vh; /* Reduce height further for mobile */
+  }
+
+  .overlay {
+    padding: 20px; /* Less padding on mobile */
+  }
+
+  .text-container {
+    max-width: 90%; /* Text container width takes up more space */
+    padding: 10px; /* Add more padding on mobile */
+  }
+
+  .text-container h1 {
+    font-size: 2.5rem; /* Smaller title for mobile */
+    line-height: 1.3;
+  }
+
+  .text-container p {
+    font-size: 0.9rem; /* Smaller text on mobile */
+  }
+
+  .cta-button {
+    font-size: 1rem; /* Button text size smaller on mobile */
+    padding: 0.8rem 1.4rem; /* Adjust padding for mobile */
+  }
 }

@@ -1,4 +1,4 @@
-header {
+header { 
   position: fixed;
   width: 100%;
   top: 0;
@@ -7,12 +7,14 @@ header {
   height: 80px;
   padding: 1rem 2rem;
 }
+
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
 }
+
 .logo a {
   text-decoration: none;
   color: white;
@@ -23,41 +25,93 @@ nav {
 .logo a:hover {
   color: #ff2e00;
 }
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
 }
+
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 1.5rem; /* Spacing between links */
+  gap: 1.5rem;
 }
 
 .nav-links a {
   text-decoration: none;
   color: white;
-  font-size: 1rem; /* Adjust text size */
+  font-size: 1rem;
   font-weight: bold;
   letter-spacing: 0.1rem;
   transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: #ff2e00; /* Change color to orange on hover */
+  color: #ff2e00;
   text-decoration: underline;
 }
 
 .login-btn {
   cursor: pointer;
-  padding: 0.5rem 1.2rem; /* Reduce padding to fit smaller header */
+  padding: 0.5rem 1.2rem;
   border: 2px solid white;
   border-radius: 5px;
   background-color: transparent;
 }
 
 .login-btn:hover {
-  background-color: whitesmoke; /* Change background color on hover */
+  background-color: whitesmoke;
   color: black;
   text-decoration: none;
+}
+
+/* Hide the menu-toggle button by default (on larger screens) */
+.menu-toggle {
+  display: none;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .logo a {
+    font-size: 1.2rem;
+  }
+
+  .nav-links {
+    display: none; /* Hide the links */
+    flex-direction: column;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Add a background to make it visible */
+    position: absolute;
+    top: 80px; /* Below the header */
+    left: 0;
+    z-index: 999;
+    padding: 1rem 0;
+  }
+
+  .nav-links.active {
+    display: flex; /* Show the links when active */
+  }
+
+  .nav-links a {
+    padding: 1rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .login-btn {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Show the menu icon on small screens */
+  .menu-toggle {
+    display: block; /* Show the menu button on smaller screens */
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+  }
 }

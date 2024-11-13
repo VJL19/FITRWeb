@@ -12,3 +12,8 @@
   display: grid;
   grid-template-columns: 20% 80%;
 }
+@media (max-width: 768px) {
+  .breadcrumbs {
+    flex-wrap: wrap; /* Allow wrapping on mobile */
+  }
+}

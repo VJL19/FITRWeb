@@ -22,6 +22,7 @@ import { NETWORK_ERROR } from "src/utils/constants/Errors";
 import delayShowToast from "src/utils/functions/delayToast";
 import { useUserOnline } from "src/hooks/useUserOnline";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+
 const CreateProgramPage = () => {
   const {
     register,
@@ -102,7 +103,7 @@ const CreateProgramPage = () => {
   }
   return (
     <div style={{ padding: 5 }}>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ padding: { xs: 2, md: 5 } }}>
         <Button
           startIcon={<ArrowBackIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
           disabled={isLoading}
@@ -110,19 +111,24 @@ const CreateProgramPage = () => {
           color="warning"
           size="medium"
           onClick={handleBack}
+          sx={{
+            mb: 3,
+            fontSize: { xs: '0.8rem', sm: '1rem' },
+          }}
         >
           Back
         </Button>
-        <h1>CREATE SUGGESTED PROGRAM</h1>
-        <br />
+        <h1 style={{ fontSize: '1.8rem', textAlign: 'center' }}>
+          CREATE SUGGESTED PROGRAM
+        </h1>
         <h2>Title</h2>
         <TextField
           {...register("SuggestedProgramTitle")}
           inputMode="text"
           required
-          error={errors.SuggestedProgramTitle ? true : false}
+          error={!!errors.SuggestedProgramTitle}
           label="Enter suggested program title"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", mb: 2 }}
         />
         {errors.SuggestedProgramTitle && (
           <h4 style={{ color: "#d9534f" }}>
@@ -130,7 +136,13 @@ const CreateProgramPage = () => {
           </h4>
         )}
         <h2>Description</h2>
-        <Box component="div" sx={{ height: 350 }}>
+        <Box
+          component="div"
+          sx={{
+            height: { xs: 250, md: 350 },
+            mb: 2,
+          }}
+        >
           <Controller
             name="SuggestedProgramDescription"
             control={control}
@@ -143,10 +155,6 @@ const CreateProgramPage = () => {
                   setValue={onChange}
                   style={{ height: "100%" }}
                 />
-                {/* <MDEditor.Markdown
-                  source={value}
-                  style={{ whiteSpace: "pre-wrap" }}
-                /> */}
               </React.Fragment>
             )}
           />
@@ -158,7 +166,6 @@ const CreateProgramPage = () => {
           </h4>
         )}
 
-        <br />
         <Button
           disabled={isSubmitting}
           endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
@@ -166,7 +173,10 @@ const CreateProgramPage = () => {
           color="success"
           size="large"
           onClick={handleSubmit(onSubmit, (err) => console.log(err))}
-          style={{ width: "100%" }}
+          sx={{
+            width: "100%",
+            fontSize: { xs: '0.9rem', sm: '1rem' },
+          }}
         >
           Submit
         </Button>

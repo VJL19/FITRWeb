@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { AppDispatch, RootState } from "../store/store";
+import { AppDispatch } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setRoute } from "../reducers/route";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import RecentAttendeesPage from "./users/RecentAttendeesPage";
 import RecentTransactionPage from "./transactions/RecentTransactionPage";
@@ -26,10 +26,11 @@ const Home = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const { data: token, error: tokenErr } = useGetAccessWebTokenQuery();
+  
   useEffect(() => {
     dispatch(setRoute("Home"));
     dispatch(setAdminAccountData({ RFIDNumber: token?.user?.RFIDNumber! }));
-  }, []);
+  }, [dispatch, token]);
 
   if (
     tokenErr?.status === HTTP_ERROR.UNAUTHORIZED ||
@@ -39,64 +40,65 @@ const Home = () => {
   }
 
   return (
-    <Container sx={{ height: 450 }}>
+    <Container sx={{ paddingY: 4 }}>
       <RenderRfidInput />
 
-      <h1>DASHBOARD</h1>
+      <Typography variant="h4"  gutterBottom>
+        DASHBOARD
+      </Typography>
 
-      <Container
-        sx={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          gap: 2.5,
-        }}
-      >
-        <TotalAnnouncementCreatedPage />
-        <TotalRecentAttendeesPage />
-        <TotalProgramCreatedPage />
-      </Container>
-      <h2>USERS</h2>
-      <Container
-        sx={{
-          display: "flex",
-          width: "100%",
-          marginTop: 2,
-          justifyContent: "center",
-          gap: 2.5,
-        }}
-      >
-        <TotalSessionUsersPage />
-        <TotalMonthlyUsersPage />
-        <TotalCreatedUserPage />
-      </Container>
-      <h2>SUBSCRIPTIONS</h2>
-      <Container
-        sx={{
-          display: "flex",
-          width: "100%",
-          marginTop: 2,
-          justifyContent: "center",
-          gap: 2.5,
-        }}
-      >
-        <TotalPendingTransactionPage />
-        <TotalFulfilledTransactionPage />
-        <TotalTodayTransactionPage />
-      </Container>
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalAnnouncementCreatedPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalRecentAttendeesPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalProgramCreatedPage />
+        </Grid>
+      </Grid>
+
+      <Typography variant="h4" sx={{ marginTop: 4 }} >
+        USERS
+      </Typography>
+      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 2 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalSessionUsersPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalMonthlyUsersPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalCreatedUserPage />
+        </Grid>
+      </Grid>
+
+      <Typography variant="h4" sx={{ marginTop: 4 }} >
+        SUBSCRIPTIONS
+      </Typography>
+      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 2 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalPendingTransactionPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalFulfilledTransactionPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TotalTodayTransactionPage />
+        </Grid>
+      </Grid>
 
       <TodaySales />
-      <Container
-        sx={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-          gap: 2.5,
-        }}
-      >
-        <RecentTransactionPage />
-        <RecentAttendeesPage />
-      </Container>
+      
+      <Grid container spacing={3} justifyContent="center" sx={{ marginTop: 4 }}>
+        <Grid item xs={12} sm={6} md={5}>
+          <RecentTransactionPage />
+        </Grid>
+        <Grid item xs={12} sm={6} md={5}>
+          <RecentAttendeesPage />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import "../promotional/styles/Feature3.css";
-import phone_left from "src/assets/phone-left.png";
+import account from "src/assets/account.png";
 const Feature3 = () => {
   return (
     <section className="yellow-section3">
@@ -16,7 +16,7 @@ const Feature3 = () => {
           </p>
         </div>
         <div className="image-content123">
-          <img src={phone_left} alt="Join Us" />
+          <img src={account} alt="Join Us" />
         </div>
       </div>
     </section>

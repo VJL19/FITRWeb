@@ -143,7 +143,7 @@ const _columns: GridColDef[] = [
           </NavLink>
           <NavLink
             to={`/suggested_programs/edit_program`}
-            style={navLinkTextStyle}
+            style={navLinkTextStyle}  
           >
             <Button
               variant="contained"

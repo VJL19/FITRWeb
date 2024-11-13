@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../promotional/styles/Header.css";
 import {
-  useGetAccessWebTokenQuery,
   useGetAuthTokenQuery,
 } from "src/reducers/login";
 import { UserRole } from "src/utils/enums/ROLE";
@@ -15,23 +14,37 @@ const Header = () => {
   });
   const [logoutUser, { status: logoutStatus, data: logoutData }] =
     useLogoutUserWebMutation();
-
+  
+  const [menuActive, setMenuActive] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (logoutStatus === "fulfilled") {
       window.location.reload();
     }
   }, [status, logoutData?.message]);
+
   if (status === "pending") {
     return <LoadingIndicator />;
   }
+
+  const toggleMenu = () => {
+    setMenuActive(!menuActive);
+  };
+
   return (
     <header>
       <nav>
         <div className="logo">
           <a href="#homepage">MJESHTER FITNESS GYM</a>
         </div>
-        <ul className="nav-links">
+
+        {/* Button to toggle the menu on smaller screens */}
+        <button className="menu-toggle" onClick={toggleMenu}>
+          ☰
+        </button>
+
+        <ul className={`nav-links ${menuActive ? "active" : ""}`}>
           <li>
             <a href="#about">ABOUT</a>
           </li>
@@ -43,7 +56,7 @@ const Header = () => {
           </li>
           <li>
             {data?.user?.Role?.toUpperCase() === UserRole.ADMIN ? (
-              <React.Fragment>
+              <>
                 <a
                   onClick={() => {
                     navigate("/dashboard", { replace: true });
@@ -62,7 +75,7 @@ const Header = () => {
                 >
                   LOG OUT
                 </a>
-              </React.Fragment>
+              </>
             ) : (
               <a
                 onClick={() => {
