@@ -8,12 +8,12 @@ const Services = () => {
         <h2 className="services-title">OUR SERVICES</h2>
         <div className="service-items">
           <div className="service-item">
-            <h3>Web Development</h3>
-            <p>High-performance and scalable web development.</p>
+            <h3>Single Session Pass</h3>
+            <p>Access to gym facilities for a single session (typically 1-2 hours).</p>
           </div>
           <div className="service-item">
-            <h3>UI/UX Design</h3>
-            <p>Beautiful and user-friendly interfaces.</p>
+            <h3>Monthly Membership</h3>
+            <p>Unlimited gym access during operational hours.</p>
           </div>
         </div>
       </div>

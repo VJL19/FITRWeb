@@ -1,12 +1,12 @@
 import React from "react";
 import "../promotional/styles/Feature2.css";
-import phone_left from "src/assets/phone-left.png";
+import newsfeed from "src/assets/newsfeed.png";
 const Feature2 = () => {
   return (
     <section className="yellow-section2">
       <div className="container1">
         <div className="image-content123">
-          <img src={phone_left} alt="Join Us" />
+          <img src={newsfeed} alt="Join Us" />
         </div>
         <div className="text-content">
           <h2>COMMUNITY</h2>

@@ -12,9 +12,10 @@ const Homepage = () => {
             WITH LOVE.
           </h1>
           <p>
-            Komm vorbei und trainiere mit uns im Herzen von Berlin. Dich
-            erwartet eine tolle Community mit erfahrenen Trainer:innen.
-            Gemeinsam holen wir das Beste aus dir raus.
+          It was established in 2018 to satisfy the burning passion for improving healthy living standards 
+          in the community. It took no time before it came to a prime position in the 
+          locality respecting fitness. It offers excellent facilities and 
+          services of high standard. 
           </p>
           <a href="#app" className="cta-button">
             DOWNLOAD NOW

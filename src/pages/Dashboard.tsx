@@ -108,7 +108,7 @@ const Dashboard = () => {
 
       <div className="main--container">
         {/* Sidebar with drawer functionality */}
-        <SideBar className={isDrawerOpen ? "sideNav open" : "sideNav"} />
+        <SideBar  className={isDrawerOpen ? "sideNav open" : "sideNav"} />
 
         <div className="dashboard-content">
           <Routes>
