@@ -10,11 +10,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import thumbnail from "src/assets/thumbnail_no_img.jpg";
 import { handleOpen } from "src/reducers/modal";
+
 const _columns: GridColDef[] = [
   {
     field: "RowID",
     headerName: "Row ID",
-
     renderHeader: (params) => {
       return <b>{params.field}</b>;
     },
@@ -30,7 +30,6 @@ const _columns: GridColDef[] = [
     flex: 1,
     field: "AnnouncementTitle",
     headerName: "Announcement Title",
-
     renderHeader: (params) => {
       return <b>{params.field.split("Announcement")[1]}</b>;
     },
@@ -60,6 +59,8 @@ const _columns: GridColDef[] = [
                 ? thumbnail
                 : currentRow.AnnouncementImage
             }
+            alt={currentRow.AnnouncementTitle} // Add alt text for accessibility
+            style={{ maxWidth: "100%", height: "auto" }} // Make image responsive
           />
         </Stack>
       );
@@ -122,6 +123,7 @@ const _columns: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "super-app-theme--header",
     renderCell: (params) => {
+      
       const dispatch = useDispatch();
       const currentRowData: IAnnouncements = params.row;
       const arg: IAnnouncements = {
@@ -142,27 +144,19 @@ const _columns: GridColDef[] = [
 
       return (
         <Stack direction="row" spacing={2} alignItems={"center"} height="100%">
-          <NavLink
-            to={`/announcements/view_announcement`}
-            style={navLinkTextStyle}
-          >
+          <NavLink to={`/announcements/view_announcement`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="info"
               size="small"
               style={{ height: 40 }}
               onClick={onClick}
-              startIcon={
-                <TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />
-              }
+              startIcon={<TextSnippetIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
             >
               View
             </Button>
           </NavLink>
-          <NavLink
-            to={`/announcements/edit_announcement`}
-            style={navLinkTextStyle}
-          >
+          <NavLink to={`/announcements/edit_announcement`} style={navLinkTextStyle}>
             <Button
               variant="contained"
               color="warning"

@@ -1,17 +1,17 @@
 /* Section Styles */
 section {
-  padding: 100px 0;
+  padding: 80px 20px;
   text-align: center;
 }
 
 section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
 section p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.8;
@@ -20,23 +20,26 @@ section p {
 
 .about-section {
   display: flex;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
   padding: 50px;
   background-color: #fff;
-  color: #fff;
   align-items: center;
   justify-content: center;
 }
 
 .about-container {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 1350px;
 }
+
 .container1 {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 850px;
@@ -56,7 +59,7 @@ section p {
 .text-section {
   flex: 1;
   position: relative;
-  padding-left: 40px; /* Adds space for the vertical line */
+  padding-left: 40px; /* Space for the vertical line */
 }
 
 .text-section::before {
@@ -66,7 +69,7 @@ section p {
   top: 0;
   bottom: 0;
   width: 4px;
-  background-color: #ff8b72; /* Vertical line color */
+  background-color: #ff8b72;
 }
 
 .heading {
@@ -86,4 +89,92 @@ section p {
   font-size: 1.2em;
   margin-bottom: 30px;
   line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .about-section {
+    padding: 30px;
+  }
+
+  .about-container,
+  .container1 {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image-section {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .text-section {
+    padding-left: 20px; /* Reduce padding on smaller screens */
+  }
+  
+  section h2 {
+    font-size: 2rem;
+  }
+
+  .heading {
+    font-size: 1.8em;
+  }
+
+  .subheading {
+    font-size: 1.6em;
+  }
+
+  .description {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 60px 10px;
+  }
+
+  section h2 {
+    font-size: 1.8rem;
+  }
+
+  .image-section img {
+    border-radius: 8px;
+  }
+
+  .text-section {
+    padding-left: 10px;
+  }
+
+  .heading {
+    font-size: 1.6em;
+  }
+
+  .subheading {
+    font-size: 1.4em;
+  }
+
+  .description {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 576px) {
+  section {
+    padding: 40px 5px;
+  }
+
+  section h2 {
+    font-size: 1.6rem;
+  }
+
+  .image-section img {
+    border-radius: 5px;
+  }
+
+  .heading,
+  .subheading,
+  .description {
+    font-size: 1em;
+  }
 }

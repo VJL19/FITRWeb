@@ -1,13 +1,10 @@
-.services-section {
-  background-color: #fff;
-}
-
-/* Services Section */
+/* Base styles for services section */
 .services-section {
   background-color: #444;
   padding: 80px 0; /* Adequate padding above and below */
 }
 
+/* Title styling */
 .services-title {
   color: #ff2e00; /* Title color */
   margin: 0 0 30px; /* Remove top margin, add bottom margin */
@@ -15,13 +12,16 @@
   font-size: 2.5rem; /* Title size */
 }
 
+/* Flexbox container for the service items */
 .service-items {
   display: flex;
   justify-content: center; /* Center the service items */
   gap: 30px; /* Space between service items */
   margin-top: 100px; /* Space above service items */
+  flex-wrap: wrap; /* Allow items to wrap to the next line on smaller screens */
 }
 
+/* Individual service item styling */
 .service-item {
   flex: 1;
   max-width: 300px; /* Max width for each service item */
@@ -44,4 +44,40 @@
   color: #000;
   font-size: 1.5rem; /* Service item title size */
   margin-bottom: 10px; /* Space below title */
+}
+
+/* Responsive Styling */
+
+/* For tablets (screen width 768px and below) */
+@media (max-width: 768px) {
+  .services-title {
+    font-size: 2rem; /* Smaller title on tablets */
+  }
+
+  .service-items {
+    gap: 20px; /* Reduce gap between service items on tablets */
+  }
+
+  .service-item {
+    max-width: 45%; /* Service items take up more space */
+    flex: 1 1 45%; /* Ensure items take 45% of the container width */
+  }
+}
+
+/* For mobile devices (screen width 480px and below) */
+@media (max-width: 480px) {
+  .services-title {
+    font-size: 1.8rem; /* Smaller title on mobile */
+  }
+
+  .service-items {
+    flex-direction: column; /* Stack service items vertically */
+    gap: 20px; /* Space between stacked items */
+  }
+
+  .service-item {
+    max-width: 90%; /* Ensure service items take up more space */
+    flex: 1 1 90%; /* Items take up 90% of the container width */
+    margin-bottom: 20px; /* Add space between items */
+  }
 }

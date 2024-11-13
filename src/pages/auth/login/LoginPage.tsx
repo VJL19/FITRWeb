@@ -30,6 +30,7 @@ import { useUserOnline } from "src/hooks/useUserOnline";
 import { setAdminAccountData } from "src/reducers/users";
 import { AppDispatch } from "src/store/store";
 import { useDispatch } from "react-redux";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { data: accessTokenData, error: tokenErr } = useGetAccessWebTokenQuery(
@@ -98,18 +99,19 @@ const LoginPage = () => {
     if (error?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
-        "Network error has occured. Please check your internet connection and try again this action",
+        "Network error has occurred. Please check your internet connection and try again.",
         "toast_login"
       );
     }
     if (error?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
       delayShowToast(
         "failed",
-        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "There is a problem with the server. Possible maintenance or an unexpected crash. We apologize for the inconvenience.",
         "toast_login"
       );
     }
   }, [status]);
+
   useEffect(() => {
     if (guestStatus === "fulfilled") {
       delayShowToast("success", guestData?.details, "toast_login");
@@ -124,43 +126,48 @@ const LoginPage = () => {
     if (guestError?.status === NETWORK_ERROR.FETCH_ERROR && !isOnline) {
       delayShowToast(
         "failed",
-        "Network error has occured. Please check your internet connection and try again this action",
+        "Network error has occurred. Please check your internet connection and try again.",
         "toast_login"
       );
     }
     if (guestError?.status === NETWORK_ERROR.FETCH_ERROR && isOnline) {
       delayShowToast(
         "failed",
-        "There is a problem within the server side possible maintenance or it crash unexpectedly. We apologize for your inconveniency",
+        "There is a problem with the server. Possible maintenance or an unexpected crash. We apologize for the inconvenience.",
         "toast_login"
       );
     }
   }, [guestStatus]);
 
   const handleLogin = async (data: TLoginSchema) => {
-    // dispatch(loginUser());
     await new Promise((resolve) => setTimeout(resolve, 1000));
     loginUserr(data);
     console.log(data);
   };
+
   const handleLoginGuest = async () => {
     guestLogin();
   };
 
-  console.log("login data", data);
-  console.log("login err", error);
-  console.log("login status", status);
+  // Determine if there's an error
+  const hasError = Object.keys(errors).length > 0;
+
   return (
     <div className="container">
       <div className="bg-background">
         <div className="logo-container">
-          <img src={logo} height={300} width="100%" className="logo-img" />
+          <img src={logo} height="200" width="80%" className="logo-img" />
         </div>
-        <div className="login-container">
+        <div
+          className="login-container"
+          style={{
+            height: hasError ? "auto" : "60%", // Adjust height dynamically if there's an error
+          }}
+        >
           <div style={{ padding: 25 }}>
             <h1>GET CONNECTED WITH US</h1>
-            <Stack direction={"column"}>
-              <Stack width={"100%"}>
+            <Stack direction={"column"} alignItems={"flex-start"}>
+              <Stack width={"100%"} alignItems={"flex-start"}>
                 <h2>Username</h2>
                 <TextField
                   {...register("Username")}
@@ -172,7 +179,7 @@ const LoginPage = () => {
                 <DisplayFormError errors={errors.Username} />
               </Stack>
               <br />
-              <Stack width={"100%"}>
+              <Stack width={"100%"} alignItems={"flex-start"}>
                 <h2>Password</h2>
                 <TextField
                   {...register("Password")}
@@ -206,7 +213,7 @@ const LoginPage = () => {
                 <DisplayFormError errors={errors.Password} />
               </Stack>
             </Stack>
-            <NavLink to="/reset_password">Forgot Password</NavLink>
+            <NavLink to="/reset_password">Forgot Password</NavLink > 
           </div>
 
           {isLoading ? (

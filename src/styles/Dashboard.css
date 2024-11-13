@@ -1,8 +1,38 @@
+/* Main Container Layout for Desktop */
 .main--container {
   display: grid;
   grid-template-columns: 20% 80%;
+  
 }
+
+/* RFID Input - Hidden */
 #rfidInput {
   opacity: 0;
   width: 0%;
+}
+.menu-button {
+  display: none; /* Hide by default */
+  background: none;
+  border: none;
+  color: #f5f5f5;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+}
+
+/* Show menu button on mobile */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .main--container {
+    grid-template-columns: 100%; /* Full width for main content on mobile */
+  }
 }

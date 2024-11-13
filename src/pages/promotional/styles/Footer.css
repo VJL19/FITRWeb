@@ -13,10 +13,11 @@ footer {
   width: 90%;
   margin: 0 auto;
   max-width: 1200px;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
 }
 
 .footer-left {
-  width: 55%; /* Adjusted to give more space to the right side */
+  width: 55%; /* Larger width for desktop */
 }
 
 .footer-left h1 {
@@ -102,4 +103,75 @@ form button:hover {
 
 .footer-bottom a:hover {
   color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .footer-container {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;    /* Center align on smaller screens */
+    text-align: center;
+  }
+
+  .footer-left,
+  .right-section {
+    width: 100%; /* Full width on smaller screens */
+    max-width: none;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .footer-left h1 {
+    font-size: 24px;
+  }
+
+  .footer-left p,
+  .right-section h3 {
+    font-size: 16px;
+  }
+
+  .social-icons a {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  footer {
+    padding: 20px 0;
+  }
+
+  .footer-left h1 {
+    font-size: 22px;
+  }
+
+  .footer-left p,
+  .right-section h3,
+  form input,
+  form textarea,
+  form button {
+    font-size: 14px;
+  }
+
+  form button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .social-icons a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  footer {
+    padding: 15px 0;
+  }
+
+  .footer-left h1 {
+    font-size: 20px;
+  }
+
+  .footer-bottom {
+    font-size: 10px;
+  }
 }

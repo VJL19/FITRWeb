@@ -1,44 +1,132 @@
+/* Ensure the body takes up the full viewport */
 body {
   margin: 0;
   padding: 0;
+  height: 120vh; /* Ensure body takes up the full height */
 }
 
 .container {
   height: 100%;
   width: 100%;
-}
-.bg-background {
-  background-image: url("../../../../images/bg_1.jpeg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  background-blend-mode: darken;
-  height: 150vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  z-index: 1; /* Ensure container sits on top of the background */
 }
 
+/* Full-page background image */
+.bg-background {
+  position: absolute; /* Make the background cover the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-image: url("../../../../images/bg_1.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  background-blend-mode: darken;
+  z-index: 0; /* Ensure background is behind the content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo container */
 .logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: -190px; /* Space between logo and login container */
+  margin-bottom: -60px;
+  z-index: 1; /* Ensure logo is above the background */
 }
+
+/* Login container */
 .login-container {
-  width: 550px;
-  height: auto;
+  width: 100%; /* Reduce the width */
+  max-width: 380px; /* Smaller max-width */
+  padding: 10px 15px; /* Reduce padding */
+  height: 60%; /* Set height to 60% of the screen, reducing it by 40% */
   background-color: #f5f5f5;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1; /* Ensure login form is above the background */
+  text-align: center; /* Center align text */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; /* Distribute content evenly inside */
+}
+
+/* Make the "GET CONNECTED WITH US" heading smaller and fit on one line */
+.login-container h1 {
+  font-size: 1.2em; /* Smaller font size */
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Ensure no overflow */
+  text-overflow: ellipsis; /* Add ellipsis if it's too long */
+}
+
+.login-container h2 {
+  font-size: 1em; /* Smaller font size */
+  margin-bottom: 5px;
 }
 
 .btn-login {
   border: none;
-  margin-bottom: 25px;
-  width: 409px;
-  height: 65px;
-  font-size: 24px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 45px; /* Reduce button height */
+  font-size: 16px; /* Smaller font size */
   cursor: pointer;
   background-color: #ff2e00;
   color: #f5f5f5;
-  position: absolute;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%;
+    max-width: 280px;
+    padding: 8px 12px;
+    height: 60%; /* Maintain the height reduction for smaller screens */
+  }
+
+  .login-container h1 {
+    font-size: 1em;
+  }
+
+  .login-container h2 {
+    font-size: 0.9em;
+  }
+
+  .btn-login {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+/* Media query for very small screens */
+@media (max-width: 480px) {
+  .login-container {
+    width: 100%;
+    max-width: 260px;
+    padding: 8px;
+    height: 60%; /* Maintain the height reduction for very small screens */
+  }
+
+  .login-container h1 {
+    font-size: 0.9em;
+  }
+
+  .login-container h2 {
+    font-size: 0.8em;
+  }
+
+  .btn-login {
+    height: 35px;
+    font-size: 13px;
+  }
 }
