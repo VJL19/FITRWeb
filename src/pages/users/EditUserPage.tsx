@@ -130,10 +130,7 @@ const EditUserPage = () => {
         "toast_user"
       );
     }
-    if (
-      error?.status === HTTP_ERROR.UNAUTHORIZED ||
-      error?.status === HTTP_ERROR.BAD_REQUEST
-    ) {
+    if (error?.status === HTTP_ERROR.UNAUTHORIZED) {
       delayShowToast(
         "failed",
         "You are not authenticated please login again!",

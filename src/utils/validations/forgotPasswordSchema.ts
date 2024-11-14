@@ -18,7 +18,16 @@ export const forgotPasswordSchema = z
     Password: z
       .string()
       .min(1, { message: "Password is required" })
-      .min(5, { message: "Password should not be less than 5 letters" }),
+      .min(8)
+      .regex(
+        new RegExp(
+          "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+        ),
+        {
+          message:
+            "Your password must be at least 8 characters and contain an uppercase letter, lowercase letter, and number",
+        }
+      ),
     ConfirmPassword: z
       .string()
       .min(1, { message: "Confirm password is required" }),

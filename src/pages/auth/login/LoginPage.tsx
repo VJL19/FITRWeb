@@ -146,7 +146,8 @@ const LoginPage = () => {
   };
 
   const handleLoginGuest = async () => {
-    guestLogin();
+    // guestLogin();ß
+    navigate("/dashboard");
   };
 
   // Determine if there's an error
@@ -238,16 +239,7 @@ const LoginPage = () => {
               </Button>
 
               <h3>OR</h3>
-              <Button
-                disabled={isSubmitting}
-                variant="outlined"
-                color="error"
-                size="large"
-                onClick={handleLoginGuest}
-                style={{ width: "100%" }}
-              >
-                LOGIN AS GUEST
-              </Button>
+              <NavLink to="/landing_page">VIEW LANDING PAGE</NavLink>
             </Container>
           )}
           <br />

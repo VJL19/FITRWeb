@@ -42,7 +42,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/homepage" element={<LandingPage />} />
+        <Route path="/landing_page" element={<LandingPage />} />
         <Route path="/reset_password" element={<ForgotPasswordPage />} />
         <Route
           path="/change_password_confirmation"
