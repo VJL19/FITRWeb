@@ -230,19 +230,27 @@ const LoginPage = () => {
                 disabled={isSubmitting}
                 endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
                 variant="contained"
-                color="error"
+                sx={{ bgColor: "primary.main" }}
                 size="large"
                 onClick={handleSubmit(handleLogin, (err) => console.log(err))}
                 style={{ width: "100%" }}
               >
                 LOGIN
               </Button>
-
               <h3>OR</h3>
-              <NavLink to="/landing_page">VIEW LANDING PAGE</NavLink>
+              <NavLink to="/landing_page">
+                <Button
+                  endIcon={<SendIcon fontSize="medium" htmlColor={"#f5f5f5"} />}
+                  variant="outlined"
+                  sx={{ bgColor: "primary.main" }}
+                  size="large"
+                  style={{ width: "100%" }}
+                >
+                  VIEW LANDING PAGE
+                </Button>
+              </NavLink>
             </Container>
           )}
-          <br />
         </div>
       </div>
       <ToastContainer containerId={"toast_login"} />

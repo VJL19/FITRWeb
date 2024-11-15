@@ -46,7 +46,9 @@ const UserPage = () => {
   const { isOnline } = useUserOnline();
   const [deleteUser, { status: deleteStatus, error }] =
     useDeleteUserAccountMutation();
-
+  useRefetchOnMessage("refresh_userLists", () => {
+    dispatch(usersApi.util.invalidateTags(["users"]));
+  });
   const {
     data,
     isFetching,
@@ -66,9 +68,6 @@ const UserPage = () => {
     "Actions",
   ];
 
-  useRefetchOnMessage("refresh_userLists", () => {
-    dispatch(usersApi.util.invalidateTags(["users"]));
-  });
   const columns = React.useMemo(
     () => _columns.filter((column) => VISIBLE_FIELDS.includes(column.field)),
     [_columns]

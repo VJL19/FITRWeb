@@ -182,20 +182,22 @@ const DailyAttendees = () => {
           <h2>SESSION</h2>
           Total Attendees : {totalDailyAttendeesBySession}
           <Box component="div">
-            Average Attendees : {averageDailyAttendeesBySession} %
+            Average Attendees : {averageDailyAttendeesBySession.toFixed(2)} %
           </Box>
         </Box>
         <Box component="div">
           <h2>MONTHLY</h2>
           Total Attendees : {totalDailyAttendeesByMonthly}
           <Box component="div">
-            Average Attendees : {averageDailyAttendeesByMonthly} %
+            Average Attendees : {averageDailyAttendeesByMonthly.toFixed(2)} %
           </Box>
         </Box>
         <Box>
           <h2>TOTAL</h2>
           <Box component="div">Total : {totalDailyAttendees}</Box>
-          <Box component="div">Average : {averageDailyAttendees} %</Box>
+          <Box component="div">
+            Average : {averageDailyAttendees.toFixed(2)} %
+          </Box>
         </Box>
       </Box>
       <ResponsiveContainer width="100%" height="100%">
