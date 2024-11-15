@@ -13,6 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   useDeleteUserAccountMutation,
   useGetAllUsersQuery,
+  usersApi,
 } from "src/reducers/users";
 import { handleClose } from "src/reducers/modal";
 import LoadingIndicator from "src/components/LoadingIndicator";
@@ -30,6 +31,7 @@ import {
 } from "src/utils/functions/firebase";
 import NotAuthorized from "src/components/NotAuthorized";
 import HTTP_ERROR from "src/utils/enums/ERROR_CODES";
+import { useRefetchOnMessage } from "src/hooks/useRefetchOnMessage";
 
 const UserPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -64,6 +66,9 @@ const UserPage = () => {
     "Actions",
   ];
 
+  useRefetchOnMessage("refresh_userLists", () => {
+    dispatch(usersApi.util.invalidateTags(["users"]));
+  });
   const columns = React.useMemo(
     () => _columns.filter((column) => VISIBLE_FIELDS.includes(column.field)),
     [_columns]

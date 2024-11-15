@@ -113,7 +113,11 @@ const generateExcelFinancialReport = ({
 
   data?.result?.map((user, index) => {
     workSheet.addRow({
-      FullName: `${user.FirstName} ${user.LastName}`,
+      FullName: `${
+        user.FirstName === null || user.LastName === undefined
+          ? user.SubscriptionBy
+          : `${user.FirstName} ${user.LastName}`
+      }`,
       SubscriptionType: user.SubscriptionType,
       amount: `${user.SubscriptionAmount} PHP`,
       status: user.SubscriptionStatus,
